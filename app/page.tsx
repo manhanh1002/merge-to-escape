@@ -1,10 +1,59 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ArrowLeft, ChevronDown, DoorOpen, Gem, HelpCircle, RotateCcw, Shield, Undo2, UserRound, Volume2 } from 'lucide-react'
+import {
+  ArrowLeft,
+  ChevronDown,
+  Compass,
+  Crown,
+  DoorOpen,
+  Flame,
+  Gem,
+  HelpCircle,
+  Hourglass,
+  Key,
+  KeyRound,
+  Lock,
+  Pickaxe,
+  RotateCcw,
+  Scroll,
+  Shield,
+  Sparkles,
+  Undo2,
+  UserRound,
+  Volume2,
+} from 'lucide-react'
 
 type Level = { name: string; target: number; stones: number; subtitle: string; size: number }
 type Tile = number | 'stone' | 'player' | 'exit' | null
+
+function renderTileIcon(value: number, iconSize: number) {
+  switch (value) {
+    case 2:
+      return <Compass size={iconSize} className="tile-item-icon" />
+    case 4:
+      return <Flame size={iconSize} className="tile-item-icon" />
+    case 8:
+      return <KeyRound size={iconSize} className="tile-item-icon" />
+    case 16:
+      return <Scroll size={iconSize} className="tile-item-icon" />
+    case 32:
+      return <Pickaxe size={iconSize} className="tile-item-icon" />
+    case 64:
+      return <Hourglass size={iconSize} className="tile-item-icon" />
+    case 128:
+      return <Lock size={iconSize} className="tile-item-icon" />
+    case 256:
+      return <Crown size={iconSize} className="tile-item-icon" />
+    case 512:
+      return <Sparkles size={iconSize} className="tile-item-icon" />
+    case 1024:
+      return <Key size={iconSize} className="tile-item-icon" />
+    case 2048:
+    default:
+      return <DoorOpen size={iconSize} className="tile-item-icon" />
+  }
+}
 
 type Snapshot = { board: Tile[]; moves: number; score: number }
 
@@ -281,14 +330,34 @@ export default function Page() {
             style={{ gridTemplateColumns: `repeat(${level.size}, 1fr)` }}
             aria-label="Game board"
           >
-            {board.map((cell, index) => (
-              <div
-                className={`tile ${cell === null ? 'empty' : typeof cell === 'number' ? `number n${Math.min(cell, 1024)}` : cell}`}
-                key={index}
-              >
-                {cell === 'stone' ? <Shield size={level.size >= 6 ? 20 : 25} /> : cell === 'player' ? <UserRound size={level.size >= 6 ? 20 : 24} /> : cell === 'exit' ? <DoorOpen size={level.size >= 6 ? 20 : 25} /> : cell}
-              </div>
-            ))}
+            {board.map((cell, index) => {
+              const iconSize = level.size >= 6 ? 16 : level.size === 5 ? 20 : 24
+              return (
+                <div
+                  className={`tile ${cell === null ? 'empty' : typeof cell === 'number' ? `number n${Math.min(cell, 2048)}` : cell}`}
+                  key={index}
+                >
+                  {cell === 'stone' ? (
+                    <div className="special-tile-content">
+                      <Shield size={level.size >= 6 ? 20 : 26} />
+                    </div>
+                  ) : cell === 'player' ? (
+                    <div className="special-tile-content player-content">
+                      <UserRound size={level.size >= 6 ? 20 : 26} />
+                    </div>
+                  ) : cell === 'exit' ? (
+                    <div className="special-tile-content exit-content">
+                      <DoorOpen size={level.size >= 6 ? 22 : 28} />
+                    </div>
+                  ) : typeof cell === 'number' ? (
+                    <div className="number-tile-content">
+                      {renderTileIcon(cell, iconSize)}
+                      <span className="tile-value">{cell}</span>
+                    </div>
+                  ) : null}
+                </div>
+              )
+            })}
           </div>
           {(won || lost) && (
             <div className="result-card">
