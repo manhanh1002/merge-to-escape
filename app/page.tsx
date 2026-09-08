@@ -9,16 +9,30 @@ type Tile = number | 'stone' | 'player' | 'exit' | null
 type Snapshot = { board: Tile[]; moves: number; score: number }
 
 const levels: Level[] = [
-  { name: 'Easy', target: 64, stones: 1, subtitle: 'Find your way out', size: 4 },
-  { name: 'Normal', target: 256, stones: 2, subtitle: 'Think two steps ahead', size: 5 },
-  { name: 'Hard', target: 1024, stones: 3, subtitle: 'Master the maze', size: 6 },
+  { name: 'Level 1', target: 16, stones: 0, subtitle: 'Learn to slide and merge', size: 4 },
+  { name: 'Level 2', target: 32, stones: 1, subtitle: 'First obstacle ahead', size: 4 },
+  { name: 'Level 3', target: 64, stones: 1, subtitle: 'Find your way out', size: 4 },
+  { name: 'Level 4', target: 128, stones: 1, subtitle: 'The tight squeeze', size: 4 },
+  { name: 'Level 5', target: 128, stones: 1, subtitle: 'Expanded territory', size: 5 },
+  { name: 'Level 6', target: 256, stones: 2, subtitle: 'Think two steps ahead', size: 5 },
+  { name: 'Level 7', target: 512, stones: 3, subtitle: 'Strategic fortress', size: 5 },
+  { name: 'Level 8', target: 512, stones: 2, subtitle: 'Grand battlefield', size: 6 },
+  { name: 'Level 9', target: 1024, stones: 3, subtitle: 'Master the maze', size: 6 },
+  { name: 'Level 10', target: 2048, stones: 4, subtitle: 'Ultimate escape challenge', size: 6 },
 ]
 
 // Stone obstacle positions by (row, col) coordinates for each level
 const stoneCoordinates: [number, number][][] = [
-  [[1, 1]], // Easy 4x4
-  [[1, 2], [3, 2]], // Normal 5x5
-  [[1, 2], [2, 4], [4, 1]], // Hard 6x6
+  [], // Level 1 (4x4, 0 stones)
+  [[1, 1]], // Level 2 (4x4, 1 stone)
+  [[2, 2]], // Level 3 (4x4, 1 stone)
+  [[1, 2]], // Level 4 (4x4, 1 stone)
+  [[2, 2]], // Level 5 (5x5, 1 stone)
+  [[1, 3], [3, 1]], // Level 6 (5x5, 2 stones)
+  [[1, 2], [3, 1], [3, 3]], // Level 7 (5x5, 3 stones)
+  [[2, 2], [3, 3]], // Level 8 (6x6, 2 stones)
+  [[1, 2], [2, 4], [4, 1]], // Level 9 (6x6, 3 stones)
+  [[1, 1], [1, 4], [4, 1], [4, 4]], // Level 10 (6x6, 4 stones)
 ]
 
 function makeBoard(levelIndex: number): Tile[] {
@@ -80,6 +94,14 @@ export default function Page() {
   }, [levelIndex])
 
   const chooseLevel = (index: number) => { setLevelIndex(index); reset(index) }
+
+  const nextLevel = useCallback(() => {
+    if (levelIndex < levels.length - 1) {
+      chooseLevel(levelIndex + 1)
+    } else {
+      reset(levelIndex)
+    }
+  }, [levelIndex, reset])
 
   const move = useCallback((direction: 'left' | 'right' | 'up' | 'down') => {
     if (won || lost) return
@@ -217,10 +239,38 @@ export default function Page() {
       </header>
 
       <section className="game-content">
-        <div className="level-heading"><div><p className="eyebrow">LEVEL {levelIndex + 1} OF 3</p><h1>{level.name}</h1><p className="subtitle">{level.subtitle}</p></div><button className="level-select"><span>{level.name}</span><ChevronDown size={16} /></button></div>
-        <div className="level-tabs">{levels.map((item, index) => <button key={item.name} className={index === levelIndex ? 'level-tab active' : 'level-tab'} onClick={() => chooseLevel(index)}><span className="tab-dot">{item.stones}</span>{item.name}<small>{item.target}</small></button>)}</div>
+        <div className="level-heading">
+          <div>
+            <p className="eyebrow">LEVEL {levelIndex + 1} OF {levels.length}</p>
+            <h1>{level.name}</h1>
+            <p className="subtitle">{level.subtitle}</p>
+          </div>
+          <div className="dropdown-wrapper">
+            <select
+              className="level-select-native"
+              value={levelIndex}
+              onChange={(e) => chooseLevel(Number(e.target.value))}
+              aria-label="Select level"
+            >
+              {levels.map((item, index) => (
+                <option key={item.name} value={index}>
+                  {item.name}: {item.target} target ({item.size}x{item.size}{item.stones ? `, ${item.stones} stones` : ', no stones'})
+                </option>
+              ))}
+            </select>
+            <div className="level-select-badge">
+              <span>{level.name}</span>
+              <ChevronDown size={15} />
+            </div>
+          </div>
+        </div>
 
-        <div className="stats"><div><span>BEST TILE</span><strong>{best || 0}</strong></div><div><span>MOVES</span><strong>{moves}</strong></div><div><span>SCORE</span><strong>{score}</strong></div></div>
+        <div className="stats">
+          <div><span>TARGET</span><strong>{level.target}</strong></div>
+          <div><span>MOVES</span><strong>{moves}</strong></div>
+          <div><span>SCORE</span><strong>{score}</strong></div>
+        </div>
+
         <div
           className="board-wrap"
           onTouchStart={handleTouchStart}
@@ -240,12 +290,37 @@ export default function Page() {
               </div>
             ))}
           </div>
-          {(won || lost) && <div className="result-card"><div className="result-icon">{won ? <DoorOpen size={28} /> : <RotateCcw size={27} />}</div><h2>{won ? 'You escaped!' : 'Try again'}</h2><p>{message}</p><button className="primary-button" onClick={() => reset()}>Play again</button></div>}
+          {(won || lost) && (
+            <div className="result-card">
+              <div className="result-icon">{won ? <DoorOpen size={28} /> : <RotateCcw size={27} />}</div>
+              <h2>{won ? (levelIndex === levels.length - 1 ? 'Champion!' : 'Escaped!') : 'Try again'}</h2>
+              <p>{message}</p>
+              <div className="result-actions">
+                {won && levelIndex < levels.length - 1 ? (
+                  <button className="primary-button" onClick={nextLevel}>Next Level →</button>
+                ) : (
+                  <button className="primary-button" onClick={() => reset()}>{won ? 'Play From Start' : 'Play again'}</button>
+                )}
+                <button className="secondary-button" onClick={() => reset()}>Replay Level</button>
+              </div>
+            </div>
+          )}
         </div>
         <p className="hint">{message}</p>
-        <div className="controls"><button className="secondary-button" onClick={undo} disabled={!history.length}><Undo2 size={17} /> Undo</button><button className="secondary-button" onClick={() => reset()}><RotateCcw size={17} /> Restart</button></div>
-        <div className="how-to"><h2>HOW TO PLAY</h2><p>Swipe or use the arrow keys to move. Merge matching tiles until the target tile appears. That tile becomes the door — then move onto it to escape.</p><div className="legend"><span><Shield size={16} /> Obstacle</span><span><UserRound size={16} /> You</span><span><DoorOpen size={16} /> Exit</span></div></div>
-        <p className="no-buffs"><Gem size={14} /> No paid buffs. Just clever moves.</p>
+        <div className="controls">
+          <button className="secondary-button" onClick={undo} disabled={!history.length}><Undo2 size={17} /> Undo</button>
+          <button className="secondary-button" onClick={() => reset()}><RotateCcw size={17} /> Restart</button>
+        </div>
+        <div className="how-to">
+          <h2>HOW TO PLAY</h2>
+          <p>Swipe or use arrow keys. Merge matching tiles until target {level.target} is reached. The door unlocks — move onto it to advance to the next level!</p>
+          <div className="legend">
+            <span><Shield size={16} /> Obstacle</span>
+            <span><UserRound size={16} /> You</span>
+            <span><DoorOpen size={16} /> Exit</span>
+          </div>
+        </div>
+        <p className="no-buffs"><Gem size={14} /> 10 Levels. No paid buffs. Pure puzzle strategy.</p>
       </section>
     </main>
   )
