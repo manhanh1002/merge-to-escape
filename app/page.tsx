@@ -30,28 +30,28 @@ type Tile = number | 'stone' | 'player' | 'exit' | null
 function renderTileIcon(value: number, iconSize: number) {
   switch (value) {
     case 2:
-      return <Compass size={iconSize} className="tile-item-icon" />
+      return <Compass size={iconSize} strokeWidth={2.2} className="tile-item-icon" />
     case 4:
-      return <Flame size={iconSize} className="tile-item-icon" />
+      return <Flame size={iconSize} strokeWidth={2.2} className="tile-item-icon" />
     case 8:
-      return <KeyRound size={iconSize} className="tile-item-icon" />
+      return <KeyRound size={iconSize} strokeWidth={2.2} className="tile-item-icon" />
     case 16:
-      return <Scroll size={iconSize} className="tile-item-icon" />
+      return <Scroll size={iconSize} strokeWidth={2.2} className="tile-item-icon" />
     case 32:
-      return <Pickaxe size={iconSize} className="tile-item-icon" />
+      return <Pickaxe size={iconSize} strokeWidth={2.2} className="tile-item-icon" />
     case 64:
-      return <Hourglass size={iconSize} className="tile-item-icon" />
+      return <Hourglass size={iconSize} strokeWidth={2.2} className="tile-item-icon" />
     case 128:
-      return <Lock size={iconSize} className="tile-item-icon" />
+      return <Lock size={iconSize} strokeWidth={2.2} className="tile-item-icon" />
     case 256:
-      return <Crown size={iconSize} className="tile-item-icon" />
+      return <Crown size={iconSize} strokeWidth={2.2} className="tile-item-icon" />
     case 512:
-      return <Sparkles size={iconSize} className="tile-item-icon" />
+      return <Sparkles size={iconSize} strokeWidth={2.2} className="tile-item-icon" />
     case 1024:
-      return <Key size={iconSize} className="tile-item-icon" />
+      return <Key size={iconSize} strokeWidth={2.2} className="tile-item-icon" />
     case 2048:
     default:
-      return <DoorOpen size={iconSize} className="tile-item-icon" />
+      return <DoorOpen size={iconSize} strokeWidth={2.2} className="tile-item-icon" />
   }
 }
 
@@ -331,7 +331,7 @@ export default function Page() {
             aria-label="Game board"
           >
             {board.map((cell, index) => {
-              const iconSize = level.size >= 6 ? 16 : level.size === 5 ? 20 : 24
+              const iconSize = level.size >= 6 ? 26 : level.size === 5 ? 32 : 38
               return (
                 <div
                   className={`tile ${cell === null ? 'empty' : typeof cell === 'number' ? `number n${Math.min(cell, 2048)}` : cell}`}
@@ -339,15 +339,15 @@ export default function Page() {
                 >
                   {cell === 'stone' ? (
                     <div className="special-tile-content">
-                      <Shield size={level.size >= 6 ? 20 : 26} />
+                      <Shield size={level.size >= 6 ? 30 : level.size === 5 ? 36 : 44} strokeWidth={2.4} />
                     </div>
                   ) : cell === 'player' ? (
                     <div className="special-tile-content player-content">
-                      <UserRound size={level.size >= 6 ? 20 : 26} />
+                      <UserRound size={level.size >= 6 ? 32 : level.size === 5 ? 38 : 46} strokeWidth={2.5} />
                     </div>
                   ) : cell === 'exit' ? (
                     <div className="special-tile-content exit-content">
-                      <DoorOpen size={level.size >= 6 ? 22 : 28} />
+                      <DoorOpen size={level.size >= 6 ? 32 : level.size === 5 ? 38 : 46} strokeWidth={2.5} />
                     </div>
                   ) : typeof cell === 'number' ? (
                     <div className="number-tile-content">
