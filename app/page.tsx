@@ -15,10 +15,10 @@ const levels: Level[] = [
   { name: 'Level 4', target: 128, stones: 1, subtitle: 'The tight squeeze', size: 4 },
   { name: 'Level 5', target: 128, stones: 1, subtitle: 'Expanded territory', size: 5 },
   { name: 'Level 6', target: 256, stones: 2, subtitle: 'Think two steps ahead', size: 5 },
-  { name: 'Level 7', target: 512, stones: 3, subtitle: 'Strategic fortress', size: 5 },
-  { name: 'Level 8', target: 512, stones: 2, subtitle: 'Grand battlefield', size: 6 },
+  { name: 'Level 7', target: 512, stones: 2, subtitle: 'Strategic fortress', size: 5 },
+  { name: 'Level 8', target: 512, stones: 3, subtitle: 'Grand battlefield', size: 6 },
   { name: 'Level 9', target: 1024, stones: 3, subtitle: 'Master the maze', size: 6 },
-  { name: 'Level 10', target: 2048, stones: 4, subtitle: 'Ultimate escape challenge', size: 6 },
+  { name: 'Level 10', target: 2048, stones: 3, subtitle: 'Ultimate escape challenge', size: 6 },
 ]
 
 // Stone obstacle positions by (row, col) coordinates for each level
@@ -29,10 +29,10 @@ const stoneCoordinates: [number, number][][] = [
   [[1, 2]], // Level 4 (4x4, 1 stone)
   [[2, 2]], // Level 5 (5x5, 1 stone)
   [[1, 3], [3, 1]], // Level 6 (5x5, 2 stones)
-  [[1, 2], [3, 1], [3, 3]], // Level 7 (5x5, 3 stones)
-  [[2, 2], [3, 3]], // Level 8 (6x6, 2 stones)
+  [[1, 2], [3, 2]], // Level 7 (5x5, 2 stones)
+  [[2, 2], [3, 4], [4, 1]], // Level 8 (6x6, 3 stones)
   [[1, 2], [2, 4], [4, 1]], // Level 9 (6x6, 3 stones)
-  [[1, 1], [1, 4], [4, 1], [4, 4]], // Level 10 (6x6, 4 stones)
+  [[1, 3], [3, 1], [4, 4]], // Level 10 (6x6, 3 stones)
 ]
 
 function makeBoard(levelIndex: number): Tile[] {
