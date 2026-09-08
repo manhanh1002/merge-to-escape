@@ -181,6 +181,33 @@ export default function Page() {
     return () => window.removeEventListener('keydown', onKey)
   }, [move])
 
+  const touchStartRef = useState<{ x: number; y: number } | null>(null)
+  const [touchStart, setTouchStart] = touchStartRef
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0]
+    setTouchStart({ x: touch.clientX, y: touch.clientY })
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart) return
+    const touch = e.changedTouches[0]
+    const dx = touch.clientX - touchStart.x
+    const dy = touch.clientY - touchStart.y
+    const absX = Math.abs(dx)
+    const absY = Math.abs(dy)
+    const threshold = 30 // minimum swipe distance in px
+
+    if (Math.max(absX, absY) > threshold) {
+      if (absX > absY) {
+        move(dx > 0 ? 'right' : 'left')
+      } else {
+        move(dy > 0 ? 'down' : 'up')
+      }
+    }
+    setTouchStart(null)
+  }
+
   return (
     <main className="game-shell">
       <header className="topbar">
@@ -194,7 +221,11 @@ export default function Page() {
         <div className="level-tabs">{levels.map((item, index) => <button key={item.name} className={index === levelIndex ? 'level-tab active' : 'level-tab'} onClick={() => chooseLevel(index)}><span className="tab-dot">{item.stones}</span>{item.name}<small>{item.target}</small></button>)}</div>
 
         <div className="stats"><div><span>BEST TILE</span><strong>{best || 0}</strong></div><div><span>MOVES</span><strong>{moves}</strong></div><div><span>SCORE</span><strong>{score}</strong></div></div>
-        <div className="board-wrap">
+        <div
+          className="board-wrap"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <div
             className={`board board-${level.size}x${level.size}`}
             style={{ gridTemplateColumns: `repeat(${level.size}, 1fr)` }}

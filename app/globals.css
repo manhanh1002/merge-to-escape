@@ -46,8 +46,8 @@ h1 { margin: 0; font-size: clamp(30px, 6vw, 48px); letter-spacing: -.06em; line-
 .stats div { padding: 13px 15px; border: 1px solid var(--border); background: #ffffffa8; border-radius: 12px; }
 .stats span { display: block; color: var(--muted-foreground); font-size: 10px; font-weight: 800; letter-spacing: .12em; }
 .stats strong { display: block; margin-top: 5px; font-size: 20px; letter-spacing: -.04em; }
-.board-wrap { position: relative; }
-.board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 10px; border-radius: 18px; background: #d8e4dc; box-shadow: inset 0 1px #ffffffcc, 0 12px 30px #385f4d16; }
+.board-wrap { position: relative; touch-action: none; user-select: none; -webkit-user-select: none; }
+.board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 10px; border-radius: 18px; background: #d8e4dc; box-shadow: inset 0 1px #ffffffcc, 0 12px 30px #385f4d16; touch-action: none; }
 .board-5x5 { gap: 7px; }
 .board-5x5 .tile { font-size: clamp(16px, 4.8vw, 24px); }
 .board-6x6 { gap: 6px; }
