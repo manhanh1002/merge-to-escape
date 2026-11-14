@@ -5,7 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "node --test scripts/test_*.mjs",
+    "check:levels": "node scripts/generate_level_layouts.mjs --check",
+    "sim": "node scripts/simulate_levels.mjs",
+    "rebalance": "node scripts/rebalance_targets.mjs",
+    "tune": "node scripts/tune_layouts.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

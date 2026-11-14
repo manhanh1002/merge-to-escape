@@ -1,6 +1,10 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
+import { Alegreya_Sans, Cinzel } from 'next/font/google'
 import './globals.css'
+
+const display = Cinzel({ subsets: ['latin'], weight: ['600', '700', '800', '900'], variable: '--font-display' })
+const body = Alegreya_Sans({ subsets: ['latin'], weight: ['400', '500', '700', '800'], variable: '--font-body' })
 
 export const metadata: Metadata = {
   title: 'Merge to Escape — Puzzle Game',
@@ -26,11 +30,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light dark',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
+  colorScheme: 'dark',
+  themeColor: '#12122a',
 }
 
 export default function RootLayout({
@@ -39,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body className="antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}

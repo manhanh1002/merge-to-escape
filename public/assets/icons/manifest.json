@@ -1,0 +1,396 @@
+{
+  "craft": [
+    {
+      "name": "wood_logs",
+      "file": "/assets/icons/craft/wood_logs.png",
+      "size": 137
+    },
+    {
+      "name": "wood_log",
+      "file": "/assets/icons/craft/wood_log.png",
+      "size": 134
+    },
+    {
+      "name": "rough_planks",
+      "file": "/assets/icons/craft/rough_planks.png",
+      "size": 129
+    },
+    {
+      "name": "wood_planks",
+      "file": "/assets/icons/craft/wood_planks.png",
+      "size": 127
+    },
+    {
+      "name": "red_wood_planks",
+      "file": "/assets/icons/craft/red_wood_planks.png",
+      "size": 129
+    },
+    {
+      "name": "pale_wood_plank",
+      "file": "/assets/icons/craft/pale_wood_plank.png",
+      "size": 136
+    },
+    {
+      "name": "golden_planks",
+      "file": "/assets/icons/craft/golden_planks.png",
+      "size": 134
+    },
+    {
+      "name": "red_wood_board",
+      "file": "/assets/icons/craft/red_wood_board.png",
+      "size": 134
+    },
+    {
+      "name": "golden_roots",
+      "file": "/assets/icons/craft/golden_roots.png",
+      "size": 142
+    },
+    {
+      "name": "golden_shavings",
+      "file": "/assets/icons/craft/golden_shavings.png",
+      "size": 124
+    },
+    {
+      "name": "iron_ore",
+      "file": "/assets/icons/craft/iron_ore.png",
+      "size": 131
+    },
+    {
+      "name": "stone_pile",
+      "file": "/assets/icons/craft/stone_pile.png",
+      "size": 140
+    },
+    {
+      "name": "copper_ore",
+      "file": "/assets/icons/craft/copper_ore.png",
+      "size": 124
+    },
+    {
+      "name": "gold_ore",
+      "file": "/assets/icons/craft/gold_ore.png",
+      "size": 132
+    },
+    {
+      "name": "ruby_ore",
+      "file": "/assets/icons/craft/ruby_ore.png",
+      "size": 119
+    },
+    {
+      "name": "amethyst_stone",
+      "file": "/assets/icons/craft/amethyst_stone.png",
+      "size": 120
+    },
+    {
+      "name": "blue_crystal",
+      "file": "/assets/icons/craft/blue_crystal.png",
+      "size": 126
+    },
+    {
+      "name": "sandstone",
+      "file": "/assets/icons/craft/sandstone.png",
+      "size": 137
+    },
+    {
+      "name": "tin_ore",
+      "file": "/assets/icons/craft/tin_ore.png",
+      "size": 120
+    },
+    {
+      "name": "sapphire_stone",
+      "file": "/assets/icons/craft/sapphire_stone.png",
+      "size": 125
+    },
+    {
+      "name": "silver_ingot",
+      "file": "/assets/icons/craft/silver_ingot.png",
+      "size": 140
+    },
+    {
+      "name": "gold_ingot",
+      "file": "/assets/icons/craft/gold_ingot.png",
+      "size": 137
+    },
+    {
+      "name": "sapphire_crystals",
+      "file": "/assets/icons/craft/sapphire_crystals.png",
+      "size": 135
+    },
+    {
+      "name": "green_scales",
+      "file": "/assets/icons/craft/green_scales.png",
+      "size": 127
+    },
+    {
+      "name": "olive_hide",
+      "file": "/assets/icons/craft/olive_hide.png",
+      "size": 122
+    },
+    {
+      "name": "hide_strips",
+      "file": "/assets/icons/craft/hide_strips.png",
+      "size": 143
+    },
+    {
+      "name": "beast_hide",
+      "file": "/assets/icons/craft/beast_hide.png",
+      "size": 127
+    },
+    {
+      "name": "red_scale",
+      "file": "/assets/icons/craft/red_scale.png",
+      "size": 115
+    },
+    {
+      "name": "leather_roll",
+      "file": "/assets/icons/craft/leather_roll.png",
+      "size": 140
+    },
+    {
+      "name": "leather_hide",
+      "file": "/assets/icons/craft/leather_hide.png",
+      "size": 129
+    },
+    {
+      "name": "golden_fur",
+      "file": "/assets/icons/craft/golden_fur.png",
+      "size": 134
+    },
+    {
+      "name": "white_fur",
+      "file": "/assets/icons/craft/white_fur.png",
+      "size": 136
+    },
+    {
+      "name": "rope",
+      "file": "/assets/icons/craft/rope.png",
+      "size": 128
+    },
+    {
+      "name": "orange_cloth",
+      "file": "/assets/icons/craft/orange_cloth.png",
+      "size": 143
+    },
+    {
+      "name": "green_cloth_roll",
+      "file": "/assets/icons/craft/green_cloth_roll.png",
+      "size": 135
+    },
+    {
+      "name": "yarn_ball",
+      "file": "/assets/icons/craft/yarn_ball.png",
+      "size": 113
+    },
+    {
+      "name": "cotton",
+      "file": "/assets/icons/craft/cotton.png",
+      "size": 127
+    },
+    {
+      "name": "wooden_gear",
+      "file": "/assets/icons/craft/wooden_gear.png",
+      "size": 124
+    },
+    {
+      "name": "water_bowl",
+      "file": "/assets/icons/craft/water_bowl.png",
+      "size": 128
+    },
+    {
+      "name": "metal_plates",
+      "file": "/assets/icons/craft/metal_plates.png",
+      "size": 137
+    },
+    {
+      "name": "nails",
+      "file": "/assets/icons/craft/nails.png",
+      "size": 118
+    },
+    {
+      "name": "gold_powder",
+      "file": "/assets/icons/craft/gold_powder.png",
+      "size": 122
+    },
+    {
+      "name": "sand_pile",
+      "file": "/assets/icons/craft/sand_pile.png",
+      "size": 125
+    },
+    {
+      "name": "bone",
+      "file": "/assets/icons/craft/bone.png",
+      "size": 134
+    }
+  ],
+  "loot": [
+    {
+      "name": "pickaxe",
+      "file": "/assets/icons/loot/pickaxe.png",
+      "size": 166
+    },
+    {
+      "name": "emerald_ore_rock",
+      "file": "/assets/icons/loot/emerald_ore_rock.png",
+      "size": 166
+    },
+    {
+      "name": "stew_cauldron",
+      "file": "/assets/icons/loot/stew_cauldron.png",
+      "size": 138
+    },
+    {
+      "name": "green_gourd",
+      "file": "/assets/icons/loot/green_gourd.png",
+      "size": 132
+    },
+    {
+      "name": "skull_chest",
+      "file": "/assets/icons/loot/skull_chest.png",
+      "size": 163
+    },
+    {
+      "name": "goblin_claw",
+      "file": "/assets/icons/loot/goblin_claw.png",
+      "size": 162
+    },
+    {
+      "name": "goblin_ear",
+      "file": "/assets/icons/loot/goblin_ear.png",
+      "size": 168
+    },
+    {
+      "name": "leather_collar",
+      "file": "/assets/icons/loot/leather_collar.png",
+      "size": 174
+    },
+    {
+      "name": "fossil_stone",
+      "file": "/assets/icons/loot/fossil_stone.png",
+      "size": 155
+    },
+    {
+      "name": "emerald_shard",
+      "file": "/assets/icons/loot/emerald_shard.png",
+      "size": 168
+    },
+    {
+      "name": "amulet",
+      "file": "/assets/icons/loot/amulet.png",
+      "size": 173
+    },
+    {
+      "name": "treasure_map",
+      "file": "/assets/icons/loot/treasure_map.png",
+      "size": 175
+    },
+    {
+      "name": "leather_pouch",
+      "file": "/assets/icons/loot/leather_pouch.png",
+      "size": 175
+    },
+    {
+      "name": "ragged_shirt",
+      "file": "/assets/icons/loot/ragged_shirt.png",
+      "size": 169
+    },
+    {
+      "name": "rat_tail",
+      "file": "/assets/icons/loot/rat_tail.png",
+      "size": 122
+    },
+    {
+      "name": "old_parchment",
+      "file": "/assets/icons/loot/old_parchment.png",
+      "size": 147
+    },
+    {
+      "name": "rune_stone",
+      "file": "/assets/icons/loot/rune_stone.png",
+      "size": 153
+    },
+    {
+      "name": "amber_nuggets",
+      "file": "/assets/icons/loot/amber_nuggets.png",
+      "size": 173
+    },
+    {
+      "name": "plumed_helmet",
+      "file": "/assets/icons/loot/plumed_helmet.png",
+      "size": 178
+    },
+    {
+      "name": "waterskin",
+      "file": "/assets/icons/loot/waterskin.png",
+      "size": 169
+    },
+    {
+      "name": "shadow_fang",
+      "file": "/assets/icons/loot/shadow_fang.png",
+      "size": 163
+    },
+    {
+      "name": "gold_nugget",
+      "file": "/assets/icons/loot/gold_nugget.png",
+      "size": 165
+    },
+    {
+      "name": "candle",
+      "file": "/assets/icons/loot/candle.png",
+      "size": 172
+    },
+    {
+      "name": "gold_bars",
+      "file": "/assets/icons/loot/gold_bars.png",
+      "size": 176
+    },
+    {
+      "name": "pearl_ore",
+      "file": "/assets/icons/loot/pearl_ore.png",
+      "size": 175
+    },
+    {
+      "name": "skull",
+      "file": "/assets/icons/loot/skull.png",
+      "size": 175
+    },
+    {
+      "name": "shovel",
+      "file": "/assets/icons/loot/shovel.png",
+      "size": 172
+    },
+    {
+      "name": "skeleton_hand",
+      "file": "/assets/icons/loot/skeleton_hand.png",
+      "size": 151
+    },
+    {
+      "name": "coin_string",
+      "file": "/assets/icons/loot/coin_string.png",
+      "size": 166
+    },
+    {
+      "name": "magma_stone",
+      "file": "/assets/icons/loot/magma_stone.png",
+      "size": 172
+    },
+    {
+      "name": "torch",
+      "file": "/assets/icons/loot/torch.png",
+      "size": 173
+    },
+    {
+      "name": "leather_bracer",
+      "file": "/assets/icons/loot/leather_bracer.png",
+      "size": 150
+    },
+    {
+      "name": "boulder",
+      "file": "/assets/icons/loot/boulder.png",
+      "size": 171
+    },
+    {
+      "name": "cloth_sack",
+      "file": "/assets/icons/loot/cloth_sack.png",
+      "size": 160
+    }
+  ]
+}

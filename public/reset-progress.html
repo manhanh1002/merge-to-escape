@@ -1,0 +1,37 @@
+<!doctype html>
+<!--
+  Test helper: wipes this browser's Merge to Escape save (levels, gold, records, level in
+  progress) after a confirmation. Open http://localhost:3123/reset-progress.html
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reset progress — Merge to Escape</title>
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #12122a; color: #f1e6c8; font: 16px/1.5 Georgia, serif; }
+    .card { max-width: 420px; padding: 28px 32px; border: 1px solid #7a1f2a; border-radius: 14px; background: #1c1b33; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,.6); }
+    h1 { margin: 0 0 8px; font-size: 24px; color: #ff8a96; }
+    p { margin: 6px 0; color: #c9bfdc; }
+    button, a { display: inline-block; margin: 16px 6px 0; padding: 10px 22px; border-radius: 10px; font: 700 15px Georgia, serif; text-decoration: none; cursor: pointer; }
+    button { border: 1px solid #ff8a96; background: #5a1a24; color: #ffe0e4; }
+    a { border: 1px solid #a8792a; background: #24223e; color: #f1e6c8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Reset progress</h1>
+    <p id="status">This deletes unlocked levels, gold, best records and the level in progress in this browser. It cannot be undone.</p>
+    <button id="reset">Delete my save</button>
+    <a href="/">Back to the game</a>
+  </div>
+  <script>
+    const KEY = 'merge-to-escape:save:v1'
+    document.getElementById('reset').addEventListener('click', () => {
+      localStorage.removeItem(KEY)
+      document.getElementById('status').textContent = 'Save deleted. The game starts again from Level 1.'
+      document.getElementById('reset').remove()
+    })
+  </script>
+</body>
+</html>

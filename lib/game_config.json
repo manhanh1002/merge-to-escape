@@ -1,0 +1,8212 @@
+{
+  "economyConfig": {
+    "goldDropRules": [
+      {
+        "minTile": 16,
+        "gold": 10,
+        "dropRate": 0.2
+      },
+      {
+        "minTile": 32,
+        "gold": 30,
+        "dropRate": 0.15
+      },
+      {
+        "minTile": 64,
+        "gold": 60,
+        "dropRate": 0.12
+      },
+      {
+        "minTile": 128,
+        "gold": 120,
+        "dropRate": 0.09
+      },
+      {
+        "minTile": 256,
+        "gold": 250,
+        "dropRate": 0.06
+      },
+      {
+        "minTile": 512,
+        "gold": 500,
+        "dropRate": 0.04
+      },
+      {
+        "minTile": 1024,
+        "gold": 1000,
+        "dropRate": 0.03
+      },
+      {
+        "minTile": 2048,
+        "gold": 2000,
+        "dropRate": 0.03
+      }
+    ],
+    "itemDropRates": {
+      "sword": {
+        "minTile": 8,
+        "dropRate": 0.12,
+        "basePower": 15
+      },
+      "armor": {
+        "minTile": 32,
+        "dropRate": 0.1,
+        "basePower": 30
+      },
+      "gauntlet": {
+        "minTile": 64,
+        "dropRate": 0.08,
+        "basePower": 50
+      },
+      "purgeScroll4": {
+        "minTile": 128,
+        "dropRate": 0.08
+      },
+      "purgeScroll2": {
+        "minTile": 128,
+        "dropRate": 0.05
+      },
+      "key": {
+        "minTile": 64,
+        "dropRate": 0.08
+      }
+    },
+    "shopPrices": {
+      "hammer": 150
+    },
+    "bossRewards": {
+      "goldRange": [
+        100,
+        300
+      ],
+      "bonusHammers": 1,
+      "bonusKeys": 1
+    },
+    "talentTreeConfig": {
+      "starRewardFormula": "Math.ceil(levelId / 10) sao khi First-Clear (Tổng 550 ⭐ qua 100 màn)",
+      "costFormula": "Chi phí nâng lên Level L tốn đúng L điểm Sao ⭐ (Tổng chi phí max 1 nhánh Lv 14 là 105 ⭐, 5 nhánh = 525 ⭐)",
+      "statsBonusPerLevel": {
+        "goldRate": 0.02,
+        "weaponRate": 0.015,
+        "basePower": 25,
+        "keyRate": 0.008,
+        "weaponBonusPower": 0.05
+      },
+      "maxLevel": 14
+    },
+    "bossTomeDrop": {
+      "minTile": 4,
+      "dropRate": 0.5
+    },
+    "bossTomeHits": {
+      "mid": 2,
+      "final": 3
+    }
+  },
+  "levels": [
+    {
+      "id": 1,
+      "chapter": 1,
+      "chapterName": "The Catacombs",
+      "name": "Level 1",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 16,
+      "targetFormula": [
+        16
+      ],
+      "enemyPointsBudget": 0,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 40,
+      "shiftingExit": false
+    },
+    {
+      "id": 2,
+      "chapter": 1,
+      "chapterName": "The Catacombs",
+      "name": "Level 2",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 16,
+      "targetFormula": [
+        16
+      ],
+      "enemyPointsBudget": 1,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 3,
+          "col": 0,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 41,
+      "shiftingExit": false
+    },
+    {
+      "id": 3,
+      "chapter": 1,
+      "chapterName": "The Catacombs",
+      "name": "Level 3",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 16,
+      "targetFormula": [
+        16
+      ],
+      "enemyPointsBudget": 1,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 2,
+          "col": 1,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 42,
+      "shiftingExit": false
+    },
+    {
+      "id": 4,
+      "chapter": 1,
+      "chapterName": "The Catacombs",
+      "name": "Level 4",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 16,
+      "targetFormula": [
+        16
+      ],
+      "enemyPointsBudget": 2,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [],
+      "numberedStones": [
+        {
+          "coord": [
+            0,
+            3
+          ],
+          "value": 8
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 43,
+      "shiftingExit": false
+    },
+    {
+      "id": 5,
+      "chapter": 1,
+      "chapterName": "The Catacombs",
+      "name": "Level 5 (Mid-Boss)",
+      "subtitle": "Dungeon Champion Appears",
+      "size": 4,
+      "target": 16,
+      "targetFormula": [
+        16
+      ],
+      "enemyPointsBudget": 1,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 0,
+          "col": 1,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": true,
+      "bossHp": 20,
+      "requiredKeys": 1,
+      "stepLimit": 44,
+      "shiftingExit": false
+    },
+    {
+      "id": 6,
+      "chapter": 1,
+      "chapterName": "The Catacombs",
+      "name": "Level 6",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 16,
+      "targetFormula": [
+        16
+      ],
+      "enemyPointsBudget": 2,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 44,
+      "shiftingExit": false
+    },
+    {
+      "id": 7,
+      "chapter": 1,
+      "chapterName": "The Catacombs",
+      "name": "Level 7",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 16,
+      "targetFormula": [
+        16
+      ],
+      "enemyPointsBudget": 3,
+      "initialStones": 1,
+      "stoneCoords": [
+        [
+          3,
+          3
+        ]
+      ],
+      "walls": [],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 45,
+      "shiftingExit": false
+    },
+    {
+      "id": 8,
+      "chapter": 1,
+      "chapterName": "The Catacombs",
+      "name": "Level 8",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 16,
+      "targetFormula": [
+        16
+      ],
+      "enemyPointsBudget": 3,
+      "initialStones": 1,
+      "stoneCoords": [
+        [
+          2,
+          3
+        ]
+      ],
+      "walls": [],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 46,
+      "shiftingExit": false
+    },
+    {
+      "id": 9,
+      "chapter": 1,
+      "chapterName": "The Catacombs",
+      "name": "Level 9",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 48,
+      "targetFormula": [
+        32,
+        16
+      ],
+      "enemyPointsBudget": 4,
+      "initialStones": 1,
+      "stoneCoords": [
+        [
+          0,
+          2
+        ]
+      ],
+      "walls": [
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 47,
+      "shiftingExit": false
+    },
+    {
+      "id": 10,
+      "chapter": 1,
+      "chapterName": "The Catacombs",
+      "name": "Level 10 (Final Boss)",
+      "subtitle": "Chamber Ruler of The Catacombs",
+      "size": 4,
+      "target": 32,
+      "targetFormula": [
+        32
+      ],
+      "enemyPointsBudget": 1,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 1,
+          "col": 1,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": true,
+      "bossHp": 40,
+      "requiredKeys": 1,
+      "stepLimit": 48,
+      "shiftingExit": false
+    },
+    {
+      "id": 11,
+      "chapter": 2,
+      "chapterName": "The Forgotten Mines",
+      "name": "Level 11",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 32,
+      "targetFormula": [
+        32
+      ],
+      "enemyPointsBudget": 2,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [],
+      "numberedStones": [
+        {
+          "coord": [
+            0,
+            2
+          ],
+          "value": 16
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 48,
+      "shiftingExit": false
+    },
+    {
+      "id": 12,
+      "chapter": 2,
+      "chapterName": "The Forgotten Mines",
+      "name": "Level 12",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 48,
+      "targetFormula": [
+        32,
+        16
+      ],
+      "enemyPointsBudget": 3,
+      "initialStones": 1,
+      "stoneCoords": [
+        [
+          1,
+          1
+        ]
+      ],
+      "walls": [],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 49,
+      "shiftingExit": false
+    },
+    {
+      "id": 13,
+      "chapter": 2,
+      "chapterName": "The Forgotten Mines",
+      "name": "Level 13",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 32,
+      "targetFormula": [
+        32
+      ],
+      "enemyPointsBudget": 3,
+      "initialStones": 1,
+      "stoneCoords": [
+        [
+          1,
+          3
+        ]
+      ],
+      "walls": [],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 50,
+      "shiftingExit": false
+    },
+    {
+      "id": 14,
+      "chapter": 2,
+      "chapterName": "The Forgotten Mines",
+      "name": "Level 14",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 32,
+      "targetFormula": [
+        32
+      ],
+      "enemyPointsBudget": 4,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 3,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 51,
+      "shiftingExit": false
+    },
+    {
+      "id": 15,
+      "chapter": 2,
+      "chapterName": "The Forgotten Mines",
+      "name": "Level 15 (Mid-Boss)",
+      "subtitle": "Dungeon Champion Appears",
+      "size": 4,
+      "target": 32,
+      "targetFormula": [
+        32
+      ],
+      "enemyPointsBudget": 2,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [],
+      "numberedStones": [
+        {
+          "coord": [
+            1,
+            1
+          ],
+          "value": 16
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": true,
+      "bossHp": 70,
+      "requiredKeys": 1,
+      "stepLimit": 52,
+      "shiftingExit": false
+    },
+    {
+      "id": 16,
+      "chapter": 2,
+      "chapterName": "The Forgotten Mines",
+      "name": "Level 16",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 32,
+      "targetFormula": [
+        32
+      ],
+      "enemyPointsBudget": 2,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 1,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 52,
+      "shiftingExit": false
+    },
+    {
+      "id": 17,
+      "chapter": 2,
+      "chapterName": "The Forgotten Mines",
+      "name": "Level 17",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 64,
+      "targetFormula": [
+        64
+      ],
+      "enemyPointsBudget": 5,
+      "initialStones": 1,
+      "stoneCoords": [
+        [
+          3,
+          3
+        ]
+      ],
+      "walls": [],
+      "numberedStones": [
+        {
+          "coord": [
+            2,
+            1
+          ],
+          "value": 32
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 53,
+      "shiftingExit": false
+    },
+    {
+      "id": 18,
+      "chapter": 2,
+      "chapterName": "The Forgotten Mines",
+      "name": "Level 18",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 80,
+      "targetFormula": [
+        64,
+        16
+      ],
+      "enemyPointsBudget": 5,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [],
+      "numberedStones": [],
+      "spikeTraps": [
+        [
+          3,
+          1
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 54,
+      "shiftingExit": false
+    },
+    {
+      "id": 19,
+      "chapter": 2,
+      "chapterName": "The Forgotten Mines",
+      "name": "Level 19",
+      "subtitle": "Escape the room",
+      "size": 4,
+      "target": 64,
+      "targetFormula": [
+        64
+      ],
+      "enemyPointsBudget": 6,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            3,
+            1
+          ],
+          "hp": 26
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 55,
+      "shiftingExit": false
+    },
+    {
+      "id": 20,
+      "chapter": 2,
+      "chapterName": "The Forgotten Mines",
+      "name": "Level 20 (Final Boss)",
+      "subtitle": "Chamber Ruler of The Forgotten Mines",
+      "size": 4,
+      "target": 64,
+      "targetFormula": [
+        64
+      ],
+      "enemyPointsBudget": 1,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": true,
+      "bossHp": 100,
+      "requiredKeys": 1,
+      "stepLimit": 56,
+      "shiftingExit": false
+    },
+    {
+      "id": 21,
+      "chapter": 3,
+      "chapterName": "The Ancient Labyrinth",
+      "name": "Level 21",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 80,
+      "targetFormula": [
+        64,
+        16
+      ],
+      "enemyPointsBudget": 4,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 2,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 2,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 56,
+      "shiftingExit": false
+    },
+    {
+      "id": 22,
+      "chapter": 3,
+      "chapterName": "The Ancient Labyrinth",
+      "name": "Level 22",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 64,
+      "targetFormula": [
+        64
+      ],
+      "enemyPointsBudget": 5,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 3,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            1,
+            4
+          ],
+          "value": 32
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 57,
+      "shiftingExit": false
+    },
+    {
+      "id": 23,
+      "chapter": 3,
+      "chapterName": "The Ancient Labyrinth",
+      "name": "Level 23",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 64,
+      "targetFormula": [
+        64
+      ],
+      "enemyPointsBudget": 5,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [],
+      "numberedStones": [],
+      "spikeTraps": [
+        [
+          1,
+          2
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 58,
+      "shiftingExit": false
+    },
+    {
+      "id": 24,
+      "chapter": 3,
+      "chapterName": "The Ancient Labyrinth",
+      "name": "Level 24",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 80,
+      "targetFormula": [
+        64,
+        16
+      ],
+      "enemyPointsBudget": 6,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            1,
+            4
+          ],
+          "hp": 26
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 59,
+      "shiftingExit": false
+    },
+    {
+      "id": 25,
+      "chapter": 3,
+      "chapterName": "The Ancient Labyrinth",
+      "name": "Level 25 (Mid-Boss)",
+      "subtitle": "Dungeon Champion Appears",
+      "size": 5,
+      "target": 128,
+      "targetFormula": [
+        128
+      ],
+      "enemyPointsBudget": 3,
+      "initialStones": 1,
+      "stoneCoords": [
+        [
+          3,
+          2
+        ]
+      ],
+      "walls": [],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": true,
+      "bossHp": 140,
+      "requiredKeys": 1,
+      "stepLimit": 60,
+      "shiftingExit": false
+    },
+    {
+      "id": 26,
+      "chapter": 3,
+      "chapterName": "The Ancient Labyrinth",
+      "name": "Level 26",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 128,
+      "targetFormula": [
+        128
+      ],
+      "enemyPointsBudget": 6,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            4,
+            4
+          ],
+          "hp": 51
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 60,
+      "shiftingExit": false
+    },
+    {
+      "id": 27,
+      "chapter": 3,
+      "chapterName": "The Ancient Labyrinth",
+      "name": "Level 27",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 160,
+      "targetFormula": [
+        128,
+        32
+      ],
+      "enemyPointsBudget": 7,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 1,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [
+        [
+          3,
+          3
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 61,
+      "shiftingExit": false
+    },
+    {
+      "id": 28,
+      "chapter": 3,
+      "chapterName": "The Ancient Labyrinth",
+      "name": "Level 28",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 128,
+      "targetFormula": [
+        128
+      ],
+      "enemyPointsBudget": 7,
+      "initialStones": 1,
+      "stoneCoords": [
+        [
+          1,
+          3
+        ]
+      ],
+      "walls": [
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 4,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            1,
+            1
+          ],
+          "value": 64
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 62,
+      "shiftingExit": false
+    },
+    {
+      "id": 29,
+      "chapter": 3,
+      "chapterName": "The Ancient Labyrinth",
+      "name": "Level 29",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 128,
+      "targetFormula": [
+        128
+      ],
+      "enemyPointsBudget": 8,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 3,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 0,
+      "stepLimit": 63,
+      "shiftingExit": false
+    },
+    {
+      "id": 30,
+      "chapter": 3,
+      "chapterName": "The Ancient Labyrinth",
+      "name": "Level 30 (Final Boss)",
+      "subtitle": "Chamber Ruler of The Ancient Labyrinth",
+      "size": 5,
+      "target": 128,
+      "targetFormula": [
+        128
+      ],
+      "enemyPointsBudget": 4,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 4,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 1,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": true,
+      "bossHp": 190,
+      "requiredKeys": 1,
+      "stepLimit": 64,
+      "shiftingExit": false
+    },
+    {
+      "id": 31,
+      "chapter": 4,
+      "chapterName": "The Shifting Vault",
+      "name": "Level 31",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 128,
+      "targetFormula": [
+        128
+      ],
+      "enemyPointsBudget": 5,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 3,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            1
+          ],
+          "value": 64
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 64,
+      "shiftingExit": true
+    },
+    {
+      "id": 32,
+      "chapter": 4,
+      "chapterName": "The Shifting Vault",
+      "name": "Level 32",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 128,
+      "targetFormula": [
+        128
+      ],
+      "enemyPointsBudget": 6,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            0,
+            3
+          ],
+          "hp": 51
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 65,
+      "shiftingExit": true
+    },
+    {
+      "id": 33,
+      "chapter": 4,
+      "chapterName": "The Shifting Vault",
+      "name": "Level 33",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 192,
+      "targetFormula": [
+        128,
+        64
+      ],
+      "enemyPointsBudget": 7,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 2,
+          "col": 1,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 66,
+      "shiftingExit": true
+    },
+    {
+      "id": 34,
+      "chapter": 4,
+      "chapterName": "The Shifting Vault",
+      "name": "Level 34",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 256,
+      "targetFormula": [
+        256
+      ],
+      "enemyPointsBudget": 8,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [],
+      "numberedStones": [
+        {
+          "coord": [
+            3,
+            0
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            1,
+            2
+          ],
+          "hp": 102
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 67,
+      "shiftingExit": true
+    },
+    {
+      "id": 35,
+      "chapter": 4,
+      "chapterName": "The Shifting Vault",
+      "name": "Level 35 (Mid-Boss)",
+      "subtitle": "Dungeon Champion Appears",
+      "size": 5,
+      "target": 256,
+      "targetFormula": [
+        256
+      ],
+      "enemyPointsBudget": 4,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            1,
+            1
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": true,
+      "bossHp": 250,
+      "requiredKeys": 1,
+      "stepLimit": 68,
+      "shiftingExit": true
+    },
+    {
+      "id": 36,
+      "chapter": 4,
+      "chapterName": "The Shifting Vault",
+      "name": "Level 36",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 320,
+      "targetFormula": [
+        256,
+        64
+      ],
+      "enemyPointsBudget": 8,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 1,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [
+        [
+          2,
+          1
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 68,
+      "shiftingExit": true
+    },
+    {
+      "id": 37,
+      "chapter": 4,
+      "chapterName": "The Shifting Vault",
+      "name": "Level 37",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 256,
+      "targetFormula": [
+        256
+      ],
+      "enemyPointsBudget": 9,
+      "initialStones": 1,
+      "stoneCoords": [
+        [
+          4,
+          0
+        ]
+      ],
+      "walls": [
+        {
+          "row": 4,
+          "col": 0,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [
+        [
+          3,
+          1
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 69,
+      "shiftingExit": true
+    },
+    {
+      "id": 38,
+      "chapter": 4,
+      "chapterName": "The Shifting Vault",
+      "name": "Level 38",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 256,
+      "targetFormula": [
+        256
+      ],
+      "enemyPointsBudget": 9,
+      "initialStones": 0,
+      "stoneCoords": [],
+      "walls": [
+        {
+          "row": 3,
+          "col": 1,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            1,
+            2
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            3,
+            4
+          ],
+          "hp": 102
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 70,
+      "shiftingExit": true
+    },
+    {
+      "id": 39,
+      "chapter": 4,
+      "chapterName": "The Shifting Vault",
+      "name": "Level 39",
+      "subtitle": "Escape the room",
+      "size": 5,
+      "target": 320,
+      "targetFormula": [
+        256,
+        64
+      ],
+      "enemyPointsBudget": 10,
+      "initialStones": 1,
+      "stoneCoords": [
+        [
+          1,
+          3
+        ]
+      ],
+      "walls": [
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            2,
+            4
+          ],
+          "hp": 102
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 71,
+      "shiftingExit": true
+    },
+    {
+      "id": 40,
+      "chapter": 4,
+      "chapterName": "The Shifting Vault",
+      "name": "Level 40 (Final Boss)",
+      "subtitle": "Chamber Ruler of The Shifting Vault",
+      "size": 5,
+      "target": 256,
+      "targetFormula": [
+        256
+      ],
+      "enemyPointsBudget": 4,
+      "initialStones": 1,
+      "stoneCoords": [
+        [
+          1,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 1,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": true,
+      "bossHp": 320,
+      "requiredKeys": 1,
+      "stepLimit": 72,
+      "shiftingExit": true
+    },
+    {
+      "id": 41,
+      "chapter": 5,
+      "chapterName": "The Abyssal Apex",
+      "name": "Level 41",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 256,
+      "targetFormula": [
+        256
+      ],
+      "enemyPointsBudget": 22,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          5,
+          4
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "walls": [
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            3,
+            0
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          3,
+          3
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            2,
+            0
+          ],
+          "hp": 205
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 72,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 42,
+      "chapter": 5,
+      "chapterName": "The Abyssal Apex",
+      "name": "Level 42",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 320,
+      "targetFormula": [
+        256,
+        64
+      ],
+      "enemyPointsBudget": 22,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "walls": [
+        {
+          "row": 5,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 2,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            1
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          2,
+          3
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            3,
+            3
+          ],
+          "hp": 205
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 73,
+      "shiftingExit": true,
+      "layoutSeed": 2
+    },
+    {
+      "id": 43,
+      "chapter": 5,
+      "chapterName": "The Abyssal Apex",
+      "name": "Level 43",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 256,
+      "targetFormula": [
+        256
+      ],
+      "enemyPointsBudget": 17,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          3,
+          0
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            1,
+            4
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          2,
+          1
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 74,
+      "shiftingExit": true,
+      "layoutSeed": 4
+    },
+    {
+      "id": 44,
+      "chapter": 5,
+      "chapterName": "The Abyssal Apex",
+      "name": "Level 44",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 16,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "walls": [
+        {
+          "row": 4,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 3,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            5,
+            4
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          3,
+          0
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 75,
+      "shiftingExit": true,
+      "layoutSeed": 3
+    },
+    {
+      "id": 45,
+      "chapter": 5,
+      "chapterName": "The Abyssal Apex",
+      "name": "Level 45 (Mid-Boss)",
+      "subtitle": "Dungeon Champion Appears",
+      "size": 6,
+      "target": 256,
+      "targetFormula": [
+        256
+      ],
+      "enemyPointsBudget": 11,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "walls": [
+        {
+          "row": 0,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            1,
+            4
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": true,
+      "bossHp": 400,
+      "requiredKeys": 1,
+      "stepLimit": 76,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 46,
+      "chapter": 5,
+      "chapterName": "The Abyssal Apex",
+      "name": "Level 46",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 384,
+      "targetFormula": [
+        256,
+        128
+      ],
+      "enemyPointsBudget": 23,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          5,
+          3
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            4
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          3,
+          0
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            0,
+            5
+          ],
+          "hp": 205
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 76,
+      "shiftingExit": true,
+      "layoutSeed": 2
+    },
+    {
+      "id": 47,
+      "chapter": 5,
+      "chapterName": "The Abyssal Apex",
+      "name": "Level 47",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 23,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          1,
+          3
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 5,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            2,
+            5
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          1,
+          1
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            3,
+            5
+          ],
+          "hp": 205
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 77,
+      "shiftingExit": true,
+      "layoutSeed": 1
+    },
+    {
+      "id": 48,
+      "chapter": 5,
+      "chapterName": "The Abyssal Apex",
+      "name": "Level 48",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 320,
+      "targetFormula": [
+        256,
+        64
+      ],
+      "enemyPointsBudget": 23,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          4,
+          5
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "walls": [
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            3,
+            1
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          1,
+          3
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            2,
+            3
+          ],
+          "hp": 205
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 78,
+      "shiftingExit": true,
+      "layoutSeed": 3
+    },
+    {
+      "id": 49,
+      "chapter": 5,
+      "chapterName": "The Abyssal Apex",
+      "name": "Level 49",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 20,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          1,
+          5
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 1,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            2,
+            1
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          5,
+          1
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 79,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 50,
+      "chapter": 5,
+      "chapterName": "The Abyssal Apex",
+      "name": "Level 50 (Final Boss)",
+      "subtitle": "Chamber Ruler of The Abyssal Apex",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 18,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          5,
+          2
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "walls": [
+        {
+          "row": 1,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            2,
+            5
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            5,
+            3
+          ],
+          "hp": 410
+        }
+      ],
+      "hasBoss": true,
+      "bossHp": 480,
+      "requiredKeys": 1,
+      "stepLimit": 80,
+      "shiftingExit": true,
+      "layoutSeed": 1
+    },
+    {
+      "id": 51,
+      "chapter": 6,
+      "chapterName": "The Molten Depths",
+      "name": "Level 51",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 256,
+      "targetFormula": [
+        256
+      ],
+      "enemyPointsBudget": 23,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          4,
+          2
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "walls": [
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 5,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            5,
+            5
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          1,
+          4
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            4,
+            0
+          ],
+          "hp": 410
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 80,
+      "shiftingExit": true,
+      "layoutSeed": 4
+    },
+    {
+      "id": 52,
+      "chapter": 6,
+      "chapterName": "The Molten Depths",
+      "name": "Level 52",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 21,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          0,
+          5
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 1,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            5
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          2,
+          2
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 81,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 53,
+      "chapter": 6,
+      "chapterName": "The Molten Depths",
+      "name": "Level 53",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 384,
+      "targetFormula": [
+        256,
+        128
+      ],
+      "enemyPointsBudget": 23,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            3,
+            3
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          3,
+          5
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 82,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 54,
+      "chapter": 6,
+      "chapterName": "The Molten Depths",
+      "name": "Level 54",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 23,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 5,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            5,
+            5
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          3,
+          0
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            3,
+            1
+          ],
+          "hp": 410
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 83,
+      "shiftingExit": true,
+      "layoutSeed": 4
+    },
+    {
+      "id": 55,
+      "chapter": 6,
+      "chapterName": "The Molten Depths",
+      "name": "Level 55 (Mid-Boss)",
+      "subtitle": "Dungeon Champion Appears",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 18,
+      "initialStones": 2,
+      "stoneCoords": [
+        [
+          3,
+          3
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            2
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            2,
+            0
+          ],
+          "hp": 410
+        }
+      ],
+      "hasBoss": true,
+      "bossHp": 560,
+      "requiredKeys": 1,
+      "stepLimit": 84,
+      "shiftingExit": true,
+      "layoutSeed": 3
+    },
+    {
+      "id": 56,
+      "chapter": 6,
+      "chapterName": "The Molten Depths",
+      "name": "Level 56",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 320,
+      "targetFormula": [
+        256,
+        64
+      ],
+      "enemyPointsBudget": 32,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          3,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          5
+        ]
+      ],
+      "walls": [
+        {
+          "row": 0,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            2,
+            1
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          4,
+          4
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            1,
+            5
+          ],
+          "hp": 410
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 84,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 57,
+      "chapter": 6,
+      "chapterName": "The Molten Depths",
+      "name": "Level 57",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 27,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 5,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            3,
+            3
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          4,
+          1
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 85,
+      "shiftingExit": true,
+      "layoutSeed": 5
+    },
+    {
+      "id": 58,
+      "chapter": 6,
+      "chapterName": "The Molten Depths",
+      "name": "Level 58",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 640,
+      "targetFormula": [
+        512,
+        128
+      ],
+      "enemyPointsBudget": 26,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          1,
+          5
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          3
+        ]
+      ],
+      "walls": [
+        {
+          "row": 1,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            3
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          0,
+          5
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 86,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 59,
+      "chapter": 6,
+      "chapterName": "The Molten Depths",
+      "name": "Level 59",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 30,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          3,
+          0
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 3,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            2,
+            3
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 87,
+      "shiftingExit": true,
+      "layoutSeed": 3
+    },
+    {
+      "id": 60,
+      "chapter": 6,
+      "chapterName": "The Molten Depths",
+      "name": "Level 60 (Final Boss)",
+      "subtitle": "Chamber Ruler of The Molten Depths",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 22,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          5,
+          3
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "walls": [
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            3,
+            3
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            2,
+            3
+          ],
+          "hp": 819
+        }
+      ],
+      "hasBoss": true,
+      "bossHp": 640,
+      "requiredKeys": 1,
+      "stepLimit": 88,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 61,
+      "chapter": 7,
+      "chapterName": "The Crystal Caverns",
+      "name": "Level 61",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 256,
+      "targetFormula": [
+        256
+      ],
+      "enemyPointsBudget": 32,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          1,
+          2
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "walls": [
+        {
+          "row": 5,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 2,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            5
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          5,
+          3
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            1,
+            4
+          ],
+          "hp": 819
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 88,
+      "shiftingExit": true,
+      "layoutSeed": 6
+    },
+    {
+      "id": 62,
+      "chapter": 7,
+      "chapterName": "The Crystal Caverns",
+      "name": "Level 62",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 26,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 5,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            5,
+            2
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          1,
+          5
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 89,
+      "shiftingExit": true,
+      "layoutSeed": 1
+    },
+    {
+      "id": 63,
+      "chapter": 7,
+      "chapterName": "The Crystal Caverns",
+      "name": "Level 63",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 384,
+      "targetFormula": [
+        256,
+        128
+      ],
+      "enemyPointsBudget": 26,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          0,
+          5
+        ]
+      ],
+      "walls": [
+        {
+          "row": 0,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 3,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            3,
+            2
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          3,
+          1
+        ],
+        [
+          5,
+          3
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 90,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 64,
+      "chapter": 7,
+      "chapterName": "The Crystal Caverns",
+      "name": "Level 64",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 32,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          4,
+          0
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          5
+        ]
+      ],
+      "walls": [
+        {
+          "row": 0,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            2,
+            4
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          0
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            2,
+            5
+          ],
+          "hp": 819
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 91,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 65,
+      "chapter": 7,
+      "chapterName": "The Crystal Caverns",
+      "name": "Level 65 (Mid-Boss)",
+      "subtitle": "Dungeon Champion Appears",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 16,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          2,
+          1
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "walls": [
+        {
+          "row": 4,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 2,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            1,
+            3
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": true,
+      "bossHp": 720,
+      "requiredKeys": 1,
+      "stepLimit": 92,
+      "shiftingExit": true,
+      "layoutSeed": 2
+    },
+    {
+      "id": 66,
+      "chapter": 7,
+      "chapterName": "The Crystal Caverns",
+      "name": "Level 66",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 320,
+      "targetFormula": [
+        256,
+        64
+      ],
+      "enemyPointsBudget": 27,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "walls": [
+        {
+          "row": 5,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 3,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            1,
+            5
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          3
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 92,
+      "shiftingExit": true,
+      "layoutSeed": 5
+    },
+    {
+      "id": 67,
+      "chapter": 7,
+      "chapterName": "The Crystal Caverns",
+      "name": "Level 67",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 33,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          1,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          5,
+          0
+        ]
+      ],
+      "walls": [
+        {
+          "row": 4,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            0,
+            3
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            5,
+            1
+          ],
+          "hp": 1638
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 93,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 68,
+      "chapter": 7,
+      "chapterName": "The Crystal Caverns",
+      "name": "Level 68",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 640,
+      "targetFormula": [
+        512,
+        128
+      ],
+      "enemyPointsBudget": 27,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          1,
+          4
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            0,
+            2
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 94,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 69,
+      "chapter": 7,
+      "chapterName": "The Crystal Caverns",
+      "name": "Level 69",
+      "subtitle": "Escape the room",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 33,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          0,
+          3
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "walls": [
+        {
+          "row": 2,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 5,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            5,
+            0
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            4,
+            2
+          ],
+          "hp": 1638
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 95,
+      "shiftingExit": true,
+      "layoutSeed": 3
+    },
+    {
+      "id": 70,
+      "chapter": 7,
+      "chapterName": "The Crystal Caverns",
+      "name": "Level 70 (Final Boss)",
+      "subtitle": "Chamber Ruler of The Crystal Caverns",
+      "size": 6,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 17,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          0,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "walls": [
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            5,
+            0
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": true,
+      "bossHp": 790,
+      "requiredKeys": 1,
+      "stepLimit": 96,
+      "shiftingExit": true,
+      "layoutSeed": 5
+    },
+    {
+      "id": 71,
+      "chapter": 8,
+      "chapterName": "The Shadow Realm",
+      "name": "Level 71",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 39,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          5,
+          5
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "walls": [
+        {
+          "row": 4,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 5,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            4
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            0
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            2,
+            6
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            5,
+            2
+          ],
+          "hp": 1638
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 96,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 72,
+      "chapter": 8,
+      "chapterName": "The Shadow Realm",
+      "name": "Level 72",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 320,
+      "targetFormula": [
+        256,
+        64
+      ],
+      "enemyPointsBudget": 38,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          2,
+          6
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            3,
+            4
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            6,
+            3
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            0,
+            4
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          0,
+          2
+        ],
+        [
+          6,
+          5
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 97,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 73,
+      "chapter": 8,
+      "chapterName": "The Shadow Realm",
+      "name": "Level 73",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 33,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          1,
+          1
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "walls": [
+        {
+          "row": 0,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 1,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            2,
+            3
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            5,
+            2
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            0,
+            4
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 98,
+      "shiftingExit": true,
+      "layoutSeed": 1
+    },
+    {
+      "id": 74,
+      "chapter": 8,
+      "chapterName": "The Shadow Realm",
+      "name": "Level 74",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 384,
+      "targetFormula": [
+        256,
+        128
+      ],
+      "enemyPointsBudget": 40,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "walls": [
+        {
+          "row": 0,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            2,
+            3
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            1,
+            4
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            5,
+            3
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          1,
+          5
+        ],
+        [
+          5,
+          6
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            4,
+            6
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 99,
+      "shiftingExit": true,
+      "layoutSeed": 5
+    },
+    {
+      "id": 75,
+      "chapter": 8,
+      "chapterName": "The Shadow Realm",
+      "name": "Level 75 (Mid-Boss)",
+      "subtitle": "Dungeon Champion Appears",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 30,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          5,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            0
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            1,
+            5
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            6
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            1,
+            2
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": true,
+      "bossHp": 850,
+      "requiredKeys": 1,
+      "stepLimit": 100,
+      "shiftingExit": true,
+      "layoutSeed": 5
+    },
+    {
+      "id": 76,
+      "chapter": 8,
+      "chapterName": "The Shadow Realm",
+      "name": "Level 76",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 37,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          3,
+          6
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "walls": [
+        {
+          "row": 6,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            6,
+            0
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            5,
+            1
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            2,
+            5
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 100,
+      "shiftingExit": true,
+      "layoutSeed": 1
+    },
+    {
+      "id": 77,
+      "chapter": 8,
+      "chapterName": "The Shadow Realm",
+      "name": "Level 77",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 640,
+      "targetFormula": [
+        512,
+        128
+      ],
+      "enemyPointsBudget": 36,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          6,
+          3
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "walls": [
+        {
+          "row": 4,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 5,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            6
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            1,
+            5
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            4,
+            0
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          2,
+          1
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 101,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 78,
+      "chapter": 8,
+      "chapterName": "The Shadow Realm",
+      "name": "Level 78",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 34,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          2,
+          4
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "walls": [
+        {
+          "row": 1,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 4,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            1
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            5
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            2,
+            1
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          5,
+          3
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 102,
+      "shiftingExit": true,
+      "layoutSeed": 4
+    },
+    {
+      "id": 79,
+      "chapter": 8,
+      "chapterName": "The Shadow Realm",
+      "name": "Level 79",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 384,
+      "targetFormula": [
+        256,
+        128
+      ],
+      "enemyPointsBudget": 42,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          0,
+          4
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "walls": [
+        {
+          "row": 6,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 5,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            5
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            2,
+            3
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            2,
+            2
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            3,
+            6
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          5,
+          5
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 103,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 80,
+      "chapter": 8,
+      "chapterName": "The Shadow Realm",
+      "name": "Level 80 (Final Boss)",
+      "subtitle": "Chamber Ruler of The Shadow Realm",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 27,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          6,
+          0
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 5,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            1,
+            5
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            4,
+            3
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            6
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            4,
+            4
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": true,
+      "bossHp": 900,
+      "requiredKeys": 1,
+      "stepLimit": 104,
+      "shiftingExit": true,
+      "layoutSeed": 1
+    },
+    {
+      "id": 81,
+      "chapter": 9,
+      "chapterName": "The Celestial Gateway",
+      "name": "Level 81",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 43,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          2,
+          0
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "walls": [
+        {
+          "row": 5,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            6,
+            2
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            4,
+            0
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            5
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            0,
+            3
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          1,
+          5
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            6,
+            5
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 104,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 82,
+      "chapter": 9,
+      "chapterName": "The Celestial Gateway",
+      "name": "Level 82",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 320,
+      "targetFormula": [
+        256,
+        64
+      ],
+      "enemyPointsBudget": 42,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          3,
+          3
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          6
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            5,
+            3
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            6,
+            3
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            1,
+            3
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            1,
+            1
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          0,
+          4
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 105,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 83,
+      "chapter": 9,
+      "chapterName": "The Celestial Gateway",
+      "name": "Level 83",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 43,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          5,
+          2
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "walls": [
+        {
+          "row": 6,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            3,
+            5
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            4,
+            3
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            2,
+            3
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            5,
+            0
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            3,
+            0
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 106,
+      "shiftingExit": true,
+      "layoutSeed": 3
+    },
+    {
+      "id": 84,
+      "chapter": 9,
+      "chapterName": "The Celestial Gateway",
+      "name": "Level 84",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 384,
+      "targetFormula": [
+        256,
+        128
+      ],
+      "enemyPointsBudget": 38,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          4,
+          3
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          4,
+          6
+        ]
+      ],
+      "walls": [
+        {
+          "row": 6,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            3,
+            4
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            4,
+            2
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            3,
+            3
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            1,
+            5
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          6,
+          1
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 107,
+      "shiftingExit": true,
+      "layoutSeed": 2
+    },
+    {
+      "id": 85,
+      "chapter": 9,
+      "chapterName": "The Celestial Gateway",
+      "name": "Level 85 (Mid-Boss)",
+      "subtitle": "Dungeon Champion Appears",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 28,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          2,
+          6
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 0,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            5,
+            4
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            1,
+            1
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            5
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            4,
+            0
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [],
+      "hasBoss": true,
+      "bossHp": 940,
+      "requiredKeys": 1,
+      "stepLimit": 108,
+      "shiftingExit": true,
+      "layoutSeed": 4
+    },
+    {
+      "id": 86,
+      "chapter": 9,
+      "chapterName": "The Celestial Gateway",
+      "name": "Level 86",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 49,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "walls": [
+        {
+          "row": 5,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 1,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            5,
+            4
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            6,
+            6
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            0
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            6
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          4,
+          1
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          4,
+          0
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            5,
+            2
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 108,
+      "shiftingExit": true,
+      "layoutSeed": 2
+    },
+    {
+      "id": 87,
+      "chapter": 9,
+      "chapterName": "The Celestial Gateway",
+      "name": "Level 87",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 640,
+      "targetFormula": [
+        512,
+        128
+      ],
+      "enemyPointsBudget": 45,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          5,
+          2
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          2,
+          6
+        ]
+      ],
+      "walls": [
+        {
+          "row": 5,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            1,
+            4
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            5,
+            5
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            1,
+            6
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            0,
+            6
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          3,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          5,
+          3
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 109,
+      "shiftingExit": true,
+      "layoutSeed": 4
+    },
+    {
+      "id": 88,
+      "chapter": 9,
+      "chapterName": "The Celestial Gateway",
+      "name": "Level 88",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 50,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          5,
+          6
+        ]
+      ],
+      "walls": [
+        {
+          "row": 0,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            3,
+            1
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            5,
+            2
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            5,
+            4
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            5,
+            0
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          3,
+          4
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            4,
+            4
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 110,
+      "shiftingExit": true,
+      "layoutSeed": 2
+    },
+    {
+      "id": 89,
+      "chapter": 9,
+      "chapterName": "The Celestial Gateway",
+      "name": "Level 89",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 384,
+      "targetFormula": [
+        256,
+        128
+      ],
+      "enemyPointsBudget": 44,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          4,
+          5
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 1,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 4,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            2
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            2,
+            0
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            3,
+            5
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            6,
+            2
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          2,
+          6
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 111,
+      "shiftingExit": true,
+      "layoutSeed": 2
+    },
+    {
+      "id": 90,
+      "chapter": 9,
+      "chapterName": "The Celestial Gateway",
+      "name": "Level 90 (Final Boss)",
+      "subtitle": "Chamber Ruler of The Celestial Gateway",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 35,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "walls": [
+        {
+          "row": 1,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            2,
+            3
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            6,
+            3
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            4,
+            4
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            1
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            3,
+            0
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": true,
+      "bossHp": 970,
+      "requiredKeys": 1,
+      "stepLimit": 112,
+      "shiftingExit": true,
+      "layoutSeed": 5
+    },
+    {
+      "id": 91,
+      "chapter": 10,
+      "chapterName": "The Void Ascendancy",
+      "name": "Level 91",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 44,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          5,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          2,
+          6
+        ]
+      ],
+      "walls": [
+        {
+          "row": 6,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            0,
+            6
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            5,
+            3
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            4,
+            6
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            2,
+            4
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          2,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 112,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 92,
+      "chapter": 10,
+      "chapterName": "The Void Ascendancy",
+      "name": "Level 92",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 320,
+      "targetFormula": [
+        256,
+        64
+      ],
+      "enemyPointsBudget": 49,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            3,
+            6
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            4,
+            4
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            2,
+            2
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            6,
+            6
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          0,
+          6
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 113,
+      "shiftingExit": true,
+      "layoutSeed": 4
+    },
+    {
+      "id": 93,
+      "chapter": 10,
+      "chapterName": "The Void Ascendancy",
+      "name": "Level 93",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 53,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          5,
+          4
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          6
+        ]
+      ],
+      "walls": [
+        {
+          "row": 2,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            0
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            2,
+            0
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            6,
+            0
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            2,
+            2
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            2,
+            4
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          6,
+          3
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          1,
+          6
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            4,
+            5
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 114,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 94,
+      "chapter": 10,
+      "chapterName": "The Void Ascendancy",
+      "name": "Level 94",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 384,
+      "targetFormula": [
+        256,
+        128
+      ],
+      "enemyPointsBudget": 53,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          5,
+          3
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          2,
+          0
+        ]
+      ],
+      "walls": [
+        {
+          "row": 6,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            2,
+            3
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            5,
+            0
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            0,
+            6
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            2,
+            2
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            0,
+            3
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          3,
+          3
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            6,
+            1
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 115,
+      "shiftingExit": true,
+      "layoutSeed": 5
+    },
+    {
+      "id": 95,
+      "chapter": 10,
+      "chapterName": "The Void Ascendancy",
+      "name": "Level 95 (Mid-Boss)",
+      "subtitle": "Dungeon Champion Appears",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 38,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          5,
+          2
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          6,
+          0
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 4,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            6,
+            2
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            4,
+            2
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            4,
+            5
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            0
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            5,
+            3
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            3,
+            2
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": true,
+      "bossHp": 990,
+      "requiredKeys": 1,
+      "stepLimit": 116,
+      "shiftingExit": true,
+      "layoutSeed": 0
+    },
+    {
+      "id": 96,
+      "chapter": 10,
+      "chapterName": "The Void Ascendancy",
+      "name": "Level 96",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 53,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          2,
+          6
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "walls": [
+        {
+          "row": 4,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            5
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            4,
+            4
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            6,
+            0
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            2,
+            4
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            2
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          0,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            2,
+            1
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 116,
+      "shiftingExit": true,
+      "layoutSeed": 2
+    },
+    {
+      "id": 97,
+      "chapter": 10,
+      "chapterName": "The Void Ascendancy",
+      "name": "Level 97",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 640,
+      "targetFormula": [
+        512,
+        128
+      ],
+      "enemyPointsBudget": 49,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          1,
+          3
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "walls": [
+        {
+          "row": 4,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 4,
+          "type": "vertical"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            5,
+            2
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            3
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            2,
+            2
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            2
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            6,
+            6
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          5,
+          6
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          6,
+          1
+        ]
+      ],
+      "wanderingBeasts": [],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 117,
+      "shiftingExit": true,
+      "layoutSeed": 2
+    },
+    {
+      "id": 98,
+      "chapter": 10,
+      "chapterName": "The Void Ascendancy",
+      "name": "Level 98",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 54,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          4,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          2,
+          4
+        ]
+      ],
+      "walls": [
+        {
+          "row": 5,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            1,
+            1
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            5,
+            2
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            3,
+            2
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            5,
+            3
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            0,
+            6
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [
+        [
+          6,
+          1
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          6,
+          2
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            3,
+            1
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 118,
+      "shiftingExit": true,
+      "layoutSeed": 3
+    },
+    {
+      "id": 99,
+      "chapter": 10,
+      "chapterName": "The Void Ascendancy",
+      "name": "Level 99",
+      "subtitle": "Escape the room",
+      "size": 7,
+      "target": 384,
+      "targetFormula": [
+        256,
+        128
+      ],
+      "enemyPointsBudget": 54,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          6,
+          0
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "walls": [
+        {
+          "row": 2,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 6,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 1,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            5,
+            0
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            4,
+            3
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            1,
+            1
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            3,
+            1
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            3,
+            0
+          ],
+          "value": 128
+        }
+      ],
+      "spikeTraps": [
+        [
+          3,
+          3
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            4,
+            6
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": false,
+      "bossHp": 0,
+      "requiredKeys": 1,
+      "stepLimit": 119,
+      "shiftingExit": true,
+      "layoutSeed": 2
+    },
+    {
+      "id": 100,
+      "chapter": 10,
+      "chapterName": "The Void Ascendancy",
+      "name": "Level 100 (Final Boss)",
+      "subtitle": "Chamber Ruler of The Void Ascendancy",
+      "size": 7,
+      "target": 512,
+      "targetFormula": [
+        512
+      ],
+      "enemyPointsBudget": 39,
+      "initialStones": 3,
+      "stoneCoords": [
+        [
+          2,
+          6
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          6,
+          3
+        ]
+      ],
+      "walls": [
+        {
+          "row": 3,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 1,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 4,
+          "type": "horizontal"
+        },
+        {
+          "row": 5,
+          "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 5,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 2,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 6,
+          "type": "horizontal"
+        }
+      ],
+      "numberedStones": [
+        {
+          "coord": [
+            4,
+            3
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            5,
+            2
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            1,
+            1
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            2,
+            4
+          ],
+          "value": 256
+        },
+        {
+          "coord": [
+            1,
+            5
+          ],
+          "value": 256
+        }
+      ],
+      "spikeTraps": [],
+      "wanderingBeasts": [
+        {
+          "coord": [
+            4,
+            0
+          ],
+          "hp": 3277
+        }
+      ],
+      "hasBoss": true,
+      "bossHp": 1000,
+      "requiredKeys": 1,
+      "stepLimit": 120,
+      "shiftingExit": true,
+      "layoutSeed": 2
+    }
+  ]
+}

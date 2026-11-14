@@ -13,3 +13,19 @@ __v0_jsx-dev-runtime.ts
 node_modules
 .next/
 .DS_Store
+# Build artifacts
+tsconfig.tsbuildinfo
+
+# Raw art packs: sources for scripts/extract_icons.py, extract_wizard.py, extract_bosses.py
+# and import_icon_packs.py. Kept locally only (≈1.4 GB, some files > 100 MB); the game uses
+# the exported assets in public/assets.
+*.zip
+/2D-Fantasy-Wizards-Sprite-Sheets-4*
+/RPG-Craft-Resources-Game-Icons-Pack2.png
+/RPG-Kobold-Loot-Icons2.png
+/free-50-rpg-book-icons/
+/free-game-icons-of-fantasy-things-pack-15/
+/Free-Game-Icons-of-Fantasy-Knight-Armor-Pack-11/
+/free-top-down-boss-character-4-direction-pack/
+/daggers/
+/daggers 2/

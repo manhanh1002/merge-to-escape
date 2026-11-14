@@ -1,0 +1,64 @@
+{
+  "frameSize": 256,
+  "actions": {
+    "idle": {
+      "strip": "/assets/sprites/wizard/idle.png",
+      "webp": "/assets/sprites/wizard/idle.webp",
+      "gif": "/assets/sprites/wizard/idle.gif",
+      "frames": 5,
+      "fps": 8,
+      "loop": true
+    },
+    "walk": {
+      "strip": "/assets/sprites/wizard/walk.png",
+      "webp": "/assets/sprites/wizard/walk.webp",
+      "gif": "/assets/sprites/wizard/walk.gif",
+      "frames": 5,
+      "fps": 12,
+      "loop": true
+    },
+    "run": {
+      "strip": "/assets/sprites/wizard/run.png",
+      "webp": "/assets/sprites/wizard/run.webp",
+      "gif": "/assets/sprites/wizard/run.gif",
+      "frames": 5,
+      "fps": 14,
+      "loop": true
+    },
+    "jump": {
+      "strip": "/assets/sprites/wizard/jump.png",
+      "webp": "/assets/sprites/wizard/jump.webp",
+      "gif": "/assets/sprites/wizard/jump.gif",
+      "frames": 5,
+      "fps": 10,
+      "loop": false
+    },
+    "attack": {
+      "strip": "/assets/sprites/wizard/attack.png",
+      "webp": "/assets/sprites/wizard/attack.webp",
+      "gif": "/assets/sprites/wizard/attack.gif",
+      "frames": 5,
+      "fps": 12,
+      "loop": false
+    },
+    "hurt": {
+      "strip": "/assets/sprites/wizard/hurt.png",
+      "webp": "/assets/sprites/wizard/hurt.webp",
+      "gif": "/assets/sprites/wizard/hurt.gif",
+      "frames": 5,
+      "fps": 12,
+      "loop": false
+    },
+    "die": {
+      "strip": "/assets/sprites/wizard/die.png",
+      "webp": "/assets/sprites/wizard/die.webp",
+      "gif": "/assets/sprites/wizard/die.gif",
+      "frames": 5,
+      "fps": 8,
+      "loop": false
+    }
+  },
+  "fx": {
+    "magicBolt": "/assets/sprites/wizard/fx_magic_bolt.png"
+  }
+}

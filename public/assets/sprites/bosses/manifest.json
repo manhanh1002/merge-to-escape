@@ -1,0 +1,215 @@
+{
+  "frameSize": 256,
+  "bosses": {
+    "caveman": {
+      "clips": {
+        "idle-front": {
+          "strip": "/assets/sprites/bosses/caveman/idle-front.png",
+          "frames": 8,
+          "fps": 10
+        },
+        "idle-back": {
+          "strip": "/assets/sprites/bosses/caveman/idle-back.png",
+          "frames": 8,
+          "fps": 10
+        },
+        "idle-left": {
+          "strip": "/assets/sprites/bosses/caveman/idle-left.png",
+          "frames": 8,
+          "fps": 10
+        },
+        "idle-right": {
+          "strip": "/assets/sprites/bosses/caveman/idle-right.png",
+          "frames": 8,
+          "fps": 10
+        },
+        "attack-front": {
+          "strip": "/assets/sprites/bosses/caveman/attack-front.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "attack-back": {
+          "strip": "/assets/sprites/bosses/caveman/attack-back.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "attack-left": {
+          "strip": "/assets/sprites/bosses/caveman/attack-left.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "attack-right": {
+          "strip": "/assets/sprites/bosses/caveman/attack-right.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "hurt-front": {
+          "strip": "/assets/sprites/bosses/caveman/hurt-front.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "hurt-back": {
+          "strip": "/assets/sprites/bosses/caveman/hurt-back.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "hurt-left": {
+          "strip": "/assets/sprites/bosses/caveman/hurt-left.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "hurt-right": {
+          "strip": "/assets/sprites/bosses/caveman/hurt-right.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "dying": {
+          "strip": "/assets/sprites/bosses/caveman/dying.png",
+          "frames": 10,
+          "fps": 14
+        }
+      },
+      "bodyHeight": 0.52
+    },
+    "goblin": {
+      "clips": {
+        "idle-front": {
+          "strip": "/assets/sprites/bosses/goblin/idle-front.png",
+          "frames": 8,
+          "fps": 10
+        },
+        "idle-back": {
+          "strip": "/assets/sprites/bosses/goblin/idle-back.png",
+          "frames": 8,
+          "fps": 10
+        },
+        "idle-left": {
+          "strip": "/assets/sprites/bosses/goblin/idle-left.png",
+          "frames": 8,
+          "fps": 10
+        },
+        "idle-right": {
+          "strip": "/assets/sprites/bosses/goblin/idle-right.png",
+          "frames": 8,
+          "fps": 10
+        },
+        "attack-front": {
+          "strip": "/assets/sprites/bosses/goblin/attack-front.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "attack-back": {
+          "strip": "/assets/sprites/bosses/goblin/attack-back.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "attack-left": {
+          "strip": "/assets/sprites/bosses/goblin/attack-left.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "attack-right": {
+          "strip": "/assets/sprites/bosses/goblin/attack-right.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "hurt-front": {
+          "strip": "/assets/sprites/bosses/goblin/hurt-front.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "hurt-back": {
+          "strip": "/assets/sprites/bosses/goblin/hurt-back.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "hurt-left": {
+          "strip": "/assets/sprites/bosses/goblin/hurt-left.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "hurt-right": {
+          "strip": "/assets/sprites/bosses/goblin/hurt-right.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "dying": {
+          "strip": "/assets/sprites/bosses/goblin/dying.png",
+          "frames": 10,
+          "fps": 14
+        }
+      },
+      "bodyHeight": 0.517
+    },
+    "viking": {
+      "clips": {
+        "idle-front": {
+          "strip": "/assets/sprites/bosses/viking/idle-front.png",
+          "frames": 8,
+          "fps": 10
+        },
+        "idle-back": {
+          "strip": "/assets/sprites/bosses/viking/idle-back.png",
+          "frames": 8,
+          "fps": 10
+        },
+        "idle-left": {
+          "strip": "/assets/sprites/bosses/viking/idle-left.png",
+          "frames": 8,
+          "fps": 10
+        },
+        "idle-right": {
+          "strip": "/assets/sprites/bosses/viking/idle-right.png",
+          "frames": 8,
+          "fps": 10
+        },
+        "attack-front": {
+          "strip": "/assets/sprites/bosses/viking/attack-front.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "attack-back": {
+          "strip": "/assets/sprites/bosses/viking/attack-back.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "attack-left": {
+          "strip": "/assets/sprites/bosses/viking/attack-left.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "attack-right": {
+          "strip": "/assets/sprites/bosses/viking/attack-right.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "hurt-front": {
+          "strip": "/assets/sprites/bosses/viking/hurt-front.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "hurt-back": {
+          "strip": "/assets/sprites/bosses/viking/hurt-back.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "hurt-left": {
+          "strip": "/assets/sprites/bosses/viking/hurt-left.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "hurt-right": {
+          "strip": "/assets/sprites/bosses/viking/hurt-right.png",
+          "frames": 10,
+          "fps": 18
+        },
+        "dying": {
+          "strip": "/assets/sprites/bosses/viking/dying.png",
+          "frames": 10,
+          "fps": 14
+        }
+      },
+      "bodyHeight": 0.516
+    }
+  }
+}
