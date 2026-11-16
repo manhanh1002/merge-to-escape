@@ -35,7 +35,7 @@ Chi phí lên Lv **L** = **L⭐**; max Lv 14 ➔ 105⭐/nhánh, 525⭐ cả cây
 | 🪙 `goldRate` | +2% tỉ lệ rơi vàng | cộng vào `dropRate` của mọi `goldDropRules` |
 | 📖 `weaponRate` | +1.5% tỉ lệ rơi trang bị | cộng vào `dropRate` của sword/armor/gauntlet **và** `bossTomeDrop` |
 | ⚔️ `basePower` | +25 Power khởi đầu | Power đầu mỗi màn = `Lv × 25`; Power cộng thẳng vào sát thương **mỗi** Fire Tome |
-| ❤️ `keyRate` ➔ **đề xuất đổi thành `bonusHearts`** | (xem §8) | +1 ❤️ ở màn Boss tại Lv 5 / 10 / 14 (tối đa 6 ❤️) |
+| ❤️ `bonusHearts` (thay `keyRate` — **đã chốt**) | `heartLevels: [5, 10, 14]` | +1 ❤️ ở màn Boss tại Lv 5 / 10 / 14 (tối đa 6 ❤️) |
 | ✨ `weaponBonusPower` | +5% Power nhận từ trang bị | Power của giáp/găng/sách nhặt được × (1 + Lv × 5%) |
 
 ### 3.3. Shop — đồ tiêu hao (Vàng)
@@ -86,14 +86,20 @@ export function migrateV1(v1: SaveDataV1): SaveData // stars = Σ ceil((i+1)/10)
 export function starsForLevel(levelIndex: number): number // Math.ceil((levelIndex + 1) / 10)
 export function recordWin(save, levelIndex, moves, score, levelCount): { save: SaveData; starsEarned: number }
 
-// lib/talents.ts
-// = economyConfig.talentTreeConfig: { statsBonusPerLevel: Record<TalentId, number>, maxLevel: 14 }
-export type TalentConfig = { statsBonusPerLevel: Record<TalentId, number>; maxLevel: number }
-export function upgradeCost(level: number): number                 // level + 1
-export function canUpgrade(save: SaveData, id: TalentId): boolean   // < max && stars đủ
-export function upgrade(save: SaveData, id: TalentId): SaveData      // trừ ⭐, +1 Lv
+// lib/talents.ts  (đã làm ở 9.2)
+// = economyConfig.talentTreeConfig
+export type TalentConfig = {
+  statsBonusPerLevel: { goldRate: number; weaponRate: number; basePower: number; weaponBonusPower: number }
+  maxLevel: number          // 14
+  heartLevels: number[]     // [5, 10, 14] — bonusHearts
+}
+export function upgradeCost(level: number): number                                  // level + 1
+export function canUpgrade(save: SaveData, id: TalentId, cfg: TalentConfig): boolean // < max && stars đủ
+export function upgrade(save: SaveData, id: TalentId, cfg: TalentConfig): SaveData   // trừ ⭐, +1 Lv (không đủ ➔ trả nguyên save)
+export function refundAll(save: SaveData): SaveData                                  // hoàn toàn bộ ⭐ đã tiêu
 export function effectiveEconomy(base: EconomyConfig, t: SaveData['talents'], cfg: TalentConfig): EconomyConfig
 export function startingRun(t: SaveData['talents'], cfg: TalentConfig): { power: number; hearts: number }
+export function gearPower(itemPower: number, t: SaveData['talents'], cfg: TalentConfig): number
 
 // lib/shop.ts
 export function buy(save: SaveData, item: keyof Stash, prices: Record<keyof Stash, number>): SaveData | null
@@ -171,7 +177,7 @@ export function usePurge(board: Tile[], value: 2 | 4): { board: Tile[]; removed:
 | 9.8 Hoàn thiện | nhỏ |
 
 ## 8. Quyết Định Cần Chốt
-1. **Nhánh `keyRate`**: chìa khóa hiện không có chỗ dùng ➔ **đề xuất đổi thành `bonusHearts`** (+1 ❤️ màn Boss tại Lv 5/10/14). Phương án khác: giữ chìa và dùng để mở Rương ở Home (thêm hệ thống mới).
+1. ~~**Nhánh `keyRate`**~~ — **Đã chốt**: đổi thành `bonusHearts` (+1 ❤️ màn Boss tại Lv 5/10/14), config `heartLevels`.
 2. **Giá Shop mới**: Cuộn Diệt 2 = 200, Diệt 4 = 300, Bình máu = 250 (đề xuất, chỉnh trong config).
 3. **Cuộn phép nhặt trong trận**: cộng vào kho vĩnh viễn (đề xuất) hay mất khi qua màn như hiện tại.
 4. **Đặt lại Talent**: miễn phí (đề xuất khi đang test) hay tốn vàng.

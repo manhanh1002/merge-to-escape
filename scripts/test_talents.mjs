@@ -1,0 +1,82 @@
+// Run: npm test
+import { test } from 'node:test'
+import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import { freshSave } from '../lib/save.ts'
+import {
+  TALENT_IDS, canUpgrade, effectiveEconomy, gearPower, refundAll, startingRun, talentLevel, upgrade, upgradeCost,
+} from '../lib/talents.ts'
+
+const config = JSON.parse(readFileSync(new URL('../lib/game_config.json', import.meta.url), 'utf8'))
+const economy = config.economyConfig
+const cfg = economy.talentTreeConfig
+const withStars = (stars, talents = {}) => ({ ...freshSave(), stars, talents })
+
+test('there are exactly five talent branches, keyRate replaced by bonusHearts', () => {
+  assert.deepEqual(TALENT_IDS, ['goldRate', 'weaponRate', 'basePower', 'bonusHearts', 'weaponBonusPower'])
+})
+
+test('cost: going to level L costs L stars; one branch to Lv 14 costs 105', () => {
+  assert.equal(upgradeCost(0), 1)
+  assert.equal(upgradeCost(13), 14)
+  assert.equal(Array.from({ length: 14 }, (_, l) => upgradeCost(l)).reduce((a, b) => a + b, 0), 105)
+})
+
+test('upgrade spends stars and raises the level; all five to Lv 14 costs 525', () => {
+  let s = withStars(525)
+  for (const id of TALENT_IDS) for (let l = 0; l < 14; l++) s = upgrade(s, id, cfg)
+  assert.equal(s.stars, 0)
+  for (const id of TALENT_IDS) assert.equal(talentLevel(s, id), 14)
+})
+
+test('cannot upgrade without enough stars or past the max level', () => {
+  const poor = withStars(2, { goldRate: 2 }) // next level costs 3
+  assert.equal(canUpgrade(poor, 'goldRate', cfg), false)
+  assert.equal(upgrade(poor, 'goldRate', cfg), poor, 'unchanged')
+  const maxed = withStars(100, { basePower: 14 })
+  assert.equal(canUpgrade(maxed, 'basePower', cfg), false)
+  assert.equal(upgrade(maxed, 'basePower', cfg), maxed)
+  assert.equal(canUpgrade(withStars(1), 'basePower', cfg), true)
+})
+
+test('refundAll gives back every star spent and resets all levels', () => {
+  const s = refundAll(withStars(4, { goldRate: 3, basePower: 2 })) // 6 + 3 spent
+  assert.equal(s.stars, 13)
+  assert.deepEqual(s.talents, {})
+})
+
+test('goldRate Lv 5 adds +10% to every gold drop rate (capped at 100%)', () => {
+  const e = effectiveEconomy(economy, { goldRate: 5 }, cfg)
+  economy.goldDropRules.forEach((r, i) => assert.ok(Math.abs(e.goldDropRules[i].dropRate - (r.dropRate + 0.1)) < 1e-9))
+  const capped = effectiveEconomy({ ...economy, goldDropRules: [{ minTile: 16, gold: 10, dropRate: 0.97 }] }, { goldRate: 5 }, cfg)
+  assert.equal(capped.goldDropRules[0].dropRate, 1)
+})
+
+test('weaponRate Lv 4 adds +6% to tome/armor/gauntlet drops and to the boss tome drop', () => {
+  const e = effectiveEconomy(economy, { weaponRate: 4 }, cfg)
+  for (const type of ['sword', 'armor', 'gauntlet']) {
+    assert.ok(Math.abs(e.itemDropRates[type].dropRate - (economy.itemDropRates[type].dropRate + 0.06)) < 1e-9, type)
+  }
+  assert.ok(Math.abs(e.bossTomeDrop.dropRate - (economy.bossTomeDrop.dropRate + 0.06)) < 1e-9)
+  assert.equal(e.itemDropRates.key.dropRate, economy.itemDropRates.key.dropRate, 'keys untouched')
+})
+
+test('effectiveEconomy with no talents changes nothing and never mutates the base config', () => {
+  const before = JSON.stringify(economy)
+  assert.deepEqual(effectiveEconomy(economy, {}, cfg), economy)
+  effectiveEconomy(economy, { goldRate: 14, weaponRate: 14 }, cfg)
+  assert.equal(JSON.stringify(economy), before)
+})
+
+test('startingRun: basePower gives 25 Power per level; bonusHearts +1 heart at Lv 5, 10, 14', () => {
+  assert.deepEqual(startingRun({ basePower: 3 }, cfg), { power: 75, hearts: 3 })
+  assert.equal(startingRun({ bonusHearts: 4 }, cfg).hearts, 3)
+  assert.equal(startingRun({ bonusHearts: 5 }, cfg).hearts, 4)
+  assert.equal(startingRun({ bonusHearts: 10 }, cfg).hearts, 5)
+  assert.equal(startingRun({ bonusHearts: 14 }, cfg).hearts, 6)
+})
+
+test('weaponBonusPower Lv 10 turns a 30 Power item into 45', () => {
+  assert.equal(gearPower(30, { weaponBonusPower: 10 }, cfg), 45)
+  assert.equal(gearPower(30, {}, cfg), 30)
+})
