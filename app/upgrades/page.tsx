@@ -16,7 +16,7 @@ import { useSave } from '../../components/useSave'
 
 const ICONS: Record<Exclude<TalentId, 'bonusHearts' | 'basePower'>, string> = {
   goldRate: '/assets/icons/items/coins_gold.png',
-  weaponRate: '/assets/icons/items/spellbook_fire.png',
+  weaponRate: '/assets/icons/loot/treasure_map.png', // Treasure Sense: finds more tomes & gear
   weaponBonusPower: '/assets/icons/items/chest_armor_royal.png', // Gear Mastery: starting armor
 }
 
