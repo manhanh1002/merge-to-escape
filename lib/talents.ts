@@ -42,10 +42,13 @@ export function upgrade(save: SaveData, id: TalentId, cfg: TalentConfig): SaveDa
   return { ...save, stars: save.stars - upgradeCost(level), talents: { ...save.talents, [id]: level + 1 } }
 }
 
+/** Stars currently invested across all branches. */
+export const starsSpent = (talents: TalentLevels) =>
+  Object.values(talents).reduce((sum: number, lv) => sum + spentFor(lv ?? 0), 0)
+
 /** Resets every branch to 0 and gives back all the stars spent on them. */
 export function refundAll(save: SaveData): SaveData {
-  const refund = Object.values(save.talents).reduce((sum: number, lv) => sum + spentFor(lv ?? 0), 0)
-  return { ...save, stars: save.stars + refund, talents: {} }
+  return { ...save, stars: save.stars + starsSpent(save.talents), talents: {} }
 }
 
 const capRate = (rate: number) => Math.min(1, rate)
@@ -76,4 +79,37 @@ export function startingRun(talents: TalentLevels, cfg: TalentConfig): { power: 
 /** Power a picked-up item really gives, boosted by weaponBonusPower. */
 export function gearPower(itemPower: number, talents: TalentLevels, cfg: TalentConfig): number {
   return Math.round(itemPower * (1 + (talents.weaponBonusPower ?? 0) * cfg.statsBonusPerLevel.weaponBonusPower))
+}
+
+/** Player-facing names. */
+export const TALENT_NAMES: Record<TalentId, string> = {
+  goldRate: 'Golden Touch',
+  weaponRate: 'Treasure Sense',
+  basePower: 'Arcane Might',
+  bonusHearts: 'Stout Heart',
+  weaponBonusPower: 'Gear Mastery',
+}
+
+/** Effect text at `level` and at the next level (null when maxed), for the upgrades screen. */
+export function describeTalent(id: TalentId, level: number, cfg: TalentConfig): { name: string; now: string; next: string | null } {
+  const per = cfg.statsBonusPerLevel
+  // one decimal when needed (weaponRate is 1.5% per level), float noise removed
+  const pct = (lv: number, rate: number) => `${Number((lv * rate * 100).toFixed(1))}%`
+  const effect = (lv: number): string => {
+    switch (id) {
+      case 'goldRate': return `+${pct(lv, per.goldRate)} gold drop chance`
+      case 'weaponRate': return `+${pct(lv, per.weaponRate)} tome & gear drop chance`
+      case 'basePower': return `+${lv * per.basePower} starting Power (added to every Fire Tome)`
+      case 'weaponBonusPower': return `+${pct(lv, per.weaponBonusPower)} Power from gear`
+      case 'bonusHearts': return `${startingRun({ bonusHearts: lv }, cfg).hearts} hearts in boss rooms`
+    }
+  }
+  const now = level === 0 && id !== 'bonusHearts' ? 'No bonus yet' : effect(level)
+  let next: string | null = level >= cfg.maxLevel ? null : effect(level + 1)
+  if (id === 'bonusHearts' && next !== null && !cfg.heartLevels.includes(level + 1)) {
+    // hearts only change at certain levels: point at the next one
+    const at = cfg.heartLevels.find((lv) => lv > level)
+    next = at === undefined ? null : `${startingRun({ bonusHearts: at }, cfg).hearts} hearts at Lv ${at}`
+  }
+  return { name: TALENT_NAMES[id], now, next }
 }

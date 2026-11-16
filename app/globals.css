@@ -1123,7 +1123,52 @@ a.level-tile:hover { transform: translateY(-2px); border-color: var(--gold); }
 
 /* Map link in the game heading (replaces the old dropdown) */
 .map-link { pointer-events: auto; text-decoration: none; }
+.upgrades-link i { font-style: normal; color: #ffd24a; margin-left: 2px; }
 .map-link:hover { border-color: var(--gold); box-shadow: 0 4px 18px rgba(226, 181, 90, 0.25); }
+
+/* ---------- Upgrades ---------- */
+.upgrades-content { width: min(100% - 32px, 620px); margin: auto; padding: 18px 0 40px; }
+.upgrades-intro { margin: 0 0 14px; color: var(--ink-dim); font-size: 15px; }
+.upgrades-intro b { color: var(--gold-hi); font-weight: 700; }
+.talent-list { display: grid; gap: 10px; }
+.talent-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--gold-line);
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--night-3), var(--night-1));
+  box-shadow: inset 0 1px 0 rgba(255, 230, 170, 0.08), 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+.talent-row.maxed { border-color: var(--gold); }
+.talent-row.just-upgraded { animation: talent-glow 700ms ease-out; }
+@keyframes talent-glow {
+  0% { box-shadow: 0 0 0 0 rgba(255, 210, 74, 0.0); border-color: var(--gold-line); }
+  25% { box-shadow: 0 0 26px 4px rgba(255, 210, 74, 0.55); border-color: var(--gold-hi); }
+  100% { box-shadow: inset 0 1px 0 rgba(255, 230, 170, 0.08), 0 4px 12px rgba(0, 0, 0, 0.35); }
+}
+.talent-icon {
+  display: grid; place-items: center;
+  width: 54px; height: 54px; flex: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(226, 181, 90, 0.18), rgba(0, 0, 0, 0.35) 70%);
+  box-shadow: inset 0 0 0 1px var(--gold-line);
+  color: var(--blood);
+}
+.talent-icon img { width: 42px; height: 42px; object-fit: contain; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.6)); }
+.talent-body { flex: 1; min-width: 0; }
+.talent-title { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.talent-title strong { font-family: var(--font-display-stack); font-size: 17px; color: var(--gold-hi); }
+.talent-level { font-family: var(--font-display-stack); font-size: 12px; font-weight: 700; color: var(--ink-dim); }
+.talent-effect { margin: 2px 0 6px; font-size: 14px; color: var(--parchment); }
+.talent-next { color: var(--hero); }
+.talent-pips { display: flex; gap: 3px; }
+.talent-pips i { flex: 1; height: 6px; border-radius: 2px; background: rgba(0, 0, 0, 0.45); box-shadow: inset 0 0 0 1px rgba(255, 230, 170, 0.08); }
+.talent-pips i.on { background: linear-gradient(180deg, var(--gold-hi), var(--gold-deep)); }
+.talent-buy { flex: none; min-width: 64px; justify-content: center; padding: 9px 14px; }
+.talent-buy i { font-style: normal; margin-right: 3px; }
+.talent-buy:disabled { opacity: .45; cursor: not-allowed; filter: grayscale(.4); transform: none; }
+.upgrades-footer { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; margin-top: 16px; }
+.upgrades-footer .confirm-reset { align-items: center; color: var(--parchment); font-size: 14px; }
 
 /* ---------- Modal (settings) ---------- */
 .modal-backdrop {

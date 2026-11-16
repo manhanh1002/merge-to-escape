@@ -152,6 +152,7 @@ export function usePurge(board: Tile[], value: 2 | 4): { board: Tile[]; removed:
 - **Tệp**: `app/upgrades/page.tsx`, CSS.
 - **Việc**: 5 hàng nhánh, 14 pips, "hiện tại ➔ cấp sau" (ví dụ `+50 ➔ +75 Power`), nút nâng cấp hiện giá, hiệu ứng khi nâng; nút "Đặt lại talent" (hoàn toàn bộ ⭐ đã tiêu — miễn phí trong giai đoạn test).
 - **Nghiệm thu**: nâng cấp trừ đúng ⭐, F5 vẫn giữ; nút khóa khi thiếu ⭐ hoặc Lv 14.
+- **Ghi chú (đã làm)**: tên nhánh: Golden Touch, Treasure Sense, Arcane Might, Stout Heart, Gear Mastery; mô tả "hiện tại ➜ cấp sau" từ `describeTalent()` (+ test). Nâng cấp áp dụng từ màn **bắt đầu tiếp theo** (màn đang dở giữ chỉ số lúc bắt đầu). "Đặt lại talent" **miễn phí** (theo đề xuất §8.4 — đổi được nếu muốn tính phí). Bảng thắng có nút "Upgrades ★N" khi còn sao chưa tiêu.
 
 ### Giai đoạn 9.7 — Shop + thanh Booster trong trận
 - **Tệp**: `lib/shop.ts`, `lib/game-logic.ts` (`useHammer`, `usePurge`), `scripts/test_shop.mjs`, `scripts/test_game_logic.mjs`, `app/shop/page.tsx`, `app/play/page.tsx`.
@@ -183,7 +184,7 @@ export function usePurge(board: Tile[], value: 2 | 4): { board: Tile[]; removed:
 1. ~~**Nhánh `keyRate`**~~ — **Đã chốt**: đổi thành `bonusHearts` (+1 ❤️ màn Boss tại Lv 5/10/14), config `heartLevels`.
 2. **Giá Shop mới**: Cuộn Diệt 2 = 200, Diệt 4 = 300, Bình máu = 250 (đề xuất, chỉnh trong config).
 3. **Cuộn phép nhặt trong trận**: cộng vào kho vĩnh viễn (đề xuất) hay mất khi qua màn như hiện tại.
-4. **Đặt lại Talent**: miễn phí (đề xuất khi đang test) hay tốn vàng.
+4. **Đặt lại Talent**: đang làm **miễn phí** (theo đề xuất) — chưa chốt, đổi sang tốn vàng nếu muốn.
 5. **Âm thanh**: có làm trong đợt này không (cần nguồn âm thanh có giấy phép).
 6. **Dropdown chọn màn trong trận**: bỏ hẳn khi đã có Bản đồ (đề xuất) hay giữ cho tiện test.
 

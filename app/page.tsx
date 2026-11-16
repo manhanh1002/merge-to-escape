@@ -14,7 +14,7 @@ import { useSave } from '../components/useSave'
 
 const MENU = [
   { key: 'map', title: 'Level Map', blurb: '10 chapters, 100 chambers', icon: ART.treasureMap, href: '/levels', phase: '9.5', ready: true },
-  { key: 'upgrades', title: 'Upgrades', blurb: 'Spend stars on talents', icon: ART.spellbook, href: '/upgrades', phase: '9.6', ready: false },
+  { key: 'upgrades', title: 'Upgrades', blurb: 'Spend stars on talents', icon: ART.spellbook, href: '/upgrades', phase: '9.6', ready: true },
   { key: 'shop', title: 'Shop', blurb: 'Hammers, scrolls, potions', icon: ART.chest, href: '/shop', phase: '9.7', ready: false },
 ] as const
 

@@ -80,3 +80,31 @@ test('weaponBonusPower Lv 10 turns a 30 Power item into 45', () => {
   assert.equal(gearPower(30, { weaponBonusPower: 10 }, cfg), 45)
   assert.equal(gearPower(30, {}, cfg), 30)
 })
+
+test('describeTalent: names and current -> next effect text for every branch', async () => {
+  const { describeTalent } = await import('../lib/talents.ts')
+  assert.deepEqual(describeTalent('goldRate', 0, cfg), { name: 'Golden Touch', now: 'No bonus yet', next: '+2% gold drop chance' })
+  assert.deepEqual(describeTalent('goldRate', 5, cfg), { name: 'Golden Touch', now: '+10% gold drop chance', next: '+12% gold drop chance' })
+  assert.equal(describeTalent('weaponRate', 4, cfg).now, '+6% tome & gear drop chance')
+  assert.equal(describeTalent('weaponRate', 1, cfg).now, '+1.5% tome & gear drop chance', 'no rounding up to 2%')
+  assert.equal(describeTalent('basePower', 3, cfg).now, '+75 starting Power (added to every Fire Tome)')
+  assert.equal(describeTalent('weaponBonusPower', 10, cfg).now, '+50% Power from gear')
+  assert.equal(describeTalent('weaponBonusPower', 14, cfg).next, null, 'maxed: no next level')
+})
+
+test('describeTalent: hearts only change at Lv 5 / 10 / 14', async () => {
+  const { describeTalent } = await import('../lib/talents.ts')
+  assert.deepEqual(describeTalent('bonusHearts', 0, cfg), { name: 'Stout Heart', now: '3 hearts in boss rooms', next: '4 hearts at Lv 5' })
+  assert.equal(describeTalent('bonusHearts', 4, cfg).next, '4 hearts in boss rooms')
+  assert.equal(describeTalent('bonusHearts', 5, cfg).now, '4 hearts in boss rooms')
+  assert.equal(describeTalent('bonusHearts', 6, cfg).next, '5 hearts at Lv 10')
+  assert.equal(describeTalent('bonusHearts', 13, cfg).next, '6 hearts in boss rooms')
+  assert.equal(describeTalent('bonusHearts', 14, cfg).now, '6 hearts in boss rooms')
+})
+
+test('starsSpent counts the stars invested across branches', async () => {
+  const { starsSpent } = await import('../lib/talents.ts')
+  assert.equal(starsSpent({}), 0)
+  assert.equal(starsSpent({ goldRate: 3, basePower: 2 }), 9)
+  assert.equal(starsSpent({ goldRate: 14, weaponRate: 14, basePower: 14, bonusHearts: 14, weaponBonusPower: 14 }), 525)
+})

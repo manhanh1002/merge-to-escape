@@ -507,6 +507,9 @@ export default function PlayPage() {
                   <button className="secondary-button" onClick={() => reset()}>Replay Level</button>
                 )}
                 <Link href="/levels" className="secondary-button"><MapIcon size={16} /> Map</Link>
+                {won && progress.stars > 0 && (
+                  <Link href="/upgrades" className="secondary-button upgrades-link">Upgrades <i aria-hidden>★</i>{progress.stars}</Link>
+                )}
               </div>
             </div>
           )}
