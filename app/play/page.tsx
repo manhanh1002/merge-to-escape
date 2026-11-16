@@ -4,12 +4,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { DoorOpen, Map as MapIcon, RotateCcw, Skull, Undo2 } from 'lucide-react'
-import { recordWin, starsForLevel } from '../../lib/save'
+import { recordWin, starsForLevel, type Stash } from '../../lib/save'
 import { effectiveEconomy, gearPower, startingRun, type TalentLevels } from '../../lib/talents'
 import { economy, levels, talentCfg } from '../../lib/levels'
 import { resolveStartLevel } from '../../lib/navigation'
 import {
-  addRandomTile, computeMove, hasAnyMove, isBoss, isFusionLevel, makeBoard as buildBoard, spikeCells,
+  addRandomTile, applyHammer, applyHeartPotion, applyPurge, computeMove, hasAnyMove, isBoss, isFusionLevel,
+  makeBoard as buildBoard, spikeCells,
   type Direction, type FloorGift, type FloorGifts, type LevelConfig, type Motion, type Tile,
 } from '../../lib/game-logic'
 import { ART, goldArt } from '../../components/art'
@@ -18,6 +19,8 @@ import {
   type BossAction, type HeroAction,
 } from '../../components/sprites'
 import { Purse } from '../../components/Purse'
+import { BOOSTERS } from '../../components/boosters'
+import { SHOP_ITEMS, type ShopItem } from '../../lib/shop'
 import { TopBar } from '../../components/TopBar'
 import { useSave } from '../../components/useSave'
 
@@ -29,7 +32,8 @@ const freshRun = (gold: number, talents: TalentLevels = {}): Inventory => {
   const start = startingRun(talents, talentCfg)
   return { gold, keys: 0, power: start.power, hearts: start.hearts, scrolls: { 2: 0, 4: 0 } }
 }
-type Snapshot = { board: Tile[]; moves: number; score: number; floorGifts: FloorGifts; inventory: Inventory }
+/** Undo restores the board, the run and the stash (so undoing a booster gives it back). */
+type Snapshot = { board: Tile[]; moves: number; score: number; floorGifts: FloorGifts; inventory: Inventory; stash: Stash }
 
 const makeBoard = (levelIndex: number) => buildBoard(levels[levelIndex])
 
@@ -121,6 +125,9 @@ export default function PlayPage() {
   /** Stars paid by the last win (0 on a replay), shown on the result card. */
   const [winStars, setWinStars] = useState<number | null>(null)
   const [lost, setLost] = useState(false)
+  /** 'stuck' losses (no moves left) can be rescued with a booster; spikes and the boss cannot. */
+  const [stuck, setStuck] = useState(false)
+  const [hammerMode, setHammerMode] = useState(false)
   // Boss animation + transient effects. `corpseAt` keeps the dying animation on screen after
   // the boss cell has already been cleared by the rules.
   const [bossAnim, setBossAnim] = useState<{ action: BossAction; nonce: number; corpseAt: number | null }>({ action: 'idle', nonce: 0, corpseAt: null })
@@ -146,7 +153,7 @@ export default function PlayPage() {
     setMessage(levels[index].hasBoss ? statusMessage(levels[index], false, true) : START_MESSAGE)
     setHero((h) => ({ action: 'idle', nonce: h.nonce + 1 })); setFacing(1)
     setBossAnim((b) => ({ action: 'idle', nonce: b.nonce + 1, corpseAt: null })); setPopup(null); setBoardAnim(null)
-    setWinStars(null)
+    setWinStars(null); setStuck(false); setHammerMode(false)
   }, [levelIndex, progress.talents])
 
   const chooseLevel = useCallback((index: number) => {
@@ -210,8 +217,10 @@ export default function PlayPage() {
     const tomeCast = res.tomesCast > 0
     let castLeft = res.tomesCast
     let nextInventory = inventory
+    const scrollsFound = { purge2: 0, purge4: 0 }
     for (const gift of res.collected) {
       if (castLeft > 0 && gift.type === 'equipment' && gift.item.type === 'sword') { castLeft--; continue }
+      if (gift.type === 'scroll') { scrollsFound[gift.targetValue === 2 ? 'purge2' : 'purge4']++; continue }
       nextInventory = applyGift(nextInventory, gift, progress.talents)
     }
     if (res.bossReward) {
@@ -225,7 +234,11 @@ export default function PlayPage() {
     setBoardAnim((a) => ({ nonce: (a?.nonce ?? 0) + 1, motions: res.motions, prev: board, spawned }))
     if (tomeCast) setPopup((p) => ({ text: `-${res.bossDamage}`, at: res.bossAt, nonce: (p?.nonce ?? 0) + 1 }))
 
-    setHistory((h) => [...h, { board, moves, score, floorGifts, inventory }])
+    setHistory((h) => [...h, { board, moves, score, floorGifts, inventory, stash: progress.stash }])
+    if (scrollsFound.purge2 || scrollsFound.purge4) {
+      // scrolls found in a chamber go to the permanent stash
+      setProgress((p) => ({ ...p, stash: { ...p.stash, purge2: p.stash.purge2 + scrollsFound.purge2, purge4: p.stash.purge4 + scrollsFound.purge4 } }))
+    }
     setBoard(nextBoard); setFloorGifts(res.floorGifts); setInventory(nextInventory)
     setMoves((m) => m + 1); setScore((s) => s + res.gained)
 
@@ -245,7 +258,11 @@ export default function PlayPage() {
       return
     }
     if (res.steppedOnSpike) { playHero('die'); setLost(true); setMessage('You stepped into a deadly Spike Trap!'); return }
-    if (!hasAnyMove(nextBoard, res.floorGifts, level, runEconomy, nextInventory.power)) { playHero('die'); setLost(true); setMessage('No moves left — the room has sealed shut.'); return }
+    if (!hasAnyMove(nextBoard, res.floorGifts, level, runEconomy, nextInventory.power)) {
+      playHero('die'); setLost(true); setStuck(true)
+      setMessage('No moves left — the room has sealed shut.')
+      return
+    }
 
     // Boss reacts: swings when it touches you, dies, or flinches from a tome.
     if (res.bossHitPlayer) playBoss('attack')
@@ -273,7 +290,7 @@ export default function PlayPage() {
           ? 'The door is sealed — defeat the boss first. Walk over Fire Tomes to blast it!'
           : note + statusMessage(level, res.doorOpen, res.board.some(isBoss)),
     )
-  }, [board, floorGifts, inventory, level, levelIndex, lost, moves, playBoss, playHero, progress.records, progress.talents, runEconomy, score, won])
+  }, [board, floorGifts, inventory, level, levelIndex, lost, moves, playBoss, playHero, progress.records, progress.stash, progress.talents, runEconomy, score, setProgress, won])
 
   const undo = () => {
     const previous = history[history.length - 1]
@@ -281,13 +298,57 @@ export default function PlayPage() {
     setHistory(history.slice(0, -1))
     setBoard(previous.board); setMoves(previous.moves); setScore(previous.score)
     setFloorGifts(previous.floorGifts); setInventory(previous.inventory)
-    setWon(false); setLost(false)
+    setProgress((p) => ({ ...p, stash: previous.stash }))
+    setWon(false); setLost(false); setStuck(false); setHammerMode(false)
     playHero('idle'); playBoss('idle'); setPopup(null); setBoardAnim(null)
     setMessage(statusMessage(level, previous.board.includes('exit'), previous.board.some(isBoss)))
   }
 
+  // ---------- Boosters (stash items, used between moves; undoable; no tile spawns) ----------
+  const bossAliveNow = board.some(isBoss)
+  const canUseBoosters = !won && (!lost || stuck)
+  const smashable = board.flatMap((c, i) => (applyHammer(board, i) ? [i] : []))
+  const boosterUsable: Record<ShopItem, boolean> = {
+    hammer: progress.stash.hammer > 0 && smashable.length > 0,
+    purge2: progress.stash.purge2 > 0 && board.includes(2),
+    purge4: progress.stash.purge4 > 0 && board.includes(4),
+    heartPotion: progress.stash.heartPotion > 0 && bossAliveNow && applyHeartPotion(inventory.hearts, maxHearts) !== null,
+  }
+
+  /** Applies a booster's new board/inventory, spends one item, and lifts a "stuck" loss
+   *  when moves are possible again. */
+  const spendBooster = (item: ShopItem, nextBoard: Tile[], nextInventory: Inventory, note: string) => {
+    setHistory((h) => [...h, { board, moves, score, floorGifts, inventory, stash: progress.stash }])
+    setProgress((p) => ({ ...p, stash: { ...p.stash, [item]: p.stash[item] - 1 } }))
+    setBoard(nextBoard); setInventory(nextInventory); setBoardAnim(null); setHammerMode(false)
+    if (stuck && hasAnyMove(nextBoard, floorGifts, level, runEconomy, nextInventory.power)) {
+      setLost(false); setStuck(false); playHero('idle')
+      setMessage(`${note} You can move again!`)
+    } else {
+      setMessage(note)
+    }
+  }
+
+  const activateBooster = (item: ShopItem) => {
+    if (!canUseBoosters || !boosterUsable[item]) return
+    if (item === 'hammer') { setHammerMode((m) => !m); setMessage('Pick a glowing stone to smash it.'); return }
+    if (item === 'heartPotion') {
+      spendBooster(item, board, { ...inventory, hearts: applyHeartPotion(inventory.hearts, maxHearts) ?? inventory.hearts }, 'The potion restores a heart.')
+      return
+    }
+    const value = item === 'purge2' ? 2 : 4
+    const res = applyPurge(board, value)
+    spendBooster(item, res.board, inventory, `The scroll burns away ${res.removed.length} × ${value}.`)
+  }
+
+  const smash = (index: number) => {
+    const next = hammerMode && canUseBoosters ? applyHammer(board, index) : null
+    if (next) spendBooster('hammer', next, inventory, 'The hammer shatters the stone!')
+  }
+
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') { setHammerMode(false); return }
       const keys: Record<string, Direction> = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down' }
       if (keys[event.key]) { event.preventDefault(); move(keys[event.key]) }
     }
@@ -345,7 +406,7 @@ export default function PlayPage() {
       <TopBar back="/" />
 
       <section className="game-content">
-        <Purse gold={inventory.gold} stars={progress.stars} keys={inventory.keys} power={inventory.power} scrolls={inventory.scrolls} />
+        <Purse gold={inventory.gold} stars={progress.stars} keys={inventory.keys} power={inventory.power} />
 
         <div className="level-heading">
           <div>
@@ -392,7 +453,7 @@ export default function PlayPage() {
         </div>
 
         <div className="board-wrap" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-          <div className={`board board-${level.size}x${level.size}`} style={{ gridTemplateColumns: `repeat(${level.size}, 1fr)` }} aria-label="Game board">
+          <div className={`board board-${level.size}x${level.size}${hammerMode ? ' hammer-mode' : ''}`} style={{ gridTemplateColumns: `repeat(${level.size}, 1fr)` }} aria-label="Game board">
             {board.map((cell, index) => {
               const gift = floorGifts[index]
               const isSpike = spikes.has(index)
@@ -410,7 +471,11 @@ export default function PlayPage() {
               const stateClass = primary ? (primary.merged ? ' merged' : ' sliding') : spawnedHere ? ' spawned' : ''
               const animKey = primary || spawnedHere ? `m${boardAnim?.nonce}` : 'still'
               return (
-                <div className={`cell${isSpike ? ' has-spike' : ''}${cell !== null ? ' occupied' : ''}`} key={index}>
+                <div
+                  className={`cell${isSpike ? ' has-spike' : ''}${cell !== null ? ' occupied' : ''}${hammerMode && smashable.includes(index) ? ' smashable' : ''}`}
+                  key={index}
+                  onClick={hammerMode ? () => smash(index) : undefined}
+                >
                   {isSpike && (
                     <div className="floor-spike" aria-label="Spike trap"><Skull size={iconSize} strokeWidth={2.2} /></div>
                   )}
@@ -485,7 +550,7 @@ export default function PlayPage() {
               ))}
             </div>
           </div>
-          {(won || lost) && (
+          {(won || lost) && !hammerMode && (
             <div className="result-card">
               <div className="result-icon"><img src={heroGif(won ? 'jump' : 'hurt')} alt="" draggable={false} /></div>
               <h2>{won ? (levelIndex === levels.length - 1 ? 'Champion!' : 'Escaped!') : 'Try again'}</h2>
@@ -494,6 +559,9 @@ export default function PlayPage() {
                 <p className={`star-line${winStars ? ' earned' : ''}`}>
                   {winStars ? <><i aria-hidden>★</i> +{winStars} {winStars === 1 ? 'star' : 'stars'} — first clear!</> : 'Replay — no stars this time'}
                 </p>
+              )}
+              {lost && stuck && SHOP_ITEMS.some((i) => boosterUsable[i]) && (
+                <p className="star-line earned">Use a booster below to clear some space and keep going.</p>
               )}
               <div className="result-actions">
                 {won && levelIndex < levels.length - 1 ? (
@@ -514,6 +582,27 @@ export default function PlayPage() {
             </div>
           )}
         </div>
+        <div className="booster-bar" aria-label="Boosters">
+          {SHOP_ITEMS.map((item) => {
+            const b = BOOSTERS[item]
+            return (
+              <button
+                key={item}
+                className={`booster-btn${item === 'hammer' && hammerMode ? ' active' : ''}`}
+                disabled={!canUseBoosters || !boosterUsable[item]}
+                onClick={() => activateBooster(item)}
+                title={`${b.name}: ${b.blurb}`}
+                aria-label={`${b.name} (${progress.stash[item]} left)`}
+              >
+                <img src={b.icon} alt="" draggable={false} />
+                {b.badge && <em className="booster-badge">{b.badge}</em>}
+                <span>{b.short}</span>
+                <span className="count">{progress.stash[item]}</span>
+              </button>
+            )
+          })}
+        </div>
+        {hammerMode && <p className="booster-hint">Pick a glowing stone to smash · Esc to cancel</p>}
         <p className="hint">{message}</p>
         <div className="controls">
           <button className="secondary-button" onClick={undo} disabled={history.length === 0}><Undo2 size={17} /> Undo</button>

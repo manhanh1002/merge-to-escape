@@ -419,3 +419,29 @@ test('tomes stay on the floor while the boss is still alive', () => {
 test('normal levels (no boss) still drop tomes as gear', () => {
   assert.deepEqual(rollGift(8, economy, always), tome)
 })
+
+test('hammer: smashes a stone or a numbered stone, nothing else', async () => {
+  const { applyHammer } = await import('../lib/game-logic.ts')
+  const board = grid([P, 'stone', ns(8), 'exit'], [2, boss(30), S, S], [S, S, S, S], [S, S, S, S])
+  assert.equal(applyHammer(board, 1)[1], null)
+  assert.equal(applyHammer(board, 2)[2], null)
+  assert.equal(applyHammer(board, 1)[2] !== null, true, 'only the target changes')
+  for (const k of [0, 3, 4, 5, 6]) assert.equal(applyHammer(board, k), null, `cell ${k} cannot be smashed`)
+})
+
+test('purge scroll: removes every tile of that value and reports where', async () => {
+  const { applyPurge } = await import('../lib/game-logic.ts')
+  const board = grid([P, 2, 4, 2], [8, 2, S, 4], [S, S, S, S], [S, S, S, boss(30)])
+  const two = applyPurge(board, 2)
+  assert.deepEqual(two.removed, [1, 3, 5])
+  assert.deepEqual(two.board.filter((c) => c === 2), [])
+  assert.equal(two.board[2], 4)
+  assert.deepEqual(applyPurge(board, 4).removed, [2, 7])
+  assert.deepEqual(applyPurge(grid([P, 8, S, S], [S, S, S, S], [S, S, S, S], [S, S, S, S]), 2).removed, [], 'nothing to purge')
+})
+
+test('heart potion: +1 heart up to the maximum, refused when full', async () => {
+  const { applyHeartPotion } = await import('../lib/game-logic.ts')
+  assert.equal(applyHeartPotion(1, 3), 2)
+  assert.equal(applyHeartPotion(3, 3), null)
+})

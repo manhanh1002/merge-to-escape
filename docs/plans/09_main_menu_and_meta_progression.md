@@ -159,6 +159,7 @@ export function usePurge(board: Tile[], value: 2 | 4): { board: Tile[]; removed:
 - **Test**: mua trừ đúng vàng, thiếu vàng ➔ `null`; Búa chỉ phá `stone`/`numbered_stone` (không phá Boss, cửa, nhân vật); Diệt 2 xóa mọi tile 2 và trả danh sách ô bị xóa; Bình máu không vượt ❤️ tối đa.
 - **Việc trong trận**: thanh Booster dưới bàn (🔨 / 📜2 / 📜4 / 🧪 kèm số lượng); Búa ➔ chế độ chọn đá (đá nhấp nháy), bấm đá ➔ vỡ; mỗi lần dùng tính là 1 lượt có thể Undo.
 - **Nghiệm thu**: theo Checklist KH 5 §6.
+- **Ghi chú (đã làm)**: hàm thuần đặt tên `applyHammer` / `applyPurge` / `applyHeartPotion` (không dùng tiền tố `use…` để khỏi nhầm với React hook) + test; `lib/shop.ts` + test. Giá trong config: Búa 150, Diệt 2 = 200, Diệt 4 = 300, Bình máu 250 (theo đề xuất §8.2, chưa chốt). Cuộn phép nhặt trong trận vào **kho vĩnh viễn** (§8.3 theo đề xuất). Dùng booster **không** tính nước đi, không sinh tile, **Undo được** (Undo trả lại vật phẩm). **Cứu khi kẹt**: thua vì hết nước đi vẫn dùng được booster; nếu đi được lại thì chơi tiếp.
 
 ### Giai đoạn 9.8 — Hoàn thiện
 - Âm thanh (nếu chốt §8), hiệu ứng nhận ⭐ / nâng cấp, `npm run build`, kiểm tra 375px, cập nhật README kế hoạch.
@@ -182,8 +183,8 @@ export function usePurge(board: Tile[], value: 2 | 4): { board: Tile[]; removed:
 
 ## 8. Quyết Định Cần Chốt
 1. ~~**Nhánh `keyRate`**~~ — **Đã chốt**: đổi thành `bonusHearts` (+1 ❤️ màn Boss tại Lv 5/10/14), config `heartLevels`.
-2. **Giá Shop mới**: Cuộn Diệt 2 = 200, Diệt 4 = 300, Bình máu = 250 (đề xuất, chỉnh trong config).
-3. **Cuộn phép nhặt trong trận**: cộng vào kho vĩnh viễn (đề xuất) hay mất khi qua màn như hiện tại.
+2. **Giá Shop mới**: đang dùng Diệt 2 = 200, Diệt 4 = 300, Bình máu = 250 (theo đề xuất, chưa chốt — chỉnh trong `shopPrices`).
+3. **Cuộn phép nhặt trong trận**: đang cộng vào kho vĩnh viễn (theo đề xuất, chưa chốt).
 4. **Đặt lại Talent**: đang làm **miễn phí** (theo đề xuất) — chưa chốt, đổi sang tốn vàng nếu muốn.
 5. **Âm thanh**: có làm trong đợt này không (cần nguồn âm thanh có giấy phép).
 6. **Dropdown chọn màn trong trận**: bỏ hẳn khi đã có Bản đồ (đề xuất) hay giữ cho tiện test.

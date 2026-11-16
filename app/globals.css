@@ -1170,6 +1170,51 @@ a.level-tile:hover { transform: translateY(-2px); border-color: var(--gold); }
 .upgrades-footer { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; margin-top: 16px; }
 .upgrades-footer .confirm-reset { align-items: center; color: var(--parchment); font-size: 14px; }
 
+/* ---------- Shop + booster bar ---------- */
+.shop-icon { position: relative; }
+.booster-badge {
+  position: absolute; right: -2px; bottom: -2px;
+  min-width: 20px; height: 20px; padding: 0 5px;
+  display: grid; place-items: center;
+  border-radius: 999px; border: 1px solid var(--gold-line);
+  background: #1a1930;
+  font-style: normal; font-family: var(--font-display-stack); font-weight: 900; font-size: 12px; color: var(--gold-hi);
+}
+.price-coin { width: 20px; height: 20px; margin-right: 4px; }
+.shop-note { color: var(--ink-dim); font-size: 14px; font-style: italic; }
+
+.booster-bar { display: flex; justify-content: center; gap: 8px; margin: 14px 0 0; flex-wrap: wrap; }
+.booster-btn {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  width: 72px; padding: 6px 4px 5px;
+  border: 1px solid var(--gold-line); border-radius: 12px;
+  background: linear-gradient(180deg, var(--night-3), var(--night-1));
+  color: var(--parchment);
+  font-family: var(--font-display-stack); font-size: 11px; font-weight: 700;
+  cursor: pointer;
+  transition: border-color .12s ease, box-shadow .12s ease, transform .12s ease;
+}
+.booster-btn img { width: 34px; height: 34px; object-fit: contain; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.6)); }
+.booster-btn .booster-badge { right: 14px; bottom: auto; top: 22px; width: 18px; height: 18px; min-width: 0; font-size: 11px; }
+.booster-btn .count {
+  position: absolute; top: -6px; right: -6px;
+  min-width: 20px; height: 20px; padding: 0 5px; display: grid; place-items: center;
+  border-radius: 999px; background: var(--gold); color: #2a1a05; font-size: 11px; font-weight: 900;
+}
+.booster-btn:hover:not(:disabled) { border-color: var(--gold); transform: translateY(-1px); }
+.booster-btn.active { border-color: var(--gold-hi); box-shadow: 0 0 16px rgba(255, 210, 74, 0.5); }
+.booster-btn:disabled { opacity: .4; cursor: not-allowed; }
+.booster-hint { margin: 8px 0 0; text-align: center; color: var(--gold-hi); font-size: 14px; }
+
+/* Hammer mode: stones pulse and can be clicked */
+.board.hammer-mode .cell.smashable { cursor: crosshair; }
+.board.hammer-mode .cell.smashable .piece { animation: smash-pulse 900ms ease-in-out infinite; }
+@keyframes smash-pulse {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(255, 210, 74, 0)); scale: 1; }
+  50% { filter: drop-shadow(0 0 10px rgba(255, 210, 74, 0.9)); scale: 1.06; }
+}
+
 /* ---------- Modal (settings) ---------- */
 .modal-backdrop {
   position: fixed; inset: 0; z-index: 50;

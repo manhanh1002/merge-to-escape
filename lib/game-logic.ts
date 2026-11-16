@@ -443,3 +443,26 @@ export function hasAnyMove(board: Tile[], floorGifts: FloorGifts, level: LevelCo
     return res.changed && !(res.bumpedBoss && res.motions.length === 0 && res.shattered === 0)
   })
 }
+
+// ---------- Boosters (plan 9.7): consumables from the stash, used between moves ----------
+
+/** Hammer: smashes one stone or numbered stone. Returns the new board, or null if `index`
+ *  holds anything else (boss, player, door, tiles, empty floor). */
+export function applyHammer(board: Tile[], index: number): Tile[] | null {
+  const cell = board[index]
+  if (cell !== 'stone' && !isNumberedStone(cell)) return null
+  const next = [...board]
+  next[index] = null
+  return next
+}
+
+/** Purge scroll: removes every tile of `value` (2 or 4). */
+export function applyPurge(board: Tile[], value: 2 | 4): { board: Tile[]; removed: number[] } {
+  const removed = board.flatMap((cell, i) => (cell === value ? [i] : []))
+  return { board: board.map((cell) => (cell === value ? null : cell)), removed }
+}
+
+/** Heart potion: one more heart, never above the maximum (null when already full). */
+export function applyHeartPotion(hearts: number, maxHearts: number): number | null {
+  return hearts >= maxHearts ? null : hearts + 1
+}
