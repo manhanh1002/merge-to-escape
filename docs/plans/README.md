@@ -37,4 +37,4 @@ Hệ thống kế hoạch được phân rã thành 8 giai đoạn độc lập,
 - [ ] Giai đoạn 6: Chưa bắt đầu (cửa chạy, `stepLimit`)
 - [~] Giai đoạn 7: HUD fantasy, hiệu ứng, bảng Boss, chọn màn theo chương (Bản đồ — KH 9.5) xong
 - [x] Giai đoạn 8: Xong theo KH 9.1–9.3, 9.6 (Sao lần đầu qua màn, 5 nhánh talent, màn Nâng cấp)
-- [~] Giai đoạn 9: 9.1 (save v2 + ⭐), 9.2 (logic talent), 9.3 (áp talent vào trận), 9.4 (Home + route /play), 9.5 (Bản đồ chương), 9.6 (màn Nâng cấp), 9.7 (Shop + Booster) xong; 9.8 (hoàn thiện) chưa làm
+- [x] Giai đoạn 9: Xong 9.1–9.8 (save v2 + ⭐, talent, Home, Bản đồ, Nâng cấp, Shop + Booster, hoàn thiện). Còn mở: âm thanh, thú đi tuần (KH 4), KH 6

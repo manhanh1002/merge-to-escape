@@ -60,6 +60,13 @@ body {
 }
 
 button { font: inherit; }
+
+/* Keyboard focus: a clear gold ring on every interactive element */
+:where(a, button, select, input, [tabindex]):focus-visible {
+  outline: 2px solid var(--gold-hi);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(226, 181, 90, 0.25);
+}
 img { -webkit-user-drag: none; user-select: none; }
 
 /* ---------- Shell ---------- */
@@ -228,23 +235,6 @@ h1 {
 
 .best-record img { width: 20px; height: 20px; }
 
-.dropdown-wrapper {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-}
-
-.level-select-native {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  z-index: 2;
-  font-size: 16px;
-}
-
 .level-select-badge {
   display: inline-flex;
   align-items: center;
@@ -263,11 +253,6 @@ h1 {
   transition: all .15s ease;
 }
 .level-select-badge svg { color: var(--gold); }
-.dropdown-wrapper:hover .level-select-badge {
-  border-color: var(--gold);
-  box-shadow: 0 4px 18px rgba(226, 181, 90, 0.25);
-}
-
 /* ---------- Stat plaques ---------- */
 .stats {
   display: grid;
@@ -873,7 +858,31 @@ h1 {
   font-weight: 700;
   color: var(--ink-dim);
 }
-.star-line.earned { color: var(--gold-hi); }
+.star-line.earned { color: var(--gold-hi); animation: star-line-pop 520ms cubic-bezier(.3, 1.5, .5, 1) both; }
+@keyframes star-line-pop { from { opacity: 0; scale: .6; } to { opacity: 1; scale: 1; } }
+
+/* Stars flying out of the result icon on a first clear */
+.result-icon-wrap { position: relative; }
+.star-burst { position: absolute; inset: 0; pointer-events: none; }
+.star-burst i {
+  position: absolute; left: 50%; top: 50%;
+  font-style: normal; font-size: 18px; color: #ffd24a;
+  text-shadow: 0 0 8px rgba(255, 210, 74, 0.9);
+  opacity: 0;
+  animation: star-fly 900ms ease-out var(--d, 0ms) forwards;
+}
+@keyframes star-fly {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--a)) translateY(0) scale(.4); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--a)) translateY(-70px) scale(1.1); }
+}
+
+/* Purse chip bump when a value goes up */
+.purse-chip.bump { animation: chip-bump 480ms cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes chip-bump { 0% { scale: 1; } 35% { scale: 1.18; box-shadow: 0 0 16px rgba(255, 210, 74, 0.55); } 100% { scale: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .star-burst, .purse-chip.bump, .star-line.earned { animation: none; }
+}
 .star-line i { font-style: normal; color: #ffd24a; text-shadow: 0 0 8px rgba(255, 210, 74, 0.8); }
 
 .result-actions {
@@ -1257,6 +1266,14 @@ a.level-tile:hover { transform: translateY(-2px); border-color: var(--gold); }
 }
 
 @media (max-width: 520px) {
+  /* talent & shop rows: name gets the full width, level / owned goes underneath */
+  .talent-row { gap: 10px; padding: 10px; }
+  .talent-icon { width: 44px; height: 44px; }
+  .talent-icon img { width: 34px; height: 34px; }
+  .talent-title { flex-direction: column; align-items: flex-start; gap: 0; }
+  .talent-title strong { font-size: 15px; }
+  .talent-effect { font-size: 13px; }
+  .talent-buy { min-width: 56px; padding: 8px 10px; }
   .topbar { padding: 0 16px; }
   .topbar::after { left: 16px; right: 16px; }
   .brand { font-size: 14px; }

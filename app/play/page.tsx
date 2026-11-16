@@ -552,7 +552,16 @@ export default function PlayPage() {
           </div>
           {(won || lost) && !hammerMode && (
             <div className="result-card">
-              <div className="result-icon"><img src={heroGif(won ? 'jump' : 'hurt')} alt="" draggable={false} /></div>
+              <div className="result-icon-wrap">
+                <div className="result-icon"><img src={heroGif(won ? 'jump' : 'hurt')} alt="" draggable={false} /></div>
+                {won && !!winStars && (
+                  <span className="star-burst" aria-hidden>
+                    {Array.from({ length: Math.min(Math.max(winStars, 3), 10) }, (_, i) => i).map((i, _, all) => (
+                      <i key={i} style={{ ['--a' as string]: `${(i / all.length) * 360}deg`, ['--d' as string]: `${i * 40}ms` }}>★</i>
+                    ))}
+                  </span>
+                )}
+              </div>
               <h2>{won ? (levelIndex === levels.length - 1 ? 'Champion!' : 'Escaped!') : 'Try again'}</h2>
               <p>{message}</p>
               {won && winStars !== null && (

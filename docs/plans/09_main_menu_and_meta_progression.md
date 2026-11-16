@@ -163,6 +163,7 @@ export function usePurge(board: Tile[], value: 2 | 4): { board: Tile[]; removed:
 
 ### Giai đoạn 9.8 — Hoàn thiện
 - Âm thanh (nếu chốt §8), hiệu ứng nhận ⭐ / nâng cấp, `npm run build`, kiểm tra 375px, cập nhật README kế hoạch.
+- **Ghi chú (đã làm)**: sao bay ra khi nhận ⭐ lần đầu; ô ví "nảy" khi vàng/⭐ tăng; viền vàng khi focus bằng bàn phím; tiêu đề tab theo từng màn hình (`metadata` của từng route + `title.template`); sửa mô tả trang; bỏ CSS chết của dropdown cũ; hàng Nâng cấp/Shop gọn hơn trên điện thoại. Đã kiểm tra 5 màn hình ở 375px (không tràn ngang). **Âm thanh chưa làm** (§8.5 chưa chốt, cần file âm thanh có giấy phép).
 
 ## 6. Kiểm Thử Chung
 - `npm test` (logic, save, talent, shop) — xanh trước mỗi commit.

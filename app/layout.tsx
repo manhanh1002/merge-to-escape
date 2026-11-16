@@ -7,8 +7,9 @@ const display = Cinzel({ subsets: ['latin'], weight: ['600', '700', '800', '900'
 const body = Alegreya_Sans({ subsets: ['latin'], weight: ['400', '500', '700', '800'], variable: '--font-body' })
 
 export const metadata: Metadata = {
-  title: 'Merge to Escape — Puzzle Game',
-  description: 'Merge tiles, navigate obstacles, and find your way out across three handcrafted levels.',
+  // child routes set their own title through their layout's metadata ("Shop — Merge to Escape")
+  title: { template: '%s — Merge to Escape', default: 'Merge to Escape — Puzzle Game' },
+  description: 'A fantasy merge-puzzle escape: slide treasures, out-merge bosses with spellbooks, and escape 100 dungeon chambers.',
   generator: 'v0.app',
   icons: {
     icon: [
