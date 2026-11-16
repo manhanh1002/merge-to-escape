@@ -8,6 +8,7 @@ import { recordWin, starsForLevel, type Stash } from '../../lib/save'
 import { effectiveEconomy, startingRun, type TalentLevels } from '../../lib/talents'
 import { economy, levels, talentCfg } from '../../lib/levels'
 import { resolveStartLevel } from '../../lib/navigation'
+import { tomeFor } from '../../lib/tomes'
 import {
   addRandomTile, applyHammer, applyHeartPotion, applyPurge, computeMove, hasAnyMove, isBoss, isFusionLevel,
   makeBoard as buildBoard, spikeCells,
@@ -56,14 +57,14 @@ function applyGift(inv: Inventory, gift: FloorGift): Inventory {
 }
 
 /** Display names for the config's equipment slots (the "sword" is the wizard's spellbook). */
-const EQUIPMENT_NAMES = { sword: 'Fire Tome', armor: 'Chest Armor', gauntlet: 'Gauntlets' } as const
+const EQUIPMENT_NAMES = { armor: 'Chest Armor', gauntlet: 'Gauntlets' } as const
 
 function giftLabel(gift: FloorGift): string {
   switch (gift.type) {
     case 'gold': return `+${gift.amount} gold`
     case 'key': return 'Picked up a key'
     case 'equipment': return gift.item.type === 'sword'
-      ? `The ${EQUIPMENT_NAMES.sword} fizzles — no boss to hit`
+      ? 'The tome fizzles — no boss to hit'
       : gift.item.type === 'armor'
         ? `${EQUIPMENT_NAMES.armor} — absorbs one hit (boss or spikes)`
         : `${EQUIPMENT_NAMES.gauntlet} — shatter a stone you slide into`
@@ -71,11 +72,14 @@ function giftLabel(gift: FloorGift): string {
   }
 }
 
-function GiftArt({ gift }: { gift: FloorGift }) {
+const tomeArt = (power: number) => `/assets/icons/items/${tomeFor(power).icon}.png`
+
+/** Floor loot; attack tomes look grander the more Power the wizard has (lib/tomes.ts). */
+function GiftArt({ gift, power }: { gift: FloorGift; power: number }) {
   const src = gift.type === 'gold' ? goldArt(gift.amount)
     : gift.type === 'key' ? ART.key
       : gift.type === 'scroll' ? ART.scroll
-        : ART[gift.item.type]
+        : gift.item.type === 'sword' ? tomeArt(power) : ART[gift.item.type]
   return <img src={src} alt="" draggable={false} />
 }
 
@@ -113,8 +117,8 @@ const START_MESSAGE = 'Merge the stones to reach the exit.'
 
 function statusMessage(level: LevelConfig, doorOpen: boolean, bossAlive = false) {
   if (bossAlive) return doorOpen
-    ? 'The door is sealed while the boss lives. Walk over Fire Tomes to blast it.'
-    : 'A boss roams this room. Merge to drop Fire Tomes, walk over them to blast it — and don\'t let it touch you.'
+    ? 'The door is sealed while the boss lives. Walk over attack tomes to blast it.'
+    : 'A boss roams this room. Merge to drop attack tomes, walk over them to blast it — and don\'t let it touch you.'
   if (doorOpen) return 'The door is open. Move onto it to escape.'
   if (isFusionLevel(level)) return `Slide ${level.targetFormula[0]} into ${level.targetFormula[1]} to fuse the door.`
   return 'Merge matching tiles to reveal the door.'
@@ -276,7 +280,7 @@ export default function PlayPage() {
     const bossName = BOSS_NAMES[bossKindFor(level.chapter)]
     if (slain) {
       playBoss('attack'); playHero('die'); setLost(true)
-      setMessage(`${bossName} struck you down. Keep your distance and blast it with Fire Tomes.`)
+      setMessage(`${bossName} struck you down. Keep your distance and blast it with your tomes.`)
       return
     }
     if (spikeDeath) { playHero('die'); setLost(true); setMessage('You stepped into a deadly Spike Trap!'); return }
@@ -303,9 +307,9 @@ export default function PlayPage() {
     const gearNote = (res.smashedStone !== -1 ? 'Your gauntlets shatter the stone! ' : '')
       + (armorOnSpikes ? `Your armor takes the spikes${armorOnSpikes > 1 ? ` (×${armorOnSpikes})` : ''} — you're unhurt! ` : '')
     const note = gearNote + (res.bossReward
-      ? `${bossName} is defeated! +${res.bossReward.gold} gold, +${res.bossReward.keys} key.${res.tomesFaded ? ' The unused Fire Tomes fade away.' : ''} `
+      ? `${bossName} is defeated! +${res.bossReward.gold} gold, +${res.bossReward.keys} key.${res.tomesFaded ? ' The unused tomes fade away.' : ''} `
       : tomeCast
-        ? `🔥 ${res.tomesCast > 1 ? `${res.tomesCast} Fire Tomes blast` : 'The Fire Tome blasts'} ${bossName} for ${res.bossDamage}! `
+        ? `🔥 ${res.tomesCast > 1 ? `${res.tomesCast} ${tomeFor(inventory.power).name}s blast` : `The ${tomeFor(inventory.power).name} blasts`} ${bossName} for ${res.bossDamage}! `
         : res.collected.length ? `${res.collected.map(giftLabel).join(', ')}. ` : '')
     setMessage(
       res.bossHitPlayer
@@ -313,7 +317,7 @@ export default function PlayPage() {
           ? `${bossName} smashes your armor — it breaks, but you're unhurt.`
           : `${bossName} hits you! ${nextInventory.hearts} ❤️ left — don't let it touch you.`
         : res.doorSealed
-          ? 'The door is sealed — defeat the boss first. Walk over Fire Tomes to blast it!'
+          ? 'The door is sealed — defeat the boss first. Walk over attack tomes to blast it!'
           : note + statusMessage(level, res.doorOpen, res.board.some(isBoss)),
     )
   }, [board, floorGifts, inventory, level, levelIndex, lost, moves, playBoss, playHero, progress.records, progress.stash, progress.talents, runEconomy, score, setProgress, won])
@@ -464,8 +468,8 @@ export default function PlayPage() {
                 {!bossAlive
                   ? 'The door is unsealed.'
                   : <>
-                      <img src={ART.sword} alt="" draggable={false} className="hint-tome" />
-                      {`Each Fire Tome deals ${tomeDamage} — ${tomesLeft === 1 ? 'one more finishes it!' : `${tomesLeft} more to win.`} Don't let it touch you.`}
+                      <img src={tomeArt(inventory.power)} alt="" draggable={false} className="hint-tome" />
+                      {`Each ${tomeFor(inventory.power).name} deals ${tomeDamage} — ${tomesLeft === 1 ? 'one more finishes it!' : `${tomesLeft} more to win.`} Don't let it touch you.`}
                     </>}
               </div>
             </div>
@@ -505,7 +509,7 @@ export default function PlayPage() {
                   {isSpike && (
                     <div className="floor-spike" aria-label="Spike trap"><Skull size={iconSize} strokeWidth={2.2} /></div>
                   )}
-                  {gift && <div className="floor-gift"><GiftArt gift={gift} /></div>}
+                  {gift && <div className="floor-gift"><GiftArt gift={gift} power={inventory.power} /></div>}
 
                   {cell !== null && (
                     <div
@@ -649,7 +653,7 @@ export default function PlayPage() {
             Swipe or use arrow keys — everything slides as far as it can, the wizard too, picking up whatever he slides over. {isFusionLevel(level)
               ? `Slide ${level.targetFormula[0]} directly into ${level.targetFormula[1]} to fuse the exit door.`
               : `Merge matching tiles until you reach ${level.target} — that tile becomes the door.`} Then
-            move onto the door to escape. Numbered stones shatter when a tile of the same value crashes into them; never slide over a spike trap. Armor absorbs one hit (a boss touch or a spike); gauntlets shatter a stone you slide into. In boss rooms the boss slides with every swipe: merge to drop Fire Tomes and walk over them to blast it, but every time it touches you costs a heart.
+            move onto the door to escape. Numbered stones shatter when a tile of the same value crashes into them; never slide over a spike trap. Armor absorbs one hit (a boss touch or a spike); gauntlets shatter a stone you slide into. In boss rooms the boss slides with every swipe: merge to drop attack tomes and walk over them to blast it, but every time it touches you costs a heart. Tomes grow grander as your Power rises (Arcane Might).
           </p>
           <div className="legend">
             <span><img src={ART.stone} alt="" draggable={false} /> Obstacle</span>

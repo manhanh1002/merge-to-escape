@@ -31,7 +31,7 @@ export function Purse({ gold, stars, keys, power, armor, gauntlets, scrolls }: {
     <div className="purse" aria-label="Inventory">
       <Chip className="gold" title="Gold" value={gold}><img src={ART.gold} alt="" draggable={false} /></Chip>
       {keys !== undefined && <Chip className="keys" title="Keys" value={keys}><img src={ART.key} alt="" draggable={false} /></Chip>}
-      {power !== undefined && <Chip className="power" title="Power (Arcane Might) — added to every Fire Tome" value={power}><img src={ART.power} alt="" draggable={false} /></Chip>}
+      {power !== undefined && <Chip className="power" title="Power (Arcane Might) — added to every attack tome" value={power}><img src={ART.power} alt="" draggable={false} /></Chip>}
       {armor !== undefined && <Chip className="armor" title="Armor — absorbs one hit (boss touch or spike)" value={armor}><img src={ART.armor} alt="" draggable={false} /></Chip>}
       {gauntlets !== undefined && <Chip className="gauntlets" title="Gauntlets — shatter a stone you slide into" value={gauntlets}><img src={ART.gauntlet} alt="" draggable={false} /></Chip>}
       <Chip className="stars" title="Stars — earned by clearing a level for the first time" value={stars}><i aria-hidden>★</i></Chip>

@@ -3,6 +3,7 @@
 // change a run (drop rates, starting Power and hearts, gear Power). No React, no storage.
 import type { EconomyConfig } from './game-logic'
 import type { SaveData } from './save'
+import { tomeFor } from './tomes.ts'
 
 export const TALENT_IDS = ['goldRate', 'weaponRate', 'basePower', 'bonusHearts', 'weaponBonusPower'] as const
 export type TalentId = (typeof TALENT_IDS)[number]
@@ -100,7 +101,7 @@ export function describeTalent(id: TalentId, level: number, cfg: TalentConfig): 
     switch (id) {
       case 'goldRate': return `+${pct(lv, per.goldRate)} gold drop chance`
       case 'weaponRate': return `+${pct(lv, per.weaponRate)} tome & gear drop chance`
-      case 'basePower': return `+${lv * per.basePower} starting Power (added to every Fire Tome)`
+      case 'basePower': return `+${lv * per.basePower} Power on every tome · ${tomeFor(lv * per.basePower).name}`
       case 'weaponBonusPower': {
         const armor = startingRun({ weaponBonusPower: lv }, cfg).armor
         return armor ? `Start each chamber with ${armor} armor` : 'No starting armor yet'

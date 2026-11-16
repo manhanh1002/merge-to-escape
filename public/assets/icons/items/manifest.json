@@ -36,5 +36,8 @@
   "spellbook_fire": "/assets/icons/items/spellbook_fire.png",
   "tome_fire": "/assets/icons/items/tome_fire.png",
   "tome_wind": "/assets/icons/items/tome_wind.png",
-  "tome_storm": "/assets/icons/items/tome_storm.png"
+  "tome_blaze": "/assets/icons/items/tome_blaze.png",
+  "tome_worn": "/assets/icons/items/tome_worn.png",
+  "tome_ember": "/assets/icons/items/tome_ember.png",
+  "tome_inferno": "/assets/icons/items/tome_inferno.png"
 }

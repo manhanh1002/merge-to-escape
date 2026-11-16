@@ -35,9 +35,12 @@ PACKS = [
         "dagger_thorn", "dagger_leaf", "dagger_twin_amethyst", "dagger_flame", "dagger_flame_curved",
     ]),
     # The wizard fights with magic, so his "weapons" are attack spellbooks (by pack number).
+    # Attack tomes get grander as Power grows (lib/tomes.ts): worn (46) -> ember (11) ->
+    # fire (27) -> blaze (29) -> inferno (12) -> spellbook_fire (18).
     ("free-50-rpg-book-icons/PNG/without background/{n}.png", {
         14: "spellbook_water", 15: "spellbook_arcane", 16: "spellbook_radiant", 17: "spellbook_ice",
-        18: "spellbook_fire", 27: "tome_fire", 28: "tome_wind", 29: "tome_storm",
+        18: "spellbook_fire", 27: "tome_fire", 28: "tome_wind", 29: "tome_blaze",
+        46: "tome_worn", 11: "tome_ember", 12: "tome_inferno",
     }),
 ]
 

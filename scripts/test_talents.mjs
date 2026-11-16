@@ -89,7 +89,7 @@ test('describeTalent: names and current -> next effect text for every branch', a
   assert.deepEqual(describeTalent('goldRate', 5, cfg), { name: 'Golden Touch', now: '+10% gold drop chance', next: '+12% gold drop chance' })
   assert.equal(describeTalent('weaponRate', 4, cfg).now, '+6% tome & gear drop chance')
   assert.equal(describeTalent('weaponRate', 1, cfg).now, '+1.5% tome & gear drop chance', 'no rounding up to 2%')
-  assert.equal(describeTalent('basePower', 3, cfg).now, '+75 starting Power (added to every Fire Tome)')
+  assert.equal(describeTalent('basePower', 3, cfg).now, '+75 Power on every tome · Ember Tome')
   assert.deepEqual(describeTalent('weaponBonusPower', 0, cfg), { name: 'Gear Mastery', now: 'No starting armor yet', next: '1 starting armor at Lv 5' })
   assert.equal(describeTalent('weaponBonusPower', 9, cfg).next, 'Start each chamber with 2 armor')
   assert.equal(describeTalent('weaponBonusPower', 10, cfg).now, 'Start each chamber with 2 armor')

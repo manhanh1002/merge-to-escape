@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Heart } from 'lucide-react'
 import { talentCfg } from '../../lib/levels'
+import { tomeFor } from '../../lib/tomes'
 import {
   TALENT_IDS, canUpgrade, describeTalent, refundAll, starsSpent, talentLevel, upgrade, upgradeCost, type TalentId,
 } from '../../lib/talents'
@@ -13,10 +14,9 @@ import { Purse } from '../../components/Purse'
 import { TopBar } from '../../components/TopBar'
 import { useSave } from '../../components/useSave'
 
-const ICONS: Record<Exclude<TalentId, 'bonusHearts'>, string> = {
+const ICONS: Record<Exclude<TalentId, 'bonusHearts' | 'basePower'>, string> = {
   goldRate: '/assets/icons/items/coins_gold.png',
   weaponRate: '/assets/icons/items/spellbook_fire.png',
-  basePower: '/assets/icons/items/spellbook_radiant.png',
   weaponBonusPower: '/assets/icons/items/chest_armor_royal.png', // Gear Mastery: starting armor
 }
 
@@ -60,7 +60,9 @@ export default function UpgradesPage() {
             return (
               <div key={flashing ? `${id}-${flash.n}` : id} className={`talent-row${flashing ? ' just-upgraded' : ''}${maxed ? ' maxed' : ''}`}>
                 <span className="talent-icon">
-                  {id === 'bonusHearts' ? <Heart size={30} fill="currentColor" aria-hidden /> : <img src={ICONS[id]} alt="" draggable={false} />}
+                  {id === 'bonusHearts' ? <Heart size={30} fill="currentColor" aria-hidden />
+                    // Arcane Might shows the tome the wizard currently wields
+                    : <img src={id === 'basePower' ? `/assets/icons/items/${tomeFor(lv * talentCfg.statsBonusPerLevel.basePower).icon}.png` : ICONS[id]} alt="" draggable={false} />}
                 </span>
                 <div className="talent-body">
                   <div className="talent-title">
