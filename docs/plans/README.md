@@ -22,15 +22,19 @@ Hệ thống kế hoạch được phân rã thành 8 giai đoạn độc lập,
    - *Mục tiêu*: Dropdown gom nhóm 10 Chapter `<optgroup>`; thanh HUD hiển thị Power, HP boss, Keys, Moves/Limit, Gold; hiệu ứng vách tường, VFX chém boss, kiểm thử build hoàn chỉnh.
 8. **[Giai đoạn 8: Tiến Trình Roguelite - Điểm Kỹ Năng Sao & Nâng Cấp Thuộc Tính (Stars & Talent Tree)](file:///Users/mac/Documents/Code-projects/merge-to-escape/docs/plans/08_roguelite_exp_and_talent_tree.md)**
    - *Mục tiêu*: Vượt màn mới nhận Sao tăng dần theo mốc (Lv 1-10: 1⭐; Lv 11-20: 2⭐;... Lv 91-100: 10⭐, chơi lại chỉ nhận Vàng); dùng Sao nâng cấp 4 chỉ số (Max Lv 15); chi phí nâng Lv L tốn đúng L Sao; giao diện Modal Talent lưu `localStorage`.
+9. **[Giai đoạn 9: Màn Hình Chính & Nâng Cấp Ngoài Trận (Main Menu & Meta Progression)](09_main_menu_and_meta_progression.md)**
+   - *Mục tiêu*: Home, Bản đồ 10 chương, Talent Tree bằng ⭐ (lần đầu qua màn) và Shop bằng 🪙; save v2 tự chuyển đổi từ v1. Thay phần triển khai của KH 5 & 8 cho khớp luật chơi hiện tại.
 
 ---
 
 ## Trạng Thái Thực Hiện
-- [ ] Giai đoạn 1: Chưa bắt đầu
-- [ ] Giai đoạn 2: Chưa bắt đầu
-- [ ] Giai đoạn 3: Chưa bắt đầu
-- [ ] Giai đoạn 4: Chưa bắt đầu
-- [ ] Giai đoạn 5: Chưa bắt đầu
-- [ ] Giai đoạn 6: Chưa bắt đầu
-- [ ] Giai đoạn 7: Chưa bắt đầu
-- [ ] Giai đoạn 8: Chưa bắt đầu
+*(cập nhật theo commit `e1f6c89`, nhánh `feat/fantasy-rpg-overhaul`)*
+- [x] Giai đoạn 1: Xong — config 100 màn; target tối đa 512 (+128) và bàn 4/5/6/7 theo 20/20/30/30 (khác bản gốc, xem ghi chú trong KH 1)
+- [x] Giai đoạn 2: Xong — tường 1 chiều, đá khắc số, dung hợp mở cổng
+- [x] Giai đoạn 3: Xong — quà nền sàn, bẫy gai; nhân vật trượt hết đường (ghi chú KH 3 §4.3)
+- [~] Giai đoạn 4: Boss xong theo luật mới (Boss di chuyển, Fire Tome, ❤️ — ghi chú KH 4 §5b); **thú đi tuần chưa làm**
+- [~] Giai đoạn 5: Vàng lưu vĩnh viễn; **Shop, Búa, dùng Cuộn phép chưa làm** ➔ chuyển sang KH 9.7
+- [ ] Giai đoạn 6: Chưa bắt đầu (cửa chạy, `stepLimit`)
+- [~] Giai đoạn 7: HUD fantasy, hiệu ứng, bảng Boss xong; **chọn màn theo chương** ➔ KH 9.5
+- [ ] Giai đoạn 8: Chưa bắt đầu ➔ triển khai theo KH 9.1–9.3, 9.6
+- [ ] Giai đoạn 9: Chưa bắt đầu (kế hoạch đã viết)
