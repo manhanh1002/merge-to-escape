@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ChevronDown, DoorOpen, RotateCcw, Skull, Undo2 } from 'lucide-react'
+import Link from 'next/link'
+import { DoorOpen, Map as MapIcon, RotateCcw, Skull, Undo2 } from 'lucide-react'
 import { recordWin, starsForLevel } from '../../lib/save'
 import { effectiveEconomy, gearPower, startingRun, type TalentLevels } from '../../lib/talents'
 import { economy, levels, talentCfg } from '../../lib/levels'
@@ -160,7 +161,7 @@ export default function PlayPage() {
   useEffect(() => {
     if (!saveLoaded || ready) return
     const start = resolveStartLevel(new URLSearchParams(window.location.search).get('level'), progress, levels.length, devUnlockAll)
-    if (!start) { router.replace('/'); return }
+    if (!start) { router.replace('/levels'); return } // locked or unknown level: pick one on the map
     setLevelIndex(start.level); reset(start.level)
     window.history.replaceState(null, '', `/play?level=${start.level + 1}`)
     const run = progress.run
@@ -355,16 +356,9 @@ export default function PlayPage() {
               <p className="best-record"><img src={ART.medal} alt="" draggable={false} />Cleared · best {progress.records[levelIndex].bestMoves} moves · {progress.records[levelIndex].bestScore} pts</p>
             )}
           </div>
-          <div className="dropdown-wrapper">
-            <select className="level-select-native" value={levelIndex} onChange={(e) => chooseLevel(Number(e.target.value))} aria-label="Select level">
-              {levels.map((item, index) => (
-                <option key={item.id} value={index} disabled={index > unlocked}>
-                  {index > unlocked ? '🔒 ' : progress.records[index] ? '✓ ' : ''}{item.name}: {item.target} target ({item.size}x{item.size})
-                </option>
-              ))}
-            </select>
-            <div className="level-select-badge"><span>{level.name}</span><ChevronDown size={15} /></div>
-          </div>
+          <Link href="/levels" className="level-select-badge map-link" aria-label="Open the level map">
+            <MapIcon size={15} /><span>Map</span>
+          </Link>
         </div>
 
         {level.hasBoss && (
@@ -512,6 +506,7 @@ export default function PlayPage() {
                 ) : (
                   <button className="secondary-button" onClick={() => reset()}>Replay Level</button>
                 )}
+                <Link href="/levels" className="secondary-button"><MapIcon size={16} /> Map</Link>
               </div>
             </div>
           )}

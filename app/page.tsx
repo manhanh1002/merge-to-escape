@@ -13,9 +13,9 @@ import { WizardSprite } from '../components/sprites'
 import { useSave } from '../components/useSave'
 
 const MENU = [
-  { key: 'map', title: 'Level Map', blurb: '10 chapters, 100 chambers', icon: ART.treasureMap, href: '/levels', phase: '9.5' },
-  { key: 'upgrades', title: 'Upgrades', blurb: 'Spend stars on talents', icon: ART.spellbook, href: '/upgrades', phase: '9.6' },
-  { key: 'shop', title: 'Shop', blurb: 'Hammers, scrolls, potions', icon: ART.chest, href: '/shop', phase: '9.7' },
+  { key: 'map', title: 'Level Map', blurb: '10 chapters, 100 chambers', icon: ART.treasureMap, href: '/levels', phase: '9.5', ready: true },
+  { key: 'upgrades', title: 'Upgrades', blurb: 'Spend stars on talents', icon: ART.spellbook, href: '/upgrades', phase: '9.6', ready: false },
+  { key: 'shop', title: 'Shop', blurb: 'Hammers, scrolls, potions', icon: ART.chest, href: '/shop', phase: '9.7', ready: false },
 ] as const
 
 export default function HomePage() {
@@ -65,17 +65,22 @@ export default function HomePage() {
         </div>
 
         <nav className="home-menu" aria-label="Main menu">
-          {MENU.map((m) => (
-            <div key={m.key} className="home-card is-soon" aria-disabled title={`Coming in phase ${m.phase}`}>
-              <img src={m.icon} alt="" draggable={false} />
-              <div>
-                <strong>{m.title}</strong>
-                <span>{m.blurb}</span>
-              </div>
-              {m.key === 'upgrades' && save.stars > 0 && <em className="home-badge">★ {save.stars}</em>}
-              <small className="soon-tag">Soon</small>
-            </div>
-          ))}
+          {MENU.map((m) => {
+            const inner = (
+              <>
+                <img src={m.icon} alt="" draggable={false} />
+                <div>
+                  <strong>{m.title}</strong>
+                  <span>{m.blurb}</span>
+                </div>
+                {m.key === 'upgrades' && save.stars > 0 && <em className="home-badge">★ {save.stars}</em>}
+                {!m.ready && <small className="soon-tag">Soon</small>}
+              </>
+            )
+            return m.ready
+              ? <Link key={m.key} href={m.href} className="home-card">{inner}</Link>
+              : <div key={m.key} className="home-card is-soon" aria-disabled title={`Coming in phase ${m.phase}`}>{inner}</div>
+          })}
         </nav>
 
         <p className="home-progress">

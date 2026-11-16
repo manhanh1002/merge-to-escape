@@ -35,6 +35,6 @@ Hệ thống kế hoạch được phân rã thành 8 giai đoạn độc lập,
 - [~] Giai đoạn 4: Boss xong theo luật mới (Boss di chuyển, Fire Tome, ❤️ — ghi chú KH 4 §5b); **thú đi tuần chưa làm**
 - [~] Giai đoạn 5: Vàng lưu vĩnh viễn; **Shop, Búa, dùng Cuộn phép chưa làm** ➔ chuyển sang KH 9.7
 - [ ] Giai đoạn 6: Chưa bắt đầu (cửa chạy, `stepLimit`)
-- [~] Giai đoạn 7: HUD fantasy, hiệu ứng, bảng Boss xong; **chọn màn theo chương** ➔ KH 9.5
+- [~] Giai đoạn 7: HUD fantasy, hiệu ứng, bảng Boss, chọn màn theo chương (Bản đồ — KH 9.5) xong
 - [ ] Giai đoạn 8: Chưa bắt đầu ➔ triển khai theo KH 9.1–9.3, 9.6
-- [~] Giai đoạn 9: 9.1 (save v2 + ⭐), 9.2 (logic talent), 9.3 (áp talent vào trận), 9.4 (Home + route /play) xong; 9.5–9.8 chưa làm
+- [~] Giai đoạn 9: 9.1 (save v2 + ⭐), 9.2 (logic talent), 9.3 (áp talent vào trận), 9.4 (Home + route /play), 9.5 (Bản đồ chương) xong; 9.6–9.8 chưa làm

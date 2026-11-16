@@ -146,6 +146,7 @@ export function usePurge(board: Tile[], value: 2 | 4): { board: Tile[]; removed:
 - **Tệp**: `app/levels/page.tsx`, `components/ChapterCard.tsx`, CSS.
 - **Việc**: 10 thẻ chương (tên chương, x/10 đã qua, ⭐ đã nhận/tổng, icon Boss chương), lưới 10 màn; bỏ dropdown khỏi màn trận (giữ `?dev` mở khóa toàn bộ để test).
 - **Nghiệm thu**: màn khóa không bấm được; màn đã qua hiện ✓ + kỷ lục; bấm màn ➔ `/play?level=N`; vừa khung 375px.
+- **Ghi chú (đã làm)**: logic thuần `lib/map.ts` (+ test). Chương đang chơi mở sẵn; dropdown trong trận thay bằng nút **Map**; bảng kết quả thêm nút **Map**; màn khóa / URL sai ➔ `/levels`. Chọn một màn khác trên bản đồ sẽ bỏ màn đang chơi dở (chỉ giữ 1 màn dở một lúc). `tsconfig`: bật `allowImportingTsExtensions` để các file `lib/` import lẫn nhau bằng `./x.ts` (chạy được trực tiếp trong test Node).
 
 ### Giai đoạn 9.6 — Màn hình Talent
 - **Tệp**: `app/upgrades/page.tsx`, CSS.
