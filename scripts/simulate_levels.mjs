@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { computeMove, hasAnyMove, makeBoard, addRandomTile } from '../lib/game-logic.ts'
 import { freshSave, starsForLevel } from '../lib/save.ts'
+import { levelEconomy } from '../lib/economy.ts'
 import { TALENT_IDS, effectiveEconomy, startingRun, talentLevel, upgrade, upgradeCost } from '../lib/talents.ts'
 
 const arg = (name, fallback) => {
@@ -62,7 +63,7 @@ function scoreOf(res, gifts, size) {
 }
 
 export function play(level, talents = TALENTS === 'expected' ? expectedTalents(level.id - 1) : {}) {
-  const economy = effectiveEconomy(config.economyConfig, talents, talentCfg)
+  const economy = levelEconomy(effectiveEconomy(config.economyConfig, talents, talentCfg), level.id)
   const start = startingRun(talents, talentCfg)
   let board = makeBoard(level)
   let gifts = {}
@@ -71,6 +72,7 @@ export function play(level, talents = TALENTS === 'expected' ? expectedTalents(l
   let armor = start.armor
   let gauntlets = 0
   let bossKilledAt = null
+  let gold = 0
   for (let m = 0; m < MAX_MOVES; m++) {
     const options = DIRS
       .map((d) => [d, computeMove(board, gifts, level, economy, d, noDrops, power, gauntlets)])
@@ -80,7 +82,9 @@ export function play(level, talents = TALENTS === 'expected' ? expectedTalents(l
     const choice = options[0][0]
     const res = computeMove(board, gifts, level, economy, choice, Math.random, power, gauntlets)
     // gear gives charges: armor absorbs a hit, gauntlets shatter a stone slid into
+    gold += res.bossReward?.gold ?? 0
     for (const g of res.collected) {
+      if (g.type === 'gold') gold += g.amount
       if (g.type !== 'equipment') continue
       if (g.item.type === 'armor') armor = Math.min(3, armor + 1)
       if (g.item.type === 'gauntlet') gauntlets = Math.min(3, gauntlets + 1)
@@ -93,7 +97,7 @@ export function play(level, talents = TALENTS === 'expected' ? expectedTalents(l
       if (armor > 0) armor--
       else if (--hearts <= 0) return { win: false, moves: m + 1, why: 'boss' }
     }
-    if (res.reachedDoor) return { win: true, moves: m + 1, bossKilledAt }
+    if (res.reachedDoor) return { win: true, moves: m + 1, bossKilledAt, gold }
     board = addRandomTile(res.board)
     gifts = res.floorGifts
     if (!hasAnyMove(board, gifts, level, economy, power, gauntlets)) return { win: false, moves: m + 1, why: 'no moves' }
@@ -103,7 +107,7 @@ export function play(level, talents = TALENTS === 'expected' ? expectedTalents(l
 
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])
 if (isMain && TALENTS === 'expected') console.log('# talents: expected (all stars from earlier first clears spent evenly)')
-if (isMain) console.log('level\tsize\ttarget\tboss\twins\tavgMoves\tlosses')
+if (isMain) console.log('level\tsize\ttarget\tboss\twins\tavgMoves\tlosses\tavgGoldPerWin')
 if (isMain) for (const level of config.levels.filter((l) => l.id >= FROM && l.id <= TO && (!BOSS_ONLY || l.hasBoss))) {
   const results = Array.from({ length: RUNS }, () => play(level))
   const wins = results.filter((r) => r.win)
@@ -114,5 +118,6 @@ if (isMain) for (const level of config.levels.filter((l) => l.id >= FROM && l.id
   const bossInfo = level.hasBoss
     ? `hp ${level.bossHp}, killed@${killed.length ? Math.round(killed.reduce((s, r) => s + r.bossKilledAt, 0) / killed.length) : '-'}`
     : ''
-  console.log(`L${level.id}\t${level.size}x${level.size}\t${level.targetFormula.join('+')}\t${bossInfo}\t${wins.length}/${RUNS}\t${avg}\t${JSON.stringify(losses)}`)
+  const gold = wins.length ? Math.round(wins.reduce((s, r) => s + r.gold, 0) / wins.length) : '-'
+  console.log(`L${level.id}\t${level.size}x${level.size}\t${level.targetFormula.join('+')}\t${bossInfo}\t${wins.length}/${RUNS}\t${avg}\t${JSON.stringify(losses)}\tgold ${gold}`)
 }

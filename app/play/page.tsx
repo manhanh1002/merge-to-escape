@@ -9,6 +9,7 @@ import { effectiveEconomy, startingRun, type TalentLevels } from '../../lib/tale
 import { economy, levels, talentCfg } from '../../lib/levels'
 import { resolveStartLevel } from '../../lib/navigation'
 import { tomeFor } from '../../lib/tomes'
+import { levelEconomy } from '../../lib/economy'
 import {
   addRandomTile, applyHammer, applyHeartPotion, applyPurge, computeMove, hasAnyMove, isBoss, isFusionLevel,
   makeBoard as buildBoard, spikeCells,
@@ -155,11 +156,15 @@ export default function PlayPage() {
   const { save: progress, setSave: setProgress, loaded: saveLoaded, unlocked, devUnlockAll } = useSave()
   /** True once the board has been set up from the save; gates the effects that write back. */
   const [ready, setReady] = useState(false)
-  // Drop rates for this player's talents (goldRate / weaponRate), and boss-room max hearts.
-  const runEconomy = useMemo(() => effectiveEconomy(economy, progress.talents, talentCfg), [progress.talents])
+  const level = levels[levelIndex]
+  // Drop rates for this player's talents (goldRate / weaponRate) plus the early-level gold
+  // boost, and boss-room max hearts.
+  const runEconomy = useMemo(
+    () => levelEconomy(effectiveEconomy(economy, progress.talents, talentCfg), levels[levelIndex].id),
+    [progress.talents, levelIndex],
+  )
   const maxHearts = startingRun(progress.talents, talentCfg).hearts
 
-  const level = levels[levelIndex]
   const spikes = spikeCells(level)
 
   const reset = useCallback((index = levelIndex) => {

@@ -198,3 +198,9 @@ export function usePurge(board: Tile[], value: 2 | 4): { board: Tile[]; removed:
 - [ ] Shop mua đồ trừ đúng vàng; Búa, Cuộn phép, Bình máu dùng được trong trận.
 - [ ] Save v1 cũ tự chuyển sang v2, không mất tiến trình.
 - [ ] `npm test`, `npm run check:levels`, `npm run build` đều sạch; giao diện ổn ở 375px.
+
+## Bổ sung sau 9.8 — Vàng đầu game
+
+Bot đo được: các màn thường L1–16 gần như **0 vàng** (đích 16/32, mà vàng chỉ rơi từ ô ≥ 16), nên Shop xa tầm với.
+`economyConfig.earlyGoldBoost` (`lib/economy.ts`, áp dụng sau talent): ở L1 ô ghép 4 rơi 5 vàng (35%), ô 8 rơi 12 vàng (50%), mọi luật vàng +35%; hiệu ứng giảm tuyến tính và hết sau L20.
+Lượng vàng rơi mỗi màn đầu tăng từ ~6 lên ~50. `npm run sim` có thêm cột `gold` (vàng nhặt được trung bình mỗi lượt thắng).

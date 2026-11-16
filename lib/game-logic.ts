@@ -40,6 +40,17 @@ export type EconomyConfig = {
   bossTomeDrop?: { minTile: number; dropRate: number }
   /** Tomes needed to kill a boss without gear: each tome deals ceil(maxHp / hits) + Power. */
   bossTomeHits?: { mid: number; final: number }
+  /** Extra gold in the first levels, fading out by `untilLevel` (applied by lib/economy.ts). */
+  earlyGoldBoost?: EarlyGoldBoost
+}
+
+export type EarlyGoldBoost = {
+  /** Last level that gets any boost; level 1 gets all of it. */
+  untilLevel: number
+  /** Added to every gold rule's drop chance (scaled by the fade). */
+  extraDropRate: number
+  /** Gold rules for small merges that normally drop nothing (rates scaled by the fade). */
+  smallMerges: { minTile: number; gold: number; dropRate: number }[]
 }
 
 export type Rng = () => number

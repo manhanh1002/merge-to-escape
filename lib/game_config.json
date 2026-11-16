@@ -42,6 +42,22 @@
         "dropRate": 0.03
       }
     ],
+    "earlyGoldBoost": {
+      "untilLevel": 20,
+      "extraDropRate": 0.35,
+      "smallMerges": [
+        {
+          "minTile": 4,
+          "gold": 5,
+          "dropRate": 0.35
+        },
+        {
+          "minTile": 8,
+          "gold": 12,
+          "dropRate": 0.5
+        }
+      ]
+    },
     "itemDropRates": {
       "sword": {
         "minTile": 8,
