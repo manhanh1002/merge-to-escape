@@ -140,6 +140,7 @@ export function usePurge(board: Tile[], value: 2 | 4): { board: Tile[]; removed:
 - **Tệp**: `app/play/page.tsx` (chuyển game sang), `app/page.tsx` (Home mới), `components/{ScreenShell,Purse,WizardSprite,BossSprite}.tsx`, `components/useSave.ts`, `app/globals.css`.
 - **Việc**: Home có Tiếp tục / Bản đồ / Nâng cấp / Cửa hàng / Cài đặt; game đọc `?level=` (chỉ cho màn đã mở; màn khóa ➔ về `/levels`); nút ← trên topbar về Home. `useSave` là nơi **duy nhất** đọc/ghi localStorage. `unlock-all.html` / `reset-progress.html` cập nhật theo key v2.
 - **Nghiệm thu**: mở `/` thấy Home; "Tiếp tục" vào đúng màn đang chơi dở (giữ `run`); F5 ở `/play` vẫn giữ bàn cờ; build `npm run build` sạch.
+- **Ghi chú (đã làm)**: Thẻ Bản đồ / Nâng cấp / Cửa hàng trên Home hiện ở trạng thái "Soon" cho tới 9.5–9.7; dropdown chọn màn vẫn nằm trong `/play` cho tới 9.5. `?dev` giờ lưu cờ trong `sessionStorage` nên giữ được khi chuyển màn hình (chỉ tab hiện tại). URL `/play?level=N` luôn khớp màn đang chơi (F5 mở lại đúng màn). Nút âm thanh / trợ giúp cũ trên topbar (chưa có chức năng) được thay bằng nút ← (trong trận) và ⚙️ Cài đặt (trên Home).
 
 ### Giai đoạn 9.5 — Bản đồ chương
 - **Tệp**: `app/levels/page.tsx`, `components/ChapterCard.tsx`, CSS.
