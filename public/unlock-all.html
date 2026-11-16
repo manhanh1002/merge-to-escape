@@ -1,8 +1,9 @@
 <!doctype html>
 <!--
-  Test helper: unlocks all 100 levels in this browser's local save, keeping gold, best
-  records and any level in progress. Open http://localhost:3123/unlock-all.html once.
-  (Same save key and format as lib/save.ts; unlocked is clamped to the last level there.)
+  Test helper: unlocks all 100 levels in this browser's local save, keeping gold, stars,
+  talents, best records and any level in progress. Open http://localhost:3123/unlock-all.html
+  once. (Same keys/format as lib/save.ts: v2 save; an old v1 save is unlocked in place and
+  the game migrates it to v2 on the next load.)
 -->
 <html lang="en">
 <head>
@@ -25,18 +26,22 @@
     <a href="/">Back to the game →</a>
   </div>
   <script>
-    const KEY = 'merge-to-escape:save:v1'
+    const KEY = 'merge-to-escape:save:v2'
+    const LEGACY_KEY = 'merge-to-escape:save:v1'
     const LAST_LEVEL_INDEX = 99 // 100 levels
     const status = document.getElementById('status')
+    const read = (key) => { try { return JSON.parse(localStorage.getItem(key)) } catch (e) { return null } }
     try {
-      let save = null
-      try { save = JSON.parse(localStorage.getItem(KEY)) } catch (e) { save = null }
-      if (!save || typeof save !== 'object' || save.version !== 1) {
-        save = { version: 1, unlocked: 0, current: 0, gold: 0, records: {} }
+      let key = KEY
+      let save = read(KEY)
+      if (!save || save.version !== 2) {
+        const legacy = read(LEGACY_KEY)
+        if (legacy && legacy.version === 1) { key = LEGACY_KEY; save = legacy }
+        else save = { version: 2, unlocked: 0, current: 0, gold: 0, records: {}, stars: 0, talents: {}, stash: {}, settings: { sound: true } }
       }
       save.unlocked = LAST_LEVEL_INDEX
-      localStorage.setItem(KEY, JSON.stringify(save))
-      status.textContent = 'All 100 levels can now be picked from the level menu. Your gold (' + (save.gold || 0) + ') and records were kept.'
+      localStorage.setItem(key, JSON.stringify(save))
+      status.textContent = 'All 100 levels can now be picked from the level menu. Your gold (' + (save.gold || 0) + '), stars (' + (save.stars || 0) + ') and records were kept.'
       setTimeout(() => { location.href = '/' }, 2500)
     } catch (e) {
       status.className = 'err'

@@ -6,7 +6,7 @@ import {
   Skull, Undo2, Volume2
 } from 'lucide-react'
 import gameConfig from '../lib/game_config.json'
-import { SAVE_KEY, freshSave, parseSave, recordWin, type SaveData } from '../lib/save'
+import { LEGACY_SAVE_KEY, SAVE_KEY, freshSave, loadSave, recordWin, starsForLevel, type SaveData } from '../lib/save'
 import {
   addRandomTile, computeMove, hasAnyMove, isBoss, isFusionLevel, makeBoard as buildBoard, spikeCells,
   type Direction, type EconomyConfig, type FloorGift, type FloorGifts, type LevelConfig, type Motion, type Tile,
@@ -199,6 +199,8 @@ export default function Page() {
   const [facing, setFacing] = useState<1 | -1>(1)
   const playHero = useCallback((action: HeroAction) => setHero((h) => ({ action, nonce: h.nonce + 1 })), [])
   const [won, setWon] = useState(false)
+  /** Stars paid by the last win (0 on a replay), shown on the result card. */
+  const [winStars, setWinStars] = useState<number | null>(null)
   const [lost, setLost] = useState(false)
   // Boss animation + transient effects. `corpseAt` keeps the dying animation on screen after
   // the boss cell has already been cleared by the rules.
@@ -223,6 +225,7 @@ export default function Page() {
     setMessage(levels[index].hasBoss ? statusMessage(levels[index], false, true) : START_MESSAGE)
     setHero((h) => ({ action: 'idle', nonce: h.nonce + 1 })); setFacing(1)
     setBossAnim((b) => ({ action: 'idle', nonce: b.nonce + 1, corpseAt: null })); setPopup(null); setBoardAnim(null)
+    setWinStars(null)
   }, [levelIndex])
 
   const chooseLevel = useCallback((index: number) => {
@@ -234,7 +237,11 @@ export default function Page() {
   // Load the save once on the client (localStorage is not available during SSR).
   useEffect(() => {
     let save = freshSave()
-    try { save = parseSave(window.localStorage.getItem(SAVE_KEY), levels.length, (i) => levels[i].size) } catch { /* storage blocked */ }
+    try {
+      // v2 save if present, otherwise migrate the v1 save (left in place as a backup)
+      save = loadSave(window.localStorage.getItem(SAVE_KEY), window.localStorage.getItem(LEGACY_SAVE_KEY),
+        levels.length, (i) => levels[i].size).save
+    } catch { /* storage blocked */ }
     setDevUnlockAll(new URLSearchParams(window.location.search).has('dev'))
     setProgress(save)
     setLevelIndex(save.current); reset(save.current)
@@ -313,7 +320,8 @@ export default function Page() {
 
     if (res.reachedDoor) {
       playHero('jump'); setWon(true); setMessage('You made it out!')
-      setProgress((p) => recordWin(p, levelIndex, moves + 1, score + res.gained, levels.length))
+      setWinStars(progress.records[levelIndex] ? 0 : starsForLevel(levelIndex))
+      setProgress((p) => recordWin(p, levelIndex, moves + 1, score + res.gained, levels.length).save)
       return
     }
     const bossName = BOSS_NAMES[bossKindFor(level.chapter)]
@@ -351,7 +359,7 @@ export default function Page() {
           ? 'The door is sealed — defeat the boss first. Walk over Fire Tomes to blast it!'
           : note + statusMessage(level, res.doorOpen, res.board.some(isBoss)),
     )
-  }, [board, floorGifts, inventory, level, levelIndex, lost, moves, playBoss, playHero, score, won])
+  }, [board, floorGifts, inventory, level, levelIndex, lost, moves, playBoss, playHero, progress.records, score, won])
 
   const undo = () => {
     const previous = history[history.length - 1]
@@ -437,6 +445,7 @@ export default function Page() {
           <span className="purse-chip gold" title="Gold"><img src={ART.gold} alt="" draggable={false} />{inventory.gold}</span>
           <span className="purse-chip keys" title="Keys"><img src={ART.key} alt="" draggable={false} />{inventory.keys}</span>
           <span className="purse-chip power" title="Power (spellbooks & gear)"><img src={ART.power} alt="" draggable={false} />{inventory.power}</span>
+          <span className="purse-chip stars" title="Stars — earned by clearing a level for the first time"><i aria-hidden>★</i>{progress.stars}</span>
           {(inventory.scrolls[2] > 0 || inventory.scrolls[4] > 0) && (
             <span className="purse-chip scrolls" title="Purge scrolls (2 / 4)"><img src={ART.scroll} alt="" draggable={false} />{inventory.scrolls[2]}/{inventory.scrolls[4]}</span>
           )}
@@ -592,6 +601,11 @@ export default function Page() {
               <div className="result-icon"><img src={heroGif(won ? 'jump' : 'hurt')} alt="" draggable={false} /></div>
               <h2>{won ? (levelIndex === levels.length - 1 ? 'Champion!' : 'Escaped!') : 'Try again'}</h2>
               <p>{message}</p>
+              {won && winStars !== null && (
+                <p className={`star-line${winStars ? ' earned' : ''}`}>
+                  {winStars ? <><i aria-hidden>★</i> +{winStars} {winStars === 1 ? 'star' : 'stars'} — first clear!</> : 'Replay — no stars this time'}
+                </p>
+              )}
               <div className="result-actions">
                 {won && levelIndex < levels.length - 1 ? (
                   <button className="primary-button" onClick={nextLevel}>Next Level →</button>

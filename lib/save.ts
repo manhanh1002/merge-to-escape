@@ -2,7 +2,9 @@
 // be unit-tested; the page does the actual reading/writing.
 import type { FloorGift, FloorGifts, Tile } from './game-logic'
 
-export const SAVE_KEY = 'merge-to-escape:save:v1'
+/** Current save (v2). The v1 save is only read once, to migrate, and is left as a backup. */
+export const SAVE_KEY = 'merge-to-escape:save:v2'
+export const LEGACY_SAVE_KEY = 'merge-to-escape:save:v1'
 
 /** The level being played right now, so a reload resumes the same board (no undo history). */
 export type RunState = {
@@ -18,20 +20,43 @@ export type RunState = {
 }
 
 export type LevelRecord = { bestMoves: number; bestScore: number }
-export type SaveData = {
-  version: 1
+
+/** Fields shared by every save version. */
+type CoreSave = {
   /** Highest level index the player may pick (0-based). */
   unlocked: number
   /** Level index to resume on. */
   current: number
   gold: number
-  /** Best results per cleared level index. */
+  /** Best results per cleared level index (a record means the level was cleared). */
   records: Record<number, LevelRecord>
   /** Unfinished level in progress, if any. */
   run?: RunState
 }
+export type SaveDataV1 = { version: 1 } & CoreSave
 
-export const freshSave = (): SaveData => ({ version: 1, unlocked: 0, current: 0, gold: 0, records: {} })
+/** Consumables bought in the shop (phase 9.7). */
+export type Stash = { hammer: number; purge2: number; purge4: number; heartPotion: number }
+export const STASH_ITEMS: (keyof Stash)[] = ['hammer', 'purge2', 'purge4', 'heartPotion']
+export const MAX_TALENT_LEVEL = 14
+
+export type SaveData = { version: 2 } & CoreSave & {
+  /** Unspent stars, earned by clearing levels for the first time. */
+  stars: number
+  /** Talent levels by id (0..14). Ids come from the talent config (phase 9.2). */
+  talents: Record<string, number>
+  stash: Stash
+  settings: { sound: boolean }
+}
+
+const emptyStash = (): Stash => ({ hammer: 0, purge2: 0, purge4: 0, heartPotion: 0 })
+export const freshSave = (): SaveData => ({
+  version: 2, unlocked: 0, current: 0, gold: 0, records: {},
+  stars: 0, talents: {}, stash: emptyStash(), settings: { sound: true },
+})
+
+/** Stars for clearing a level the first time: 1 for levels 1-10 ... 10 for 91-100. */
+export const starsForLevel = (levelIndex: number) => Math.ceil((levelIndex + 1) / 10)
 
 const clampInt = (v: unknown, min: number, max: number, fallback: number) =>
   typeof v === 'number' && Number.isFinite(v) ? Math.min(max, Math.max(min, Math.floor(v))) : fallback
@@ -92,14 +117,19 @@ function parseRun(r: unknown, unlocked: number, sizeOf?: (level: number) => numb
   }
 }
 
-/** Parses stored JSON; anything missing, corrupt or out of range falls back to safe values.
+type SizeOf = (level: number) => number
+
+function parseJson(raw: string | null): Record<string, unknown> | null {
+  if (!raw) return null
+  try {
+    const data = JSON.parse(raw)
+    return data && typeof data === 'object' && !Array.isArray(data) ? data : null
+  } catch { return null }
+}
+
+/** Validates the fields every version shares; anything out of range falls back to safe values.
  *  `sizeOf(level)` (board side length) lets a saved run be checked against its level. */
-export function parseSave(raw: string | null, levelCount: number, sizeOf?: (level: number) => number): SaveData {
-  if (!raw) return freshSave()
-  let data: unknown
-  try { data = JSON.parse(raw) } catch { return freshSave() }
-  if (!data || typeof data !== 'object' || (data as { version?: unknown }).version !== 1) return freshSave()
-  const d = data as Partial<SaveData>
+function parseCore(d: Record<string, unknown>, levelCount: number, sizeOf?: SizeOf): CoreSave {
   const last = Math.max(0, levelCount - 1)
   const unlocked = clampInt(d.unlocked, 0, last, 0)
   const records: Record<number, LevelRecord> = {}
@@ -115,7 +145,6 @@ export function parseSave(raw: string | null, levelCount: number, sizeOf?: (leve
   const current = clampInt(d.current, 0, unlocked, 0)
   const run = parseRun(d.run, unlocked, sizeOf)
   return {
-    version: 1,
     unlocked,
     current,
     gold: clampInt(d.gold, 0, Number.MAX_SAFE_INTEGER, 0),
@@ -125,18 +154,69 @@ export function parseSave(raw: string | null, levelCount: number, sizeOf?: (leve
   }
 }
 
-/** Clearing a level unlocks the next one and keeps the best moves/score. */
-export function recordWin(save: SaveData, levelIndex: number, moves: number, score: number, levelCount: number): SaveData {
-  const prev = save.records[levelIndex]
+/** Parses a v1 save (used only to migrate). Invalid input gives an empty v1 save. */
+export function parseSaveV1(raw: string | null, levelCount: number, sizeOf?: SizeOf): SaveDataV1 {
+  const d = parseJson(raw)
+  if (!d || d.version !== 1) return { version: 1, unlocked: 0, current: 0, gold: 0, records: {} }
+  return { version: 1, ...parseCore(d, levelCount, sizeOf) }
+}
+
+/** Parses a v2 save; anything missing, corrupt or out of range falls back to safe values. */
+export function parseSave(raw: string | null, levelCount: number, sizeOf?: SizeOf): SaveData {
+  const d = parseJson(raw)
+  if (!d || d.version !== 2) return freshSave()
+  const talents: Record<string, number> = {}
+  if (d.talents && typeof d.talents === 'object') {
+    for (const [id, lv] of Object.entries(d.talents)) {
+      if (/^[A-Za-z]\w*$/.test(id)) talents[id] = clampInt(lv, 0, MAX_TALENT_LEVEL, 0)
+    }
+  }
+  const stashIn = (d.stash && typeof d.stash === 'object' ? d.stash : {}) as Record<string, unknown>
+  const stash = emptyStash()
+  for (const item of STASH_ITEMS) stash[item] = clampInt(stashIn[item], 0, 999, 0)
+  const settings = (d.settings && typeof d.settings === 'object' ? d.settings : {}) as Record<string, unknown>
   return {
-    ...save,
-    unlocked: Math.min(levelCount - 1, Math.max(save.unlocked, levelIndex + 1)),
-    run: undefined,
-    records: {
-      ...save.records,
-      [levelIndex]: {
-        bestMoves: prev ? Math.min(prev.bestMoves, moves) : moves,
-        bestScore: prev ? Math.max(prev.bestScore, score) : score,
+    version: 2,
+    ...parseCore(d, levelCount, sizeOf),
+    stars: clampInt(d.stars, 0, 100000, 0),
+    talents,
+    stash,
+    settings: { sound: settings.sound !== false },
+  }
+}
+
+/** v1 -> v2: keeps progress, gold, records and the run; back-pays stars for cleared levels. */
+export function migrateV1(v1: SaveDataV1): SaveData {
+  const stars = Object.keys(v1.records).reduce((sum, k) => sum + starsForLevel(Number(k)), 0)
+  const { version: _v, ...core } = v1
+  return { ...freshSave(), ...core, version: 2, stars }
+}
+
+/** Picks the save to use: a valid v2 save wins; otherwise a v1 save is migrated. */
+export function loadSave(rawV2: string | null, rawV1: string | null, levelCount: number, sizeOf?: SizeOf): { save: SaveData; migrated: boolean } {
+  if (parseJson(rawV2)?.version === 2) return { save: parseSave(rawV2, levelCount, sizeOf), migrated: false }
+  if (parseJson(rawV1)?.version === 1) return { save: migrateV1(parseSaveV1(rawV1, levelCount, sizeOf)), migrated: true }
+  return { save: freshSave(), migrated: false }
+}
+
+/** Clearing a level unlocks the next one, keeps the best moves/score, and pays stars the
+ *  first time the level is cleared (replays pay none). */
+export function recordWin(save: SaveData, levelIndex: number, moves: number, score: number, levelCount: number): { save: SaveData; starsEarned: number } {
+  const prev = save.records[levelIndex]
+  const starsEarned = prev ? 0 : starsForLevel(levelIndex)
+  return {
+    starsEarned,
+    save: {
+      ...save,
+      stars: save.stars + starsEarned,
+      unlocked: Math.min(levelCount - 1, Math.max(save.unlocked, levelIndex + 1)),
+      run: undefined,
+      records: {
+        ...save.records,
+        [levelIndex]: {
+          bestMoves: prev ? Math.min(prev.bestMoves, moves) : moves,
+          bestScore: prev ? Math.max(prev.bestScore, score) : score,
+        },
       },
     },
   }

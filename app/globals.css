@@ -172,6 +172,7 @@ img { -webkit-user-drag: none; user-select: none; }
 .purse-chip.gold { color: var(--gold-hi); }
 .purse-chip.keys svg { color: var(--gold); }
 .purse-chip.power svg { color: #ff8a6a; }
+.purse-chip.stars i { font-style: normal; font-size: 18px; margin: 0 2px 0 5px; color: #ffd24a; text-shadow: 0 0 8px rgba(255, 210, 74, 0.7); }
 
 /* ---------- Heading ---------- */
 .level-heading {
@@ -865,6 +866,15 @@ h1 {
   font-size: 15px;
   max-width: 300px;
 }
+
+.star-line {
+  margin: -10px 0 18px !important;
+  font-family: var(--font-display-stack);
+  font-weight: 700;
+  color: var(--ink-dim);
+}
+.star-line.earned { color: var(--gold-hi); }
+.star-line i { font-style: normal; color: #ffd24a; text-shadow: 0 0 8px rgba(255, 210, 74, 0.8); }
 
 .result-actions {
   display: flex;
