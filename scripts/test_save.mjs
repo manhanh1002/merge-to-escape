@@ -15,7 +15,7 @@ test('missing or corrupt save starts fresh', () => {
 
 test('valid v2 save round-trips', () => {
   const save = v2({ unlocked: 12, current: 7, gold: 340, records: { 3: { bestMoves: 40, bestScore: 500 } },
-    stars: 9, talents: { goldRate: 3, basePower: 1 }, stash: { hammer: 2, purge2: 0, purge4: 1, heartPotion: 0 }, settings: { sound: false } })
+    stars: 9, talents: { goldRate: 3, basePower: 1 }, stash: { hammer: 2, purge2: 0, purge4: 1, heartPotion: 0, wallRune: 3 }, settings: { sound: false } })
   assert.deepEqual(parseSave(json(save), 100), save)
 })
 
@@ -28,7 +28,7 @@ test('out-of-range values are clamped, not trusted', () => {
   assert.deepEqual(s.records, {})
   assert.equal(s.stars, 0)
   assert.deepEqual(s.talents, { goldRate: 14, basePower: 0 })
-  assert.deepEqual(s.stash, { hammer: 0, purge2: 0, purge4: 0, heartPotion: 0 })
+  assert.deepEqual(s.stash, { hammer: 0, purge2: 0, purge4: 0, heartPotion: 0, wallRune: 0 })
   assert.deepEqual(s.settings, { sound: true })
 })
 
@@ -81,7 +81,7 @@ test('migrating v1 keeps progress and back-pays stars for cleared levels', () =>
   assert.deepEqual(s.records, v1.records)
   assert.equal(s.stars, 1 + 1 + 2, 'levels 1 and 10 pay 1, level 15 pays 2')
   assert.deepEqual(s.talents, {})
-  assert.deepEqual(s.stash, { hammer: 0, purge2: 0, purge4: 0, heartPotion: 0 })
+  assert.deepEqual(s.stash, { hammer: 0, purge2: 0, purge4: 0, heartPotion: 0, wallRune: 0 })
 })
 
 test('loadSave prefers a v2 save, migrates a v1 save, else starts fresh', () => {
@@ -97,7 +97,7 @@ test('loadSave prefers a v2 save, migrates a v1 save, else starts fresh', () => 
 })
 
 const run = (over = {}) => ({
-  level: 2, moves: 7, score: 40, keys: 1, power: 15, hearts: 3, scrolls: { 2: 0, 4: 1 }, armor: 1, gauntlets: 2,
+  level: 2, moves: 7, score: 40, keys: 1, power: 15, hearts: 3, scrolls: { 2: 0, 4: 1 }, armor: 1, gauntlets: 2, brokenWalls: [0, 2],
   board: ['player', 2, null, 4, null, 'stone', { type: 'numbered_stone', value: 8 }, null,
     null, null, 'exit', null, null, 8, null, { type: 'boss', hp: 12, maxHp: 20 }],
   floorGifts: { 2: { type: 'gold', amount: 30 }, 7: { type: 'equipment', item: { type: 'sword', power: 15 } } },
@@ -140,4 +140,12 @@ test('older runs without gear charges load with 0 armor / gauntlets; bad values 
   const { armor, gauntlets, ...old } = run()
   assert.deepEqual(parseSave(withRun(old), 100, size4).run, { ...old, armor: 0, gauntlets: 0 })
   assert.equal(parseSave(withRun(run({ armor: -1 })), 100, size4).run, undefined)
+})
+
+test('older runs without broken walls load with none; bad lists drop the run', () => {
+  const { brokenWalls, ...old } = run()
+  assert.deepEqual(parseSave(withRun(old), 100, size4).run, { ...old, brokenWalls: [] })
+  for (const bad of [[-1], [1.5], ['0'], [1, 1], 'all']) {
+    assert.equal(parseSave(withRun(run({ brokenWalls: bad })), 100, size4).run, undefined, JSON.stringify(bad))
+  }
 })

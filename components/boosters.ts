@@ -28,4 +28,10 @@ export const BOOSTERS: Record<ShopItem, { name: string; short: string; blurb: st
     blurb: 'Restores one heart in a boss room (up to your maximum).',
     icon: '/assets/icons/loot/green_gourd.png',
   },
+  wallRune: {
+    name: 'Rune of Passage',
+    short: 'Rune',
+    blurb: 'Dissolves one magic wall line for the rest of the chamber.',
+    icon: '/assets/icons/loot/rune_stone.png',
+  },
 }

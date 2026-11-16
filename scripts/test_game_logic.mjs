@@ -2,7 +2,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
-import { computeMove, hasAnyMove, makeBoard, rollGift, isWallBetween } from '../lib/game-logic.ts'
+import { computeMove, hasAnyMove, makeBoard, rollGift, isWallBetween, withoutWalls } from '../lib/game-logic.ts'
 
 const config = JSON.parse(readFileSync(new URL('../lib/game_config.json', import.meta.url), 'utf8'))
 const economy = config.economyConfig
@@ -473,4 +473,21 @@ test('spikesCrossed counts every spike slid over', () => {
   const res = computeMove(board, {}, lvl({ spikeTraps: [[0, 1], [0, 3]] }), economy, 'right', never)
   assert.equal(res.spikesCrossed, 2)
   assert.equal(res.steppedOnSpike, true)
+})
+
+test('Rune of Passage: a dissolved wall no longer blocks, the others still do', () => {
+  const walls = [{ row: 0, col: 1, type: 'vertical' }, { row: 3, col: 2, type: 'vertical' }]
+  const level = lvl({ walls })
+  const board = grid(
+    [null, null, 2, null],
+    [null, null, null, null],
+    [null, null, null, null],
+    [null, null, null, P],
+  )
+  assert.equal(computeMove(board, {}, level, economy, 'left', never).board[2], 2, 'wall 0 blocks')
+  const opened = withoutWalls(level, [0])
+  assert.equal(computeMove(board, {}, opened, economy, 'left', never).board[0], 2, 'wall 0 dissolved')
+  assert.deepEqual(opened.walls, [walls[1]])
+  assert.deepEqual(level.walls, walls, 'the level config is not changed')
+  assert.equal(withoutWalls(level, []), level)
 })

@@ -20,6 +20,8 @@ export type RunState = {
   /** Gear charges (armor absorbs a hit, gauntlets shatter a stone); 0 in older saves. */
   armor: number
   gauntlets: number
+  /** Walls dissolved by a Rune of Passage (indices into the level's walls); [] in older saves. */
+  brokenWalls: number[]
 }
 
 export type LevelRecord = { bestMoves: number; bestScore: number }
@@ -39,8 +41,8 @@ type CoreSave = {
 export type SaveDataV1 = { version: 1 } & CoreSave
 
 /** Consumables bought in the shop (phase 9.7). */
-export type Stash = { hammer: number; purge2: number; purge4: number; heartPotion: number }
-export const STASH_ITEMS: (keyof Stash)[] = ['hammer', 'purge2', 'purge4', 'heartPotion']
+export type Stash = { hammer: number; purge2: number; purge4: number; heartPotion: number; wallRune: number }
+export const STASH_ITEMS: (keyof Stash)[] = ['hammer', 'purge2', 'purge4', 'heartPotion', 'wallRune']
 export const MAX_TALENT_LEVEL = 14
 
 export type SaveData = { version: 2 } & CoreSave & {
@@ -52,7 +54,7 @@ export type SaveData = { version: 2 } & CoreSave & {
   settings: { sound: boolean }
 }
 
-const emptyStash = (): Stash => ({ hammer: 0, purge2: 0, purge4: 0, heartPotion: 0 })
+const emptyStash = (): Stash => ({ hammer: 0, purge2: 0, purge4: 0, heartPotion: 0, wallRune: 0 })
 export const freshSave = (): SaveData => ({
   version: 2, unlocked: 0, current: 0, gold: 0, records: {},
   stars: 0, talents: {}, stash: emptyStash(), settings: { sound: true },
@@ -110,6 +112,8 @@ function parseRun(r: unknown, unlocked: number, sizeOf?: (level: number) => numb
   const gear = (v: unknown) => (v === undefined ? 0 : isCount(v) ? Math.min(v as number, 9) : -1)
   const armor = gear(o.armor), gauntlets = gear(o.gauntlets)
   if (armor < 0 || gauntlets < 0) return undefined
+  const brokenWalls = o.brokenWalls === undefined ? [] : o.brokenWalls
+  if (!Array.isArray(brokenWalls) || !brokenWalls.every(isCount) || new Set(brokenWalls).size !== brokenWalls.length) return undefined
   return {
     level: o.level as number,
     board: o.board as Tile[],
@@ -122,6 +126,7 @@ function parseRun(r: unknown, unlocked: number, sizeOf?: (level: number) => numb
     scrolls: { 2: scrolls![2] as number, 4: scrolls![4] as number },
     armor,
     gauntlets,
+    brokenWalls: brokenWalls as number[],
   }
 }
 

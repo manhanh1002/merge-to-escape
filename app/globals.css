@@ -1216,6 +1216,19 @@ a.level-tile:hover { transform: translateY(-2px); border-color: var(--gold); }
 .booster-btn:disabled { opacity: .4; cursor: not-allowed; }
 .booster-hint { margin: 8px 0 0; text-align: center; color: var(--gold-hi); font-size: 14px; }
 
+/* Rune of Passage: walls pulse gold and can be tapped (wide invisible hit area for fingers) */
+.wall-line.pickable {
+  display: block; padding: 0; border: 0; cursor: pointer; pointer-events: auto;
+  animation: wall-pick 900ms ease-in-out infinite;
+}
+.wall-line.pickable::before { content: ''; position: absolute; inset: -12px; }
+.wall-line.pickable:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; }
+@keyframes wall-pick {
+  0%, 100% { box-shadow: 0 0 10px var(--arcane), 0 0 3px #fff; }
+  50% { box-shadow: 0 0 18px rgba(255, 210, 74, 0.95), 0 0 6px #fff; filter: brightness(1.3); }
+}
+@media (prefers-reduced-motion: reduce) { .wall-line.pickable { animation: none; box-shadow: 0 0 14px rgba(255, 210, 74, 0.9); } }
+
 /* Hammer mode: stones pulse and can be clicked */
 .board.hammer-mode .cell.smashable { cursor: crosshair; }
 .board.hammer-mode .cell.smashable .piece { animation: smash-pulse 900ms ease-in-out infinite; }

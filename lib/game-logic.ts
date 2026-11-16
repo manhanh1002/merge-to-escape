@@ -491,6 +491,14 @@ export function applyPurge(board: Tile[], value: 2 | 4): { board: Tile[]; remove
   return { board: board.map((cell) => (cell === value ? null : cell)), removed }
 }
 
+/** Rune of Passage: the level as played once some of its walls (indices into
+ *  `level.walls`) have been dissolved. Returns `level` itself when nothing is broken. */
+export function withoutWalls<L extends LevelConfig>(level: L, broken: readonly number[]): L {
+  if (!broken.length || !level.walls?.length) return level
+  const gone = new Set(broken)
+  return { ...level, walls: level.walls.filter((_, i) => !gone.has(i)) }
+}
+
 /** Heart potion: one more heart, never above the maximum (null when already full). */
 export function applyHeartPotion(hearts: number, maxHearts: number): number | null {
   return hearts >= maxHearts ? null : hearts + 1
