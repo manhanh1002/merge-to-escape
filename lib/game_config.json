@@ -91,8 +91,7 @@
       "statsBonusPerLevel": {
         "goldRate": 0.02,
         "weaponRate": 0.015,
-        "basePower": 25,
-        "weaponBonusPower": 0.05
+        "basePower": 25
       },
       "maxLevel": 14,
       "heartLevels": [
@@ -100,7 +99,12 @@
         10,
         14
       ],
-      "branches": "goldRate, weaponRate, basePower, bonusHearts (+1 ❤️ màn Boss ở các Lv trong heartLevels), weaponBonusPower"
+      "branches": "goldRate, weaponRate, basePower, bonusHearts (+1 ❤️ màn Boss ở các Lv trong heartLevels), weaponBonusPower = Gear Mastery (bắt đầu mỗi màn với 1/2/3 giáp ở các Lv trong armorLevels)",
+      "armorLevels": [
+        5,
+        10,
+        14
+      ]
     },
     "bossTomeDrop": {
       "minTile": 4,

@@ -97,7 +97,7 @@ test('loadSave prefers a v2 save, migrates a v1 save, else starts fresh', () => 
 })
 
 const run = (over = {}) => ({
-  level: 2, moves: 7, score: 40, keys: 1, power: 15, hearts: 3, scrolls: { 2: 0, 4: 1 },
+  level: 2, moves: 7, score: 40, keys: 1, power: 15, hearts: 3, scrolls: { 2: 0, 4: 1 }, armor: 1, gauntlets: 2,
   board: ['player', 2, null, 4, null, 'stone', { type: 'numbered_stone', value: 8 }, null,
     null, null, 'exit', null, null, 8, null, { type: 'boss', hp: 12, maxHp: 20 }],
   floorGifts: { 2: { type: 'gold', amount: 30 }, 7: { type: 'equipment', item: { type: 'sword', power: 15 } } },
@@ -134,4 +134,10 @@ test('winning a level clears the saved run', () => {
 test('a v1 run in progress survives migration', () => {
   const raw = JSON.stringify({ version: 1, unlocked: 5, current: 2, gold: 10, records: {}, run: run() })
   assert.deepEqual(loadSave(null, raw, 100, size4).save.run, run())
+})
+
+test('older runs without gear charges load with 0 armor / gauntlets; bad values drop the run', () => {
+  const { armor, gauntlets, ...old } = run()
+  assert.deepEqual(parseSave(withRun(old), 100, size4).run, { ...old, armor: 0, gauntlets: 0 })
+  assert.equal(parseSave(withRun(run({ armor: -1 })), 100, size4).run, undefined)
 })

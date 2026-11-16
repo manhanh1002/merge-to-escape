@@ -416,8 +416,10 @@ test('tomes stay on the floor while the boss is still alive', () => {
   assert.deepEqual(res.floorGifts, { 6: tome })
 })
 
-test('normal levels (no boss) still drop tomes as gear', () => {
-  assert.deepEqual(rollGift(8, economy, always), tome)
+test('regular levels (no boss) never drop attack tomes', () => {
+  // an 8 merge with an rng that always hits: only a tome would qualify, and tomes are boss-only
+  const board = grid([P, S, S, S], [S, S, S, S], [S, S, S, S], [4, 4, S, S])
+  assert.equal(computeMove(board, {}, lvl(), economy, 'left', always).floorGifts[12], undefined)
 })
 
 test('hammer: smashes a stone or a numbered stone, nothing else', async () => {
@@ -444,4 +446,31 @@ test('heart potion: +1 heart up to the maximum, refused when full', async () => 
   const { applyHeartPotion } = await import('../lib/game-logic.ts')
   assert.equal(applyHeartPotion(1, 3), 2)
   assert.equal(applyHeartPotion(3, 3), null)
+})
+
+test('gauntlets: sliding into a stone or numbered stone shatters it (one charge)', () => {
+  const board = grid([P, S, S, 'stone'], [S, S, S, S], [S, S, S, S], [S, S, S, S])
+  const res = computeMove(board, {}, lvl(), economy, 'right', never, 0, 1)
+  assert.equal(res.smashedStone, 3)
+  assert.equal(res.board[3], null)
+  assert.equal(res.board[2], P, 'the wizard stops where he hit it')
+  const ns8 = grid([P, ns(8), S, S], [S, S, S, S], [S, S, S, S], [S, S, S, S])
+  assert.equal(computeMove(ns8, {}, lvl(), economy, 'right', never, 0, 1).smashedStone, 1, 'already adjacent also counts')
+})
+
+test('gauntlets do nothing without charges, through a wall, or against other pieces', () => {
+  const board = grid([P, S, S, 'stone'], [S, S, S, S], [S, S, S, S], [S, S, S, S])
+  assert.equal(computeMove(board, {}, lvl(), economy, 'right', never, 0, 0).smashedStone, -1)
+  const walled = computeMove(board, {}, lvl({ walls: [{ row: 0, col: 2, type: 'vertical' }] }), economy, 'right', never, 0, 1)
+  assert.equal(walled.smashedStone, -1)
+  assert.equal(walled.board[3], 'stone')
+  const tile = grid([P, S, S, 8], [S, S, S, S], [S, S, S, S], [S, S, S, S])
+  assert.equal(computeMove(tile, {}, lvl(), economy, 'right', never, 0, 1).smashedStone, -1)
+})
+
+test('spikesCrossed counts every spike slid over', () => {
+  const board = grid([P, S, S, S], [S, S, S, S], [S, S, S, S], [S, S, S, S])
+  const res = computeMove(board, {}, lvl({ spikeTraps: [[0, 1], [0, 3]] }), economy, 'right', never)
+  assert.equal(res.spikesCrossed, 2)
+  assert.equal(res.steppedOnSpike, true)
 })

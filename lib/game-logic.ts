@@ -212,6 +212,10 @@ export type MoveResult = {
   playerMoved: boolean
   reachedDoor: boolean
   steppedOnSpike: boolean
+  /** How many spikes the player slid over (armor absorbs one each). */
+  spikesCrossed: number
+  /** Cell of a stone the player's gauntlets shattered this move, or -1. */
+  smashedStone: number
   /** Player tried to step but a wall was in the way. */
   bumpedWall: boolean
   /** Numbered stones shattered this move. */
@@ -254,8 +258,10 @@ export function computeMove(
   economy: EconomyConfig,
   direction: Direction,
   rng: Rng = Math.random,
-  /** Player Power from gear; added to every tome's damage. */
+  /** Player Power (Arcane Might talent); added to every tome's damage. */
   power = 0,
+  /** Gauntlet charges: sliding into a stone or numbered stone shatters it (one charge). */
+  gauntlets = 0,
 ): MoveResult {
   const size = level.size
   const walls = level.walls ?? []
@@ -269,7 +275,8 @@ export function computeMove(
     economy,
     rng,
     bossLevel: base.some(isBoss),
-    allowTomes: !(level.hasBoss && !base.some(isBoss)),
+    // attack tomes only exist while a boss is there to hit
+    allowTomes: base.some(isBoss),
   }
   let changed = false
   let gained = 0
@@ -341,6 +348,8 @@ export function computeMove(
   let steppedOnSpike = false
   let bumpedWall = false
   let bumpedBoss = false
+  let spikesCrossed = 0
+  let smashedStone = -1
   let bossDiedAt = -1
   let doorSealed = false
   let tomesCast = 0
@@ -353,7 +362,8 @@ export function computeMove(
       path.push(cur)
     }
     const spikes = spikeCells(level)
-    steppedOnSpike = path.some((k) => spikes.has(k))
+    spikesCrossed = path.filter((k) => spikes.has(k)).length
+    steppedOnSpike = spikesCrossed > 0
     for (const k of path) {
       if (gifts[k]) { collected.push(gifts[k]); delete gifts[k] }
     }
@@ -379,6 +389,13 @@ export function computeMove(
       }
     }
     if (openAhead && isBoss(next[front]) && !playerMoved) { bumpedBoss = true; changed = true }
+    // Gauntlets: running into a stone (or numbered stone) shatters it.
+    if (openAhead && gauntlets > 0 && !reachedDoor && (next[front] === 'stone' || isNumberedStone(next[front]))) {
+      next[front] = null
+      smashedStone = front
+      shattered++
+      changed = true
+    }
 
     // Attack tomes picked up while a boss lives are cast at it, one blast each.
     const bossIdx = next.findIndex(isBoss)
@@ -430,16 +447,17 @@ export function computeMove(
   return {
     board: next, floorGifts: gifts, changed, gained, playerMoved, reachedDoor, steppedOnSpike, bumpedWall, shattered,
     collected, doorOpen: next.includes('exit'), bossDamage, bossDefeated, bossReward, bossHitPlayer, bumpedBoss, bossAt, doorSealed, tomesCast, tomesFaded,
+    spikesCrossed, smashedStone,
     motions,
   }
 }
 
 /** True if at least one swipe direction would change the board. */
-export function hasAnyMove(board: Tile[], floorGifts: FloorGifts, level: LevelConfig, economy: EconomyConfig, power = 0): boolean {
+export function hasAnyMove(board: Tile[], floorGifts: FloorGifts, level: LevelConfig, economy: EconomyConfig, power = 0, gauntlets = 0): boolean {
   const noDrops: Rng = () => 1 // never roll gifts during the probe
   // Just walking into the boss (nothing else moves) is not a way out.
   return (['left', 'right', 'up', 'down'] as const).some((d) => {
-    const res = computeMove(board, floorGifts, level, economy, d, noDrops, power)
+    const res = computeMove(board, floorGifts, level, economy, d, noDrops, power, gauntlets)
     return res.changed && !(res.bumpedBoss && res.motions.length === 0 && res.shattered === 0)
   })
 }

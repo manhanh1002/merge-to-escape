@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { DoorOpen, Map as MapIcon, RotateCcw, Skull, Undo2 } from 'lucide-react'
 import { recordWin, starsForLevel, type Stash } from '../../lib/save'
-import { effectiveEconomy, gearPower, startingRun, type TalentLevels } from '../../lib/talents'
+import { effectiveEconomy, startingRun, type TalentLevels } from '../../lib/talents'
 import { economy, levels, talentCfg } from '../../lib/levels'
 import { resolveStartLevel } from '../../lib/navigation'
 import {
@@ -27,21 +27,30 @@ import { useSave } from '../../components/useSave'
 // Gold is the persistent wallet; keys, power and scrolls belong to the current run of a level.
 // Hearts only matter on boss levels: each touch of the boss costs one. Talents (bought with
 // stars) decide the Power and hearts a level starts with.
-type Inventory = { gold: number; keys: number; power: number; hearts: number; scrolls: { 2: number; 4: number } }
+// Gear gives charges, not Power: armor absorbs one hit (boss touch or a spike), gauntlets
+// shatter a stone the wizard slides into. Power comes only from the Arcane Might talent.
+type Inventory = {
+  gold: number; keys: number; power: number; hearts: number; scrolls: { 2: number; 4: number }
+  armor: number; gauntlets: number
+}
+const MAX_GEAR = 3
 const freshRun = (gold: number, talents: TalentLevels = {}): Inventory => {
   const start = startingRun(talents, talentCfg)
-  return { gold, keys: 0, power: start.power, hearts: start.hearts, scrolls: { 2: 0, 4: 0 } }
+  return { gold, keys: 0, power: start.power, hearts: start.hearts, scrolls: { 2: 0, 4: 0 }, armor: start.armor, gauntlets: 0 }
 }
 /** Undo restores the board, the run and the stash (so undoing a booster gives it back). */
 type Snapshot = { board: Tile[]; moves: number; score: number; floorGifts: FloorGifts; inventory: Inventory; stash: Stash }
 
 const makeBoard = (levelIndex: number) => buildBoard(levels[levelIndex])
 
-function applyGift(inv: Inventory, gift: FloorGift, talents: TalentLevels): Inventory {
+function applyGift(inv: Inventory, gift: FloorGift): Inventory {
   switch (gift.type) {
     case 'gold': return { ...inv, gold: inv.gold + gift.amount }
     case 'key': return { ...inv, keys: inv.keys + 1 }
-    case 'equipment': return { ...inv, power: inv.power + gearPower(gift.item.power, talents, talentCfg) }
+    case 'equipment':
+      if (gift.item.type === 'armor') return { ...inv, armor: Math.min(MAX_GEAR, inv.armor + 1) }
+      if (gift.item.type === 'gauntlet') return { ...inv, gauntlets: Math.min(MAX_GEAR, inv.gauntlets + 1) }
+      return inv // an attack tome with no boss left to hit
     case 'scroll': return { ...inv, scrolls: { ...inv.scrolls, [gift.targetValue]: inv.scrolls[gift.targetValue] + 1 } }
   }
 }
@@ -54,8 +63,10 @@ function giftLabel(gift: FloorGift): string {
     case 'gold': return `+${gift.amount} gold`
     case 'key': return 'Picked up a key'
     case 'equipment': return gift.item.type === 'sword'
-      ? `Learned the ${EQUIPMENT_NAMES.sword} (+${gift.item.power} Power)`
-      : `Equipped ${EQUIPMENT_NAMES[gift.item.type]} (+${gift.item.power} Power)`
+      ? `The ${EQUIPMENT_NAMES.sword} fizzles — no boss to hit`
+      : gift.item.type === 'armor'
+        ? `${EQUIPMENT_NAMES.armor} — absorbs one hit (boss or spikes)`
+        : `${EQUIPMENT_NAMES.gauntlet} — shatter a stone you slide into`
     case 'scroll': return `Gained Purge [${gift.targetValue}] Scroll`
   }
 }
@@ -175,7 +186,7 @@ export default function PlayPage() {
     if (start.resume && run) {
       // Resume the unfinished level exactly where it was left (undo history is not kept).
       setBoard(run.board); setFloorGifts(run.floorGifts); setMoves(run.moves); setScore(run.score)
-      setInventory({ gold: progress.gold, keys: run.keys, power: run.power, hearts: run.hearts, scrolls: run.scrolls })
+      setInventory({ gold: progress.gold, keys: run.keys, power: run.power, hearts: run.hearts, scrolls: run.scrolls, armor: run.armor, gauntlets: run.gauntlets })
       setMessage(`Welcome back — your run is restored. ${statusMessage(levels[run.level], run.board.includes('exit'), run.board.some(isBoss))}`)
     } else {
       setInventory(freshRun(progress.gold, progress.talents))
@@ -197,8 +208,8 @@ export default function PlayPage() {
     const active = !won && !lost && moves > 0
     setProgress((p) => {
       if (!active) return p.run ? { ...p, run: undefined } : p
-      const { keys, power, hearts, scrolls } = inventory
-      return { ...p, run: { level: levelIndex, board, floorGifts, moves, score, keys, power, hearts, scrolls } }
+      const { keys, power, hearts, scrolls, armor, gauntlets } = inventory
+      return { ...p, run: { level: levelIndex, board, floorGifts, moves, score, keys, power, hearts, scrolls, armor, gauntlets } }
     })
   }, [board, floorGifts, inventory, levelIndex, lost, moves, ready, score, setProgress, won])
 
@@ -209,7 +220,7 @@ export default function PlayPage() {
 
   const move = useCallback((direction: Direction) => {
     if (won || lost) return
-    const res = computeMove(board, floorGifts, level, runEconomy, direction, Math.random, inventory.power)
+    const res = computeMove(board, floorGifts, level, runEconomy, direction, Math.random, inventory.power, inventory.gauntlets)
     if (!res.changed) return
 
     // Attack tomes picked up while a boss lives are cast at it, not kept as Power; every other
@@ -221,14 +232,25 @@ export default function PlayPage() {
     for (const gift of res.collected) {
       if (castLeft > 0 && gift.type === 'equipment' && gift.item.type === 'sword') { castLeft--; continue }
       if (gift.type === 'scroll') { scrollsFound[gift.targetValue === 2 ? 'purge2' : 'purge4']++; continue }
-      nextInventory = applyGift(nextInventory, gift, progress.talents)
+      nextInventory = applyGift(nextInventory, gift)
     }
+    if (res.smashedStone !== -1) nextInventory = { ...nextInventory, gauntlets: nextInventory.gauntlets - 1 }
+    // Armor absorbs one spike each; without enough, the spikes are deadly.
+    const spikeDeath = res.spikesCrossed > nextInventory.armor
+    const armorOnSpikes = !spikeDeath ? res.spikesCrossed : 0
+    if (armorOnSpikes) nextInventory = { ...nextInventory, armor: nextInventory.armor - armorOnSpikes }
     if (res.bossReward) {
       nextInventory = { ...nextInventory, gold: nextInventory.gold + res.bossReward.gold, keys: nextInventory.keys + res.bossReward.keys }
     }
-    if (res.bossHitPlayer) nextInventory = { ...nextInventory, hearts: nextInventory.hearts - 1 }
-    const slain = res.bossHitPlayer && nextInventory.hearts <= 0
-    const finished = res.reachedDoor || res.steppedOnSpike || slain
+    // A boss hit breaks armor first, then costs a heart.
+    const armorBlocked = res.bossHitPlayer && nextInventory.armor > 0
+    if (res.bossHitPlayer) {
+      nextInventory = armorBlocked
+        ? { ...nextInventory, armor: nextInventory.armor - 1 }
+        : { ...nextInventory, hearts: nextInventory.hearts - 1 }
+    }
+    const slain = res.bossHitPlayer && !armorBlocked && nextInventory.hearts <= 0
+    const finished = res.reachedDoor || spikeDeath || slain
     const nextBoard = finished ? res.board : addRandomTile(res.board)
     const spawned = nextBoard.findIndex((c, i) => c !== null && res.board[i] === null)
     setBoardAnim((a) => ({ nonce: (a?.nonce ?? 0) + 1, motions: res.motions, prev: board, spawned }))
@@ -257,8 +279,8 @@ export default function PlayPage() {
       setMessage(`${bossName} struck you down. Keep your distance and blast it with Fire Tomes.`)
       return
     }
-    if (res.steppedOnSpike) { playHero('die'); setLost(true); setMessage('You stepped into a deadly Spike Trap!'); return }
-    if (!hasAnyMove(nextBoard, res.floorGifts, level, runEconomy, nextInventory.power)) {
+    if (spikeDeath) { playHero('die'); setLost(true); setMessage('You stepped into a deadly Spike Trap!'); return }
+    if (!hasAnyMove(nextBoard, res.floorGifts, level, runEconomy, nextInventory.power, nextInventory.gauntlets)) {
       playHero('die'); setLost(true); setStuck(true)
       setMessage('No moves left — the room has sealed shut.')
       return
@@ -269,7 +291,7 @@ export default function PlayPage() {
     else if (res.bossDefeated) playBoss('dying', res.bossAt)
     else if (tomeCast) playBoss('hurt')
     // The wizard reacts: casts on a tome/stone, ouch on a hit or wall, steps otherwise.
-    if (res.bossHitPlayer || res.bumpedWall || res.doorSealed) playHero('hurt')
+    if (res.bossHitPlayer || res.bumpedWall || res.doorSealed || armorOnSpikes) playHero('hurt')
     else if (tomeCast || res.shattered > 0) playHero('attack')
     else if (res.playerMoved) {
       // a long slide is a run, a short one a walk
@@ -278,14 +300,18 @@ export default function PlayPage() {
       playHero(dist >= 2 ? 'run' : 'walk')
     }
 
-    const note = res.bossReward
+    const gearNote = (res.smashedStone !== -1 ? 'Your gauntlets shatter the stone! ' : '')
+      + (armorOnSpikes ? `Your armor takes the spikes${armorOnSpikes > 1 ? ` (×${armorOnSpikes})` : ''} — you're unhurt! ` : '')
+    const note = gearNote + (res.bossReward
       ? `${bossName} is defeated! +${res.bossReward.gold} gold, +${res.bossReward.keys} key.${res.tomesFaded ? ' The unused Fire Tomes fade away.' : ''} `
       : tomeCast
         ? `🔥 ${res.tomesCast > 1 ? `${res.tomesCast} Fire Tomes blast` : 'The Fire Tome blasts'} ${bossName} for ${res.bossDamage}! `
-        : res.collected.length ? `${res.collected.map(giftLabel).join(', ')}. ` : ''
+        : res.collected.length ? `${res.collected.map(giftLabel).join(', ')}. ` : '')
     setMessage(
       res.bossHitPlayer
-        ? `${bossName} hits you! ${nextInventory.hearts} ❤️ left — don't let it touch you.`
+        ? armorBlocked
+          ? `${bossName} smashes your armor — it breaks, but you're unhurt.`
+          : `${bossName} hits you! ${nextInventory.hearts} ❤️ left — don't let it touch you.`
         : res.doorSealed
           ? 'The door is sealed — defeat the boss first. Walk over Fire Tomes to blast it!'
           : note + statusMessage(level, res.doorOpen, res.board.some(isBoss)),
@@ -321,7 +347,7 @@ export default function PlayPage() {
     setHistory((h) => [...h, { board, moves, score, floorGifts, inventory, stash: progress.stash }])
     setProgress((p) => ({ ...p, stash: { ...p.stash, [item]: p.stash[item] - 1 } }))
     setBoard(nextBoard); setInventory(nextInventory); setBoardAnim(null); setHammerMode(false)
-    if (stuck && hasAnyMove(nextBoard, floorGifts, level, runEconomy, nextInventory.power)) {
+    if (stuck && hasAnyMove(nextBoard, floorGifts, level, runEconomy, nextInventory.power, nextInventory.gauntlets)) {
       setLost(false); setStuck(false); playHero('idle')
       setMessage(`${note} You can move again!`)
     } else {
@@ -406,7 +432,7 @@ export default function PlayPage() {
       <TopBar back="/" />
 
       <section className="game-content">
-        <Purse gold={inventory.gold} stars={progress.stars} keys={inventory.keys} power={inventory.power} />
+        <Purse gold={inventory.gold} stars={progress.stars} keys={inventory.keys} power={inventory.power} armor={inventory.armor} gauntlets={inventory.gauntlets} />
 
         <div className="level-heading">
           <div>
@@ -623,7 +649,7 @@ export default function PlayPage() {
             Swipe or use arrow keys — everything slides as far as it can, the wizard too, picking up whatever he slides over. {isFusionLevel(level)
               ? `Slide ${level.targetFormula[0]} directly into ${level.targetFormula[1]} to fuse the exit door.`
               : `Merge matching tiles until you reach ${level.target} — that tile becomes the door.`} Then
-            move onto the door to escape. Numbered stones shatter when a tile of the same value crashes into them; never step on a spike trap. In boss rooms the boss slides with every swipe: merge to drop Fire Tomes and walk over them to blast it, but every time it touches you costs a heart.
+            move onto the door to escape. Numbered stones shatter when a tile of the same value crashes into them; never slide over a spike trap. Armor absorbs one hit (a boss touch or a spike); gauntlets shatter a stone you slide into. In boss rooms the boss slides with every swipe: merge to drop Fire Tomes and walk over them to blast it, but every time it touches you costs a heart.
           </p>
           <div className="legend">
             <span><img src={ART.stone} alt="" draggable={false} /> Obstacle</span>

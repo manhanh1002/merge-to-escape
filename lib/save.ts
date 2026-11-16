@@ -17,6 +17,9 @@ export type RunState = {
   power: number
   hearts: number
   scrolls: { 2: number; 4: number }
+  /** Gear charges (armor absorbs a hit, gauntlets shatter a stone); 0 in older saves. */
+  armor: number
+  gauntlets: number
 }
 
 export type LevelRecord = { bestMoves: number; bestScore: number }
@@ -104,6 +107,9 @@ function parseRun(r: unknown, unlocked: number, sizeOf?: (level: number) => numb
   const scrolls = o.scrolls as Record<string, unknown> | undefined
   if (![o.moves, o.score, o.keys, o.power, o.hearts, scrolls?.[2], scrolls?.[4]].every(isCount)) return undefined
   if ((o.hearts as number) < 1) return undefined
+  const gear = (v: unknown) => (v === undefined ? 0 : isCount(v) ? Math.min(v as number, 9) : -1)
+  const armor = gear(o.armor), gauntlets = gear(o.gauntlets)
+  if (armor < 0 || gauntlets < 0) return undefined
   return {
     level: o.level as number,
     board: o.board as Tile[],
@@ -114,6 +120,8 @@ function parseRun(r: unknown, unlocked: number, sizeOf?: (level: number) => numb
     power: o.power as number,
     hearts: o.hearts as number,
     scrolls: { 2: scrolls![2] as number, 4: scrolls![4] as number },
+    armor,
+    gauntlets,
   }
 }
 

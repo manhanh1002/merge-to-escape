@@ -4,7 +4,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { freshSave } from '../lib/save.ts'
 import {
-  TALENT_IDS, canUpgrade, effectiveEconomy, gearPower, refundAll, startingRun, talentLevel, upgrade, upgradeCost,
+  TALENT_IDS, canUpgrade, effectiveEconomy, refundAll, startingRun, talentLevel, upgrade, upgradeCost,
 } from '../lib/talents.ts'
 
 const config = JSON.parse(readFileSync(new URL('../lib/game_config.json', import.meta.url), 'utf8'))
@@ -69,16 +69,18 @@ test('effectiveEconomy with no talents changes nothing and never mutates the bas
 })
 
 test('startingRun: basePower gives 25 Power per level; bonusHearts +1 heart at Lv 5, 10, 14', () => {
-  assert.deepEqual(startingRun({ basePower: 3 }, cfg), { power: 75, hearts: 3 })
+  assert.deepEqual(startingRun({ basePower: 3 }, cfg), { power: 75, hearts: 3, armor: 0 })
   assert.equal(startingRun({ bonusHearts: 4 }, cfg).hearts, 3)
   assert.equal(startingRun({ bonusHearts: 5 }, cfg).hearts, 4)
   assert.equal(startingRun({ bonusHearts: 10 }, cfg).hearts, 5)
   assert.equal(startingRun({ bonusHearts: 14 }, cfg).hearts, 6)
 })
 
-test('weaponBonusPower Lv 10 turns a 30 Power item into 45', () => {
-  assert.equal(gearPower(30, { weaponBonusPower: 10 }, cfg), 45)
-  assert.equal(gearPower(30, {}, cfg), 30)
+test('Gear Mastery (weaponBonusPower) gives 1 / 2 / 3 starting armor at Lv 5 / 10 / 14', () => {
+  assert.equal(startingRun({ weaponBonusPower: 4 }, cfg).armor, 0)
+  assert.equal(startingRun({ weaponBonusPower: 5 }, cfg).armor, 1)
+  assert.equal(startingRun({ weaponBonusPower: 10 }, cfg).armor, 2)
+  assert.equal(startingRun({ weaponBonusPower: 14 }, cfg).armor, 3)
 })
 
 test('describeTalent: names and current -> next effect text for every branch', async () => {
@@ -88,7 +90,9 @@ test('describeTalent: names and current -> next effect text for every branch', a
   assert.equal(describeTalent('weaponRate', 4, cfg).now, '+6% tome & gear drop chance')
   assert.equal(describeTalent('weaponRate', 1, cfg).now, '+1.5% tome & gear drop chance', 'no rounding up to 2%')
   assert.equal(describeTalent('basePower', 3, cfg).now, '+75 starting Power (added to every Fire Tome)')
-  assert.equal(describeTalent('weaponBonusPower', 10, cfg).now, '+50% Power from gear')
+  assert.deepEqual(describeTalent('weaponBonusPower', 0, cfg), { name: 'Gear Mastery', now: 'No starting armor yet', next: '1 starting armor at Lv 5' })
+  assert.equal(describeTalent('weaponBonusPower', 9, cfg).next, 'Start each chamber with 2 armor')
+  assert.equal(describeTalent('weaponBonusPower', 10, cfg).now, 'Start each chamber with 2 armor')
   assert.equal(describeTalent('weaponBonusPower', 14, cfg).next, null, 'maxed: no next level')
 })
 

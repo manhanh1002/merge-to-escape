@@ -9,12 +9,13 @@ export type TalentId = (typeof TALENT_IDS)[number]
 
 /** = economyConfig.talentTreeConfig in game_config.json */
 export type TalentConfig = {
-  /** Effect per level: goldRate / weaponRate add to drop rates, basePower adds Power,
-   *  weaponBonusPower multiplies gear Power by (1 + level x value). */
-  statsBonusPerLevel: { goldRate: number; weaponRate: number; basePower: number; weaponBonusPower: number }
+  /** Effect per level: goldRate / weaponRate add to drop rates, basePower adds Power. */
+  statsBonusPerLevel: { goldRate: number; weaponRate: number; basePower: number }
   maxLevel: number
   /** bonusHearts: +1 heart in boss rooms at each of these levels. */
   heartLevels: number[]
+  /** weaponBonusPower ("Gear Mastery"): +1 starting armor at each of these levels. */
+  armorLevels: number[]
 }
 
 /** Hearts every boss room starts with before talents. */
@@ -70,15 +71,15 @@ export function effectiveEconomy(base: EconomyConfig, talents: TalentLevels, cfg
   }
 }
 
-/** What a run starts with: Power from basePower, hearts from bonusHearts. */
-export function startingRun(talents: TalentLevels, cfg: TalentConfig): { power: number; hearts: number } {
-  const hearts = BASE_HEARTS + cfg.heartLevels.filter((lv) => (talents.bonusHearts ?? 0) >= lv).length
-  return { power: (talents.basePower ?? 0) * cfg.statsBonusPerLevel.basePower, hearts }
-}
-
-/** Power a picked-up item really gives, boosted by weaponBonusPower. */
-export function gearPower(itemPower: number, talents: TalentLevels, cfg: TalentConfig): number {
-  return Math.round(itemPower * (1 + (talents.weaponBonusPower ?? 0) * cfg.statsBonusPerLevel.weaponBonusPower))
+/** What a run starts with: Power from basePower, boss-room hearts from bonusHearts, and
+ *  armor charges from Gear Mastery (stored under its original id, weaponBonusPower). */
+export function startingRun(talents: TalentLevels, cfg: TalentConfig): { power: number; hearts: number; armor: number } {
+  const reached = (levels: number[], lv: number | undefined) => levels.filter((at) => (lv ?? 0) >= at).length
+  return {
+    power: (talents.basePower ?? 0) * cfg.statsBonusPerLevel.basePower,
+    hearts: BASE_HEARTS + reached(cfg.heartLevels, talents.bonusHearts),
+    armor: reached(cfg.armorLevels, talents.weaponBonusPower),
+  }
 }
 
 /** Player-facing names. */
@@ -100,16 +101,22 @@ export function describeTalent(id: TalentId, level: number, cfg: TalentConfig): 
       case 'goldRate': return `+${pct(lv, per.goldRate)} gold drop chance`
       case 'weaponRate': return `+${pct(lv, per.weaponRate)} tome & gear drop chance`
       case 'basePower': return `+${lv * per.basePower} starting Power (added to every Fire Tome)`
-      case 'weaponBonusPower': return `+${pct(lv, per.weaponBonusPower)} Power from gear`
+      case 'weaponBonusPower': {
+        const armor = startingRun({ weaponBonusPower: lv }, cfg).armor
+        return armor ? `Start each chamber with ${armor} armor` : 'No starting armor yet'
+      }
       case 'bonusHearts': return `${startingRun({ bonusHearts: lv }, cfg).hearts} hearts in boss rooms`
     }
   }
-  const now = level === 0 && id !== 'bonusHearts' ? 'No bonus yet' : effect(level)
+  const now = level === 0 && id !== 'bonusHearts' && id !== 'weaponBonusPower' ? 'No bonus yet' : effect(level)
   let next: string | null = level >= cfg.maxLevel ? null : effect(level + 1)
-  if (id === 'bonusHearts' && next !== null && !cfg.heartLevels.includes(level + 1)) {
-    // hearts only change at certain levels: point at the next one
-    const at = cfg.heartLevels.find((lv) => lv > level)
-    next = at === undefined ? null : `${startingRun({ bonusHearts: at }, cfg).hearts} hearts at Lv ${at}`
+  // hearts and armor only change at certain levels: point at the next one
+  const steps = id === 'bonusHearts' ? cfg.heartLevels : id === 'weaponBonusPower' ? cfg.armorLevels : null
+  if (steps && next !== null && !steps.includes(level + 1)) {
+    const at = steps.find((lv) => lv > level)
+    next = at === undefined ? null : id === 'bonusHearts'
+      ? `${startingRun({ bonusHearts: at }, cfg).hearts} hearts at Lv ${at}`
+      : `${startingRun({ weaponBonusPower: at }, cfg).armor} starting armor at Lv ${at}`
   }
   return { name: TALENT_NAMES[id], now, next }
 }

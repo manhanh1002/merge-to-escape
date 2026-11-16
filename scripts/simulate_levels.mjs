@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { computeMove, hasAnyMove, makeBoard, addRandomTile } from '../lib/game-logic.ts'
 import { freshSave, starsForLevel } from '../lib/save.ts'
-import { TALENT_IDS, effectiveEconomy, gearPower, startingRun, talentLevel, upgrade, upgradeCost } from '../lib/talents.ts'
+import { TALENT_IDS, effectiveEconomy, startingRun, talentLevel, upgrade, upgradeCost } from '../lib/talents.ts'
 
 const arg = (name, fallback) => {
   const i = process.argv.indexOf(`--${name}`)
@@ -66,29 +66,37 @@ export function play(level, talents = TALENTS === 'expected' ? expectedTalents(l
   const start = startingRun(talents, talentCfg)
   let board = makeBoard(level)
   let gifts = {}
-  let power = start.power
+  const power = start.power
   let hearts = start.hearts
+  let armor = start.armor
+  let gauntlets = 0
   let bossKilledAt = null
   for (let m = 0; m < MAX_MOVES; m++) {
     const options = DIRS
-      .map((d) => [d, computeMove(board, gifts, level, economy, d, noDrops, power)])
-      .filter(([, r]) => r.changed && !r.steppedOnSpike && !r.doorSealed && !(r.bumpedBoss && r.motions.length === 0))
+      .map((d) => [d, computeMove(board, gifts, level, economy, d, noDrops, power, gauntlets)])
+      .filter(([, r]) => r.changed && r.spikesCrossed <= armor && !r.doorSealed && !(r.bumpedBoss && r.motions.length === 0))
     if (!options.length) return { win: false, moves: m, why: 'stuck' }
     options.sort((a, b) => scoreOf(b[1], gifts, level.size) - scoreOf(a[1], gifts, level.size))
     const choice = options[0][0]
-    const res = computeMove(board, gifts, level, economy, choice, Math.random, power)
-    let castLeft = res.tomesCast
+    const res = computeMove(board, gifts, level, economy, choice, Math.random, power, gauntlets)
+    // gear gives charges: armor absorbs a hit, gauntlets shatter a stone slid into
     for (const g of res.collected) {
       if (g.type !== 'equipment') continue
-      if (isTome(g) && castLeft > 0) { castLeft--; continue }
-      power += gearPower(g.item.power, talents, talentCfg)
+      if (g.item.type === 'armor') armor = Math.min(3, armor + 1)
+      if (g.item.type === 'gauntlet') gauntlets = Math.min(3, gauntlets + 1)
     }
+    if (res.smashedStone !== -1) gauntlets--
+    if (res.spikesCrossed > armor) return { win: false, moves: m + 1, why: 'spike' }
+    armor -= res.spikesCrossed
     if (res.bossDefeated) bossKilledAt = m + 1
-    if (res.bossHitPlayer && --hearts <= 0) return { win: false, moves: m + 1, why: 'boss' }
+    if (res.bossHitPlayer) {
+      if (armor > 0) armor--
+      else if (--hearts <= 0) return { win: false, moves: m + 1, why: 'boss' }
+    }
     if (res.reachedDoor) return { win: true, moves: m + 1, bossKilledAt }
     board = addRandomTile(res.board)
     gifts = res.floorGifts
-    if (!hasAnyMove(board, gifts, level, economy, power)) return { win: false, moves: m + 1, why: 'no moves' }
+    if (!hasAnyMove(board, gifts, level, economy, power, gauntlets)) return { win: false, moves: m + 1, why: 'no moves' }
   }
   return { win: false, moves: MAX_MOVES, why: 'timeout' }
 }

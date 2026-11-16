@@ -96,7 +96,8 @@ if (nextCell === 'boss') {
 - **Sau khi hạ Boss**: không còn rơi Fire Tome nữa ở màn đó, và các Fire Tome còn nằm trên sàn biến mất (vàng, chìa, giáp… vẫn giữ).
 - **Va chạm**: mỗi khi Boss và nhân vật **mới chạm nhau** (một bên trượt/bước sát bên kia, hoặc nhân vật đi vào Boss) ➔ Boss đánh, mất 1 ❤️ (3 ❤️ mỗi màn Boss). Đứng yên cạnh nhau thì an toàn. Không còn luật "đủ Power thì chém chết Boss".
 - **Cửa bị phong ấn** khi Boss còn sống. Giết Boss: thưởng vàng trong `bossRewards.goldRange` + `bonusKeys` chìa. Búa (phase 5) chưa có.
-- **Vũ khí của pháp sư là Sách phép**: slot `sword` hiển thị thành *Fire Tome* (pack `free-50-rpg-book-icons`); ở màn thường sách chỉ cộng Power. Icon Power trên HUD là *Arcane Tome*.
+- **Vũ khí của pháp sư là Sách phép**: slot `sword` hiển thị thành *Fire Tome* (pack `free-50-rpg-book-icons`) và **chỉ rơi khi Boss còn sống**. Icon Power trên HUD là *Arcane Tome*.
+- **Trang bị có vai trò riêng (không còn cộng Power)**: 🛡️ **Giáp** = 1 lượt đỡ đòn — đỡ một cú chạm của Boss (thay vì mất ❤️) hoặc một bẫy gai trượt qua (thay vì chết; mỗi gai tốn 1 giáp). 🥊 **Găng** = 1 lượt — khi pháp sư trượt đâm vào đá / đá khắc số thì đá vỡ (tự dùng). Mỗi loại mang tối đa 3. **Power chỉ đến từ talent Arcane Might** và cộng vào mỗi Fire Tome. Talent **Gear Mastery** (id cũ `weaponBonusPower`) đổi thành: bắt đầu mỗi màn với 1/2/3 giáp ở Lv 5/10/14 (`armorLevels`).
 - **Nhân vật Boss**: Chương 1–3 Caveman, 4–7 Giant Goblin, 8–10 Viking Leader (`scripts/extract_bosses.py`, pack CraftPix). Thú đi tuần (3.4) chưa triển khai.
 - Cân bằng: `npm run sim -- --boss` (bot săn sách, tránh va chạm). Bàn 4×4 chật vì Boss chiếm 1 ô di động, nên số sách cần thấp (2/3) và tỉ lệ rơi cao (50%).
 

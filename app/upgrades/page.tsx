@@ -17,7 +17,7 @@ const ICONS: Record<Exclude<TalentId, 'bonusHearts'>, string> = {
   goldRate: '/assets/icons/items/coins_gold.png',
   weaponRate: '/assets/icons/items/spellbook_fire.png',
   basePower: '/assets/icons/items/spellbook_radiant.png',
-  weaponBonusPower: '/assets/icons/items/gauntlets_royal.png',
+  weaponBonusPower: '/assets/icons/items/chest_armor_royal.png', // Gear Mastery: starting armor
 }
 
 export default function UpgradesPage() {
