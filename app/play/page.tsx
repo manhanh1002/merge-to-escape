@@ -440,7 +440,7 @@ export default function PlayPage() {
     <main className="game-shell">
       <TopBar back="/" />
 
-      <section className="game-content">
+      <section className="game-content play-content">
         <Purse gold={inventory.gold} stars={progress.stars} keys={inventory.keys} power={inventory.power} armor={inventory.armor} gauntlets={inventory.gauntlets} />
 
         <div className="level-heading">
@@ -626,6 +626,9 @@ export default function PlayPage() {
             </div>
           )}
         </div>
+        {/* status right under the board so it stays in view while swiping on a phone */}
+        <p className="hint" aria-live="polite">{message}</p>
+        {hammerMode && <p className="booster-hint">Pick a glowing stone to smash · Esc to cancel</p>}
         <div className="booster-bar" aria-label="Boosters">
           {SHOP_ITEMS.map((item) => {
             const b = BOOSTERS[item]
@@ -646,8 +649,6 @@ export default function PlayPage() {
             )
           })}
         </div>
-        {hammerMode && <p className="booster-hint">Pick a glowing stone to smash · Esc to cancel</p>}
-        <p className="hint">{message}</p>
         <div className="controls">
           <button className="secondary-button" onClick={undo} disabled={history.length === 0}><Undo2 size={17} /> Undo</button>
           <button className="secondary-button" onClick={() => reset()}><RotateCcw size={17} /> Restart</button>

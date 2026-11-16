@@ -1292,3 +1292,52 @@ a.level-tile:hover { transform: translateY(-2px); border-color: var(--gold); }
   .result-icon { width: 68px; height: 68px; }
   .result-card h2 { font-size: 24px; }
 }
+
+/* ---------- Phones: fit the whole play screen (HUD, board, status, boosters) ---------- */
+@media (max-width: 520px) {
+  .topbar { height: 54px; }
+  .brand-mark { width: 32px; height: 32px; }
+  .brand-mark img { width: 25px; height: 25px; }
+  .icon-button { width: 34px; height: 34px; }
+
+  .play-content { padding-top: 8px; }
+  /* in-run chips: one compact row */
+  .play-content .purse { flex-wrap: nowrap; justify-content: space-between; gap: 4px; margin-bottom: 8px; }
+  .play-content .purse-chip { min-width: 0; flex: 1 1 0; justify-content: center; gap: 3px; padding: 2px 6px 2px 3px; font-size: 12px; box-shadow: none; }
+  .play-content .purse-chip img { width: 18px; height: 18px; }
+  .play-content .purse-chip.stars i { font-size: 14px; margin: 0 1px 0 2px; }
+
+  .play-content .level-heading { align-items: center; gap: 10px; }
+  .play-content .eyebrow { margin-bottom: 2px; font-size: 10px; letter-spacing: .14em; }
+  .play-content h1 { font-size: 22px; }
+  .play-content .subtitle { display: none; }
+  .play-content .best-record { margin-top: 2px; font-size: 11px; }
+  .play-content .best-record img { width: 16px; height: 16px; }
+  .play-content .map-link { padding: 8px 10px; }
+  .play-content .map-link span { display: none; }
+
+  .play-content .boss-panel { gap: 8px; margin-top: 10px; padding: 5px 10px 6px 4px; }
+  .play-content .boss-portrait { width: 44px; height: 44px; background-position: -17px -21px; }
+  .play-content .boss-panel-title { font-size: 12px; gap: 6px; align-items: baseline; }
+  .play-content .boss-panel-title em { font-size: 11px; white-space: nowrap; }
+  .play-content .hearts { font-size: 12px; }
+  .play-content .boss-panel-bar { height: 6px; margin: 3px 0 4px; }
+  .play-content .boss-panel-hint { font-size: 11.5px; line-height: 1.25; }
+  .play-content .hint-tome { width: 18px; height: 18px; }
+
+  .play-content .stats { margin: 10px 0; gap: 6px; }
+  .play-content .stats div { display: flex; align-items: baseline; justify-content: center; gap: 6px; padding: 5px 6px; }
+  .play-content .stats span { font-size: 9px; letter-spacing: .12em; }
+  .play-content .stats strong { margin: 0; font-size: 15px; }
+
+  .play-content .hint { margin: 10px 0 0; font-size: 13.5px; line-height: 1.3; min-height: 2.6em; }
+  .play-content .booster-hint { margin: 4px 0 0; font-size: 12px; }
+  .play-content .booster-bar { margin-top: 8px; gap: 6px; flex-wrap: nowrap; }
+  .play-content .booster-btn { flex: 1 1 0; width: auto; max-width: 80px; padding: 4px 2px 4px; font-size: 10px; }
+  .play-content .booster-btn img { width: 28px; height: 28px; }
+  .play-content .booster-btn .booster-badge { top: 18px; right: calc(50% - 20px); width: 16px; height: 16px; font-size: 10px; }
+  .play-content .controls { margin: 10px 0 24px; }
+  .play-content .controls .secondary-button { padding: 8px 14px; font-size: 13px; }
+  /* boss crown sits on the corner so it never covers a two-digit level number */
+  .level-crown { top: -5px; right: -5px; width: 14px; height: 14px; }
+}
