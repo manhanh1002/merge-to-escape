@@ -88,11 +88,11 @@
       }
     },
     "shopPrices": {
-      "hammer": 150,
-      "purge2": 200,
-      "purge4": 300,
-      "heartPotion": 250,
-      "wallRune": 250
+      "hammer": 75,
+      "purge2": 100,
+      "purge4": 150,
+      "heartPotion": 120,
+      "wallRune": 120
     },
     "bossRewards": {
       "goldRange": [

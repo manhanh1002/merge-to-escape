@@ -184,7 +184,7 @@ export function usePurge(board: Tile[], value: 2 | 4): { board: Tile[]; removed:
 
 ## 8. Quyết Định Cần Chốt
 1. ~~**Nhánh `keyRate`**~~ — **Đã chốt**: đổi thành `bonusHearts` (+1 ❤️ màn Boss tại Lv 5/10/14), config `heartLevels`.
-2. **Giá Shop mới**: đang dùng Diệt 2 = 200, Diệt 4 = 300, Bình máu = 250 (theo đề xuất, chưa chốt — chỉnh trong `shopPrices`).
+2. **Giá Shop** (đã giảm ~½ sau khi đo thu nhập vàng): Búa 75, Diệt 2 = 100, Diệt 4 = 150, Bình máu 120, Rune of Passage 120. Bot nhặt ~420–510 vàng mỗi chương 1–2, ~2500 ở chương 5–7, ~4000 ở chương 8–10 — chỉnh trong `shopPrices`.
 3. **Cuộn phép nhặt trong trận**: đang cộng vào kho vĩnh viễn (theo đề xuất, chưa chốt).
 4. **Đặt lại Talent**: đang làm **miễn phí** (theo đề xuất) — chưa chốt, đổi sang tốn vàng nếu muốn.
 5. **Âm thanh**: có làm trong đợt này không (cần nguồn âm thanh có giấy phép).
