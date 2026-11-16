@@ -134,6 +134,7 @@ export function usePurge(board: Tile[], value: 2 | 4): { board: Tile[]; removed:
 - **Việc**: đầu màn dùng `startingRun()` (Power, ❤️); `computeMove` nhận `effectiveEconomy()`; Power trang bị nhân `weaponBonusPower`.
 - **Cân bằng**: thêm `--talents expected` cho bot (giả định người chơi đã tiêu toàn bộ ⭐ kiếm được tới màn đó, chia đều 5 nhánh) và chạy `npm run sim`; mục tiêu: không màn nào > 98% ở 6×6/7×7 với talent, đường cong vẫn giảm dần theo màn. Nếu `basePower` 25/Lv làm Boss quá dễ (Fire Tome đã gây 1/2–1/3 HP), giảm hệ số trong config — **không** sửa code.
 - **Nghiệm thu**: nâng `basePower` Lv 1 ➔ vào màn Boss, 1 Fire Tome gây thêm đúng 25.
+- **Kết quả đo (đã làm)**: `npm run sim -- --talents expected` (30 lượt/màn): tỉ lệ thắng trung bình chỉ **+2.1 điểm** so với không talent (4×4 92%, 5×5 93%, 6×6 83%, 7×7 76%), đường cong vẫn giảm dần; Boss chết nhanh gấp ~2 lần nhờ Power cộng vào Fire Tome. L45/L48/L51 lên 100% nhưng vốn đã 93–97% (trong sai số) ➔ **giữ nguyên config**.
 
 ### Giai đoạn 9.4 — Tách route + Home
 - **Tệp**: `app/play/page.tsx` (chuyển game sang), `app/page.tsx` (Home mới), `components/{ScreenShell,Purse,WizardSprite,BossSprite}.tsx`, `components/useSave.ts`, `app/globals.css`.

@@ -1,12 +1,13 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   ArrowLeft, ChevronDown, DoorOpen, HelpCircle, RotateCcw,
   Skull, Undo2, Volume2
 } from 'lucide-react'
 import gameConfig from '../lib/game_config.json'
 import { LEGACY_SAVE_KEY, SAVE_KEY, freshSave, loadSave, recordWin, starsForLevel, type SaveData } from '../lib/save'
+import { effectiveEconomy, gearPower, startingRun, type TalentConfig, type TalentLevels } from '../lib/talents'
 import {
   addRandomTile, computeMove, hasAnyMove, isBoss, isFusionLevel, makeBoard as buildBoard, spikeCells,
   type Direction, type EconomyConfig, type FloorGift, type FloorGifts, type LevelConfig, type Motion, type Tile,
@@ -16,21 +17,25 @@ const levels = gameConfig.levels as unknown as (LevelConfig & {
   name: string; chapter: number; chapterName: string; subtitle: string
 })[]
 const economy = gameConfig.economyConfig as unknown as EconomyConfig
+const talentCfg = gameConfig.economyConfig.talentTreeConfig as unknown as TalentConfig
 
 // Gold is the persistent wallet; keys, power and scrolls belong to the current run of a level.
-// Hearts only matter on boss levels: a strike the boss counters costs one.
-const PLAYER_HEARTS = 3
+// Hearts only matter on boss levels: each touch of the boss costs one. Talents (bought with
+// stars) decide the Power and hearts a level starts with.
 type Inventory = { gold: number; keys: number; power: number; hearts: number; scrolls: { 2: number; 4: number } }
-const freshRun = (gold: number): Inventory => ({ gold, keys: 0, power: 0, hearts: PLAYER_HEARTS, scrolls: { 2: 0, 4: 0 } })
+const freshRun = (gold: number, talents: TalentLevels = {}): Inventory => {
+  const start = startingRun(talents, talentCfg)
+  return { gold, keys: 0, power: start.power, hearts: start.hearts, scrolls: { 2: 0, 4: 0 } }
+}
 type Snapshot = { board: Tile[]; moves: number; score: number; floorGifts: FloorGifts; inventory: Inventory }
 
 const makeBoard = (levelIndex: number) => buildBoard(levels[levelIndex])
 
-function applyGift(inv: Inventory, gift: FloorGift): Inventory {
+function applyGift(inv: Inventory, gift: FloorGift, talents: TalentLevels): Inventory {
   switch (gift.type) {
     case 'gold': return { ...inv, gold: inv.gold + gift.amount }
     case 'key': return { ...inv, keys: inv.keys + 1 }
-    case 'equipment': return { ...inv, power: inv.power + gift.item.power }
+    case 'equipment': return { ...inv, power: inv.power + gearPower(gift.item.power, talents, talentCfg) }
     case 'scroll': return { ...inv, scrolls: { ...inv.scrolls, [gift.targetValue]: inv.scrolls[gift.targetValue] + 1 } }
   }
 }
@@ -211,6 +216,9 @@ export default function Page() {
   const playBoss = useCallback((action: BossAction, corpseAt: number | null = null) =>
     setBossAnim((b) => ({ action, nonce: b.nonce + 1, corpseAt })), [])
   const [progress, setProgress] = useState<SaveData>(freshSave)
+  // Drop rates for this player's talents (goldRate / weaponRate), and boss-room max hearts.
+  const runEconomy = useMemo(() => effectiveEconomy(economy, progress.talents, talentCfg), [progress.talents])
+  const maxHearts = startingRun(progress.talents, talentCfg).hearts
   const [saveLoaded, setSaveLoaded] = useState(false)
   // ?dev in the URL opens every level for testing without touching the real save.
   const [devUnlockAll, setDevUnlockAll] = useState(false)
@@ -221,12 +229,12 @@ export default function Page() {
 
   const reset = useCallback((index = levelIndex) => {
     setBoard(makeBoard(index)); setFloorGifts({}); setHistory([]); setMoves(0); setScore(0); setWon(false); setLost(false)
-    setInventory((inv) => freshRun(inv.gold))
+    setInventory((inv) => freshRun(inv.gold, progress.talents))
     setMessage(levels[index].hasBoss ? statusMessage(levels[index], false, true) : START_MESSAGE)
     setHero((h) => ({ action: 'idle', nonce: h.nonce + 1 })); setFacing(1)
     setBossAnim((b) => ({ action: 'idle', nonce: b.nonce + 1, corpseAt: null })); setPopup(null); setBoardAnim(null)
     setWinStars(null)
-  }, [levelIndex])
+  }, [levelIndex, progress.talents])
 
   const chooseLevel = useCallback((index: number) => {
     if (index > unlocked) return
@@ -252,7 +260,7 @@ export default function Page() {
       setInventory({ gold: save.gold, keys: run.keys, power: run.power, hearts: run.hearts, scrolls: run.scrolls })
       setMessage(`Welcome back — your run is restored. ${statusMessage(levels[run.level], run.board.includes('exit'), run.board.some(isBoss))}`)
     } else {
-      setInventory(freshRun(save.gold))
+      setInventory(freshRun(save.gold, save.talents))
     }
     setSaveLoaded(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -288,7 +296,7 @@ export default function Page() {
 
   const move = useCallback((direction: Direction) => {
     if (won || lost) return
-    const res = computeMove(board, floorGifts, level, economy, direction, Math.random, inventory.power)
+    const res = computeMove(board, floorGifts, level, runEconomy, direction, Math.random, inventory.power)
     if (!res.changed) return
 
     // Attack tomes picked up while a boss lives are cast at it, not kept as Power; every other
@@ -298,7 +306,7 @@ export default function Page() {
     let nextInventory = inventory
     for (const gift of res.collected) {
       if (castLeft > 0 && gift.type === 'equipment' && gift.item.type === 'sword') { castLeft--; continue }
-      nextInventory = applyGift(nextInventory, gift)
+      nextInventory = applyGift(nextInventory, gift, progress.talents)
     }
     if (res.bossReward) {
       nextInventory = { ...nextInventory, gold: nextInventory.gold + res.bossReward.gold, keys: nextInventory.keys + res.bossReward.keys }
@@ -331,7 +339,7 @@ export default function Page() {
       return
     }
     if (res.steppedOnSpike) { playHero('die'); setLost(true); setMessage('You stepped into a deadly Spike Trap!'); return }
-    if (!hasAnyMove(nextBoard, res.floorGifts, level, economy, nextInventory.power)) { playHero('die'); setLost(true); setMessage('No moves left — the room has sealed shut.'); return }
+    if (!hasAnyMove(nextBoard, res.floorGifts, level, runEconomy, nextInventory.power)) { playHero('die'); setLost(true); setMessage('No moves left — the room has sealed shut.'); return }
 
     // Boss reacts: swings when it touches you, dies, or flinches from a tome.
     if (res.bossHitPlayer) playBoss('attack')
@@ -359,7 +367,7 @@ export default function Page() {
           ? 'The door is sealed — defeat the boss first. Walk over Fire Tomes to blast it!'
           : note + statusMessage(level, res.doorOpen, res.board.some(isBoss)),
     )
-  }, [board, floorGifts, inventory, level, levelIndex, lost, moves, playBoss, playHero, progress.records, score, won])
+  }, [board, floorGifts, inventory, level, levelIndex, lost, moves, playBoss, playHero, progress.records, progress.talents, runEconomy, score, won])
 
   const undo = () => {
     const previous = history[history.length - 1]
@@ -478,8 +486,8 @@ export default function Page() {
             <div className="boss-panel-body">
               <div className="boss-panel-title">
                 <span>{BOSS_NAMES[bossKind]}</span>
-                <span className="hearts" title={`${inventory.hearts} of ${PLAYER_HEARTS} hearts`} aria-label={`${inventory.hearts} hearts`}>
-                  {Array.from({ length: PLAYER_HEARTS }, (_, i) => <i key={i} className={i < inventory.hearts ? 'full' : ''}>♥</i>)}
+                <span className="hearts" title={`${inventory.hearts} of ${maxHearts} hearts`} aria-label={`${inventory.hearts} hearts`}>
+                  {Array.from({ length: maxHearts }, (_, i) => <i key={i} className={i < inventory.hearts ? 'full' : ''}>♥</i>)}
                 </span>
                 <em>{bossCellTile ? `${bossCellTile.hp} / ${bossCellTile.maxHp} HP` : 'Defeated'}</em>
               </div>

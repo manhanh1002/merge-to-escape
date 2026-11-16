@@ -37,4 +37,4 @@ Hệ thống kế hoạch được phân rã thành 8 giai đoạn độc lập,
 - [ ] Giai đoạn 6: Chưa bắt đầu (cửa chạy, `stepLimit`)
 - [~] Giai đoạn 7: HUD fantasy, hiệu ứng, bảng Boss xong; **chọn màn theo chương** ➔ KH 9.5
 - [ ] Giai đoạn 8: Chưa bắt đầu ➔ triển khai theo KH 9.1–9.3, 9.6
-- [~] Giai đoạn 9: 9.1 (save v2 + ⭐) và 9.2 (logic talent) xong; 9.3–9.8 chưa làm
+- [~] Giai đoạn 9: 9.1 (save v2 + ⭐), 9.2 (logic talent), 9.3 (áp talent vào trận) xong; 9.4–9.8 chưa làm
