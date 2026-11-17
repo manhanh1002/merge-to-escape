@@ -50,7 +50,7 @@ export type EconomyConfig = {
   bossRewards?: { goldRange: [number, number]; bonusKeys: number }
   /** On boss levels attack tomes drop more often (rolled before any other gift). */
   bossTomeDrop?: { minTile: number; dropRate: number }
-  /** Tomes needed to kill a boss without gear: each tome deals ceil(maxHp / hits) + Power. */
+  /** Tomes needed to kill a boss with no Power: each tome deals ceil(maxHp / hits × (1 + Power%)). */
   bossTomeHits?: TomeHits
   /** Keys drop only while the level still needs them (not yet carried or on the floor). */
   keyDrop?: { minTile: number; dropRate: number }
@@ -86,10 +86,11 @@ export function tomesToKill(levelId: number, hits: TomeHits): number {
   return (final ? hits.final : hits.mid) + Math.floor(later * growth)
 }
 
-/** Damage of one attack tome: its share of the boss's HP (see tomesToKill) plus the
- *  wizard's Power. */
+/** Damage of one attack tome: its share of the boss's HP (see tomesToKill), raised by the
+ *  wizard's Power as a percentage (Power 40 = +40% damage). */
 export function tomeDamage(maxHp: number, levelId: number, hits: TomeHits, power = 0): number {
-  return Math.ceil(maxHp / tomesToKill(levelId, hits)) + power
+  const bonus = 1 + Math.max(0, power) / 100
+  return Math.ceil((maxHp / tomesToKill(levelId, hits)) * bonus)
 }
 
 export type Rng = () => number
@@ -314,7 +315,7 @@ export function computeMove(
   economy: EconomyConfig,
   direction: Direction,
   rng: Rng = Math.random,
-  /** Player Power (Arcane Might talent); added to every tome's damage. */
+  /** Player Power (Arcane Might talent): +Power% damage on every tome. */
   power = 0,
   /** Gauntlet charges: sliding into a stone or numbered stone shatters it (one charge). */
   gauntlets = 0,

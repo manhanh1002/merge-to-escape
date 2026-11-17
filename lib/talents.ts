@@ -10,7 +10,7 @@ export type TalentId = (typeof TALENT_IDS)[number]
 
 /** = economyConfig.talentTreeConfig in game_config.json */
 export type TalentConfig = {
-  /** Effect per level: goldRate / weaponRate add to drop rates, basePower adds Power. */
+  /** Effect per level: goldRate / weaponRate add to drop rates, basePower adds Power (+% tome damage). */
   statsBonusPerLevel: { goldRate: number; weaponRate: number; basePower: number }
   maxLevel: number
   /** bonusHearts: +1 starting heart (every chamber) at each of these levels. */
@@ -68,7 +68,8 @@ export function effectiveEconomy(base: EconomyConfig, talents: TalentLevels, cfg
     ...base,
     goldDropRules: base.goldDropRules.map((r) => ({ ...r, dropRate: capRate(r.dropRate + gold) })),
     itemDropRates: items,
-    ...(base.bossTomeDrop ? { bossTomeDrop: { ...base.bossTomeDrop, dropRate: capRate(base.bossTomeDrop.dropRate + weapon) } } : {}),
+    // boss tomes get half the bonus: on top of Arcane Might's damage the full bonus made bosses trivial
+    ...(base.bossTomeDrop ? { bossTomeDrop: { ...base.bossTomeDrop, dropRate: capRate(base.bossTomeDrop.dropRate + weapon / 2) } } : {}),
   }
 }
 
@@ -101,7 +102,7 @@ export function describeTalent(id: TalentId, level: number, cfg: TalentConfig): 
     switch (id) {
       case 'goldRate': return `+${pct(lv, per.goldRate)} gold drop chance`
       case 'weaponRate': return `+${pct(lv, per.weaponRate)} tome & gear drop chance`
-      case 'basePower': return `+${lv * per.basePower} Power on every tome · ${tomeFor(lv * per.basePower).name}`
+      case 'basePower': return `+${lv * per.basePower}% tome damage · ${tomeFor(lv * per.basePower).name}`
       case 'weaponBonusPower': {
         const armor = startingRun({ weaponBonusPower: lv }, cfg).armor
         return armor ? `Start each chamber with ${armor} armor` : 'No starting armor yet'

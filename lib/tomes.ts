@@ -1,6 +1,6 @@
 // Attack tomes (the config's "sword" slot) look grander as the wizard's Power grows. Power
 // comes only from the Arcane Might talent (+25 per level, 0..350), so each tier is a visible
-// reward for investing in it. Purely cosmetic: damage is still ceil(maxHp / hits) + Power.
+// reward for investing in it. Purely cosmetic: damage is set by tomeDamage (Power = +% damage).
 
 export type TomeTier = {
   /** Lowest Power that shows this tier. */
@@ -12,11 +12,11 @@ export type TomeTier = {
 
 export const TOME_TIERS: readonly TomeTier[] = [
   { minPower: 0, name: 'Worn Tome', icon: 'tome_worn' },
-  { minPower: 50, name: 'Ember Tome', icon: 'tome_ember' },
-  { minPower: 100, name: 'Fire Tome', icon: 'tome_fire' },
-  { minPower: 175, name: 'Blaze Tome', icon: 'tome_blaze' },
-  { minPower: 250, name: 'Inferno Codex', icon: 'tome_inferno' },
-  { minPower: 350, name: 'Phoenix Grimoire', icon: 'spellbook_fire' },
+  { minPower: 20, name: 'Ember Tome', icon: 'tome_ember' },
+  { minPower: 40, name: 'Fire Tome', icon: 'tome_fire' },
+  { minPower: 70, name: 'Blaze Tome', icon: 'tome_blaze' },
+  { minPower: 100, name: 'Inferno Codex', icon: 'tome_inferno' },
+  { minPower: 140, name: 'Phoenix Grimoire', icon: 'spellbook_fire' },
 ]
 
 /** The tier shown for a given Power (negative or NaN Power counts as 0). */

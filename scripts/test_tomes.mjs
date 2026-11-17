@@ -39,6 +39,6 @@ test('odd Power values fall back to the first tier', () => {
 })
 
 test('Arcane Might description names the tome its Power brings', () => {
-  assert.match(describeTalent('basePower', 2, cfg).now, /\+50 Power .*Ember Tome/)
+  assert.match(describeTalent('basePower', 2, cfg).now, /\+20% tome damage .*Ember Tome/)
   assert.match(describeTalent('basePower', 13, cfg).next, /Phoenix Grimoire/)
 })

@@ -284,14 +284,14 @@ test('attack tomes drop from small merges while a boss is alive, not on normal l
   assert.deepEqual(res.floorGifts[12], tome)
 })
 
-test('walking over a tome blasts the boss: mid-boss takes maxHp/2 + Power', () => {
+test('walking over a tome blasts the boss: mid-boss takes maxHp/2, raised by Power %', () => {
   const board = grid([P, S, S, S], [S, S, S, S], [S, S, S, S], [S, S, S, boss(30)])
   const res = computeMove(board, { 1: tome }, bossLvl(), economy, 'right', never)
   assert.deepEqual(res.collected, [tome])
   assert.equal(res.bossDamage, 15)
   assert.deepEqual(res.board[15], boss(15, 30))
-  const geared = computeMove(board, { 1: tome }, bossLvl(), economy, 'right', never, 5)
-  assert.equal(geared.bossDamage, 20, 'gear Power adds to every tome')
+  const geared = computeMove(board, { 1: tome }, bossLvl(), economy, 'right', never, 40)
+  assert.equal(geared.bossDamage, 21, 'Power 40 = +40% on every tome (15 → 21)')
 })
 
 test('a final boss (level x10) takes maxHp/3 per tome', () => {
@@ -563,7 +563,8 @@ test('chapter-1 bosses fall to fewer tomes while players learn', () => {
   assert.equal(tomeDamage(100, 5, hits), 100, 'level 5: one tome')
   assert.equal(tomeDamage(100, 10, hits), 50, 'level 10: two tomes')
   assert.equal(tomeDamage(100, 15, hits), 50, 'level 15: back to two')
-  assert.equal(tomeDamage(99, 20, hits, 7), 33 + 7, 'level 20: three, plus Power')
+  assert.equal(tomeDamage(99, 20, hits), 33, 'level 20: three')
+  assert.equal(tomeDamage(99, 20, hits, 50), 50, 'Power 50 = +50% (33 × 1.5, rounded up)')
 })
 
 test('later bosses need more tomes, so their HP really matters', () => {
@@ -575,5 +576,7 @@ test('later bosses need more tomes, so their HP really matters', () => {
   for (const id of [30, 50, 70, 90]) assert.ok(need(id + 10) > need(id), `final bosses keep growing at L${id + 10}`)
   for (const id of [15, 35, 55, 75]) assert.ok(need(id + 20) > need(id), `mid bosses keep growing at L${id + 20}`)
   assert.equal(tomeDamage(1000, 100, hits), 91)
+  const maxPower = 140
+  assert.equal(Math.ceil(1000 / tomeDamage(1000, 100, hits, maxPower)), 5, 'maxed Arcane Might still needs 5 tomes at L100')
   assert.equal(tomesToKill(100, { mid: 2, final: 3 }), 3, 'no growth configured: fixed counts')
 })

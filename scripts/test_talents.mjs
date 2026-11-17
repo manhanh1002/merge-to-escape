@@ -52,12 +52,12 @@ test('goldRate Lv 5 adds +10% to every gold drop rate (capped at 100%)', () => {
   assert.equal(capped.goldDropRules[0].dropRate, 1)
 })
 
-test('weaponRate Lv 4 adds +6% to tome/armor/gauntlet drops and to the boss tome drop', () => {
+test('weaponRate Lv 4 adds +6% to tome/armor/gauntlet drops and half that (+3%) to the boss tome drop', () => {
   const e = effectiveEconomy(economy, { weaponRate: 4 }, cfg)
   for (const type of ['sword', 'armor', 'gauntlet']) {
     assert.ok(Math.abs(e.itemDropRates[type].dropRate - (economy.itemDropRates[type].dropRate + 0.06)) < 1e-9, type)
   }
-  assert.ok(Math.abs(e.bossTomeDrop.dropRate - (economy.bossTomeDrop.dropRate + 0.06)) < 1e-9)
+  assert.ok(Math.abs(e.bossTomeDrop.dropRate - (economy.bossTomeDrop.dropRate + 0.03)) < 1e-9)
   assert.equal(e.itemDropRates.key.dropRate, economy.itemDropRates.key.dropRate, 'keys untouched')
 })
 
@@ -68,8 +68,8 @@ test('effectiveEconomy with no talents changes nothing and never mutates the bas
   assert.equal(JSON.stringify(economy), before)
 })
 
-test('startingRun: basePower gives 25 Power per level; bonusHearts +1 heart at Lv 5, 10, 14', () => {
-  assert.deepEqual(startingRun({ basePower: 3 }, cfg), { power: 75, hearts: 3, armor: 0 })
+test('startingRun: basePower gives 10 Power (+10% tome damage) per level; bonusHearts +1 heart at Lv 5, 10, 14', () => {
+  assert.deepEqual(startingRun({ basePower: 3 }, cfg), { power: 30, hearts: 3, armor: 0 })
   assert.equal(startingRun({ bonusHearts: 4 }, cfg).hearts, 3)
   assert.equal(startingRun({ bonusHearts: 5 }, cfg).hearts, 4)
   assert.equal(startingRun({ bonusHearts: 10 }, cfg).hearts, 5)
@@ -89,7 +89,7 @@ test('describeTalent: names and current -> next effect text for every branch', a
   assert.deepEqual(describeTalent('goldRate', 5, cfg), { name: 'Golden Touch', now: '+10% gold drop chance', next: '+12% gold drop chance' })
   assert.equal(describeTalent('weaponRate', 4, cfg).now, '+6% tome & gear drop chance')
   assert.equal(describeTalent('weaponRate', 1, cfg).now, '+1.5% tome & gear drop chance', 'no rounding up to 2%')
-  assert.equal(describeTalent('basePower', 3, cfg).now, '+75 Power on every tome · Ember Tome')
+  assert.equal(describeTalent('basePower', 3, cfg).now, '+30% tome damage · Ember Tome')
   assert.deepEqual(describeTalent('weaponBonusPower', 0, cfg), { name: 'Gear Mastery', now: 'No starting armor yet', next: '1 starting armor at Lv 5' })
   assert.equal(describeTalent('weaponBonusPower', 9, cfg).next, 'Start each chamber with 2 armor')
   assert.equal(describeTalent('weaponBonusPower', 10, cfg).now, 'Start each chamber with 2 armor')

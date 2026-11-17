@@ -34,7 +34,7 @@ Chi phí lên Lv **L** = **L⭐**; max Lv 14 ➔ 105⭐/nhánh, 525⭐ cả cây
 |---|---|---|
 | 🪙 `goldRate` | +2% tỉ lệ rơi vàng | cộng vào `dropRate` của mọi `goldDropRules` |
 | 📖 `weaponRate` | +1.5% tỉ lệ rơi trang bị | cộng vào `dropRate` của sword/armor/gauntlet **và** `bossTomeDrop` |
-| ⚔️ `basePower` | +25 Power khởi đầu | Power đầu mỗi màn = `Lv × 25`; Power cộng thẳng vào sát thương **mỗi** Fire Tome |
+| ⚔️ `basePower` | +10 Power khởi đầu | Power đầu mỗi màn = `Lv × 10`; mỗi Fire Tome gây thêm **Power %** sát thương (tối đa +140%). Trước đây Power cộng thẳng (+25/Lv) nên Power cao khiến boss chết sau 1–2 sách |
 | ❤️ `bonusHearts` (thay `keyRate` — **đã chốt**) | `heartLevels: [5, 10, 14]` | +1 ❤️ ở màn Boss tại Lv 5 / 10 / 14 (tối đa 6 ❤️) |
 | 🛡️ `weaponBonusPower` = **Gear Mastery** (đổi sau 9.8) | `armorLevels: [5, 10, 14]` | Bắt đầu mỗi màn với 1 / 2 / 3 giáp (trước đây: +5% Power từ trang bị — bị bỏ vì trang bị không còn cho Power, xem KH 4 §5b) |
 

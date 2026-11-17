@@ -111,7 +111,7 @@
       "statsBonusPerLevel": {
         "goldRate": 0.02,
         "weaponRate": 0.015,
-        "basePower": 25
+        "basePower": 10
       },
       "maxLevel": 14,
       "heartLevels": [
