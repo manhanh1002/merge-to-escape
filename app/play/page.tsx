@@ -170,7 +170,7 @@ export default function PlayPage() {
   const playBoss = useCallback((action: BossAction, corpseAt: number | null = null) =>
     setBossAnim((b) => ({ action, nonce: b.nonce + 1, corpseAt })), [])
   const router = useRouter()
-  const { save: progress, setSave: setProgress, loaded: saveLoaded, unlocked, devUnlockAll } = useSave()
+  const { save: progress, setSave: setProgress, loaded: saveLoaded, unlocked } = useSave()
   /** True once the board has been set up from the save; gates the effects that write back. */
   const [ready, setReady] = useState(false)
   const level = levels[levelIndex]
@@ -209,7 +209,7 @@ export default function PlayPage() {
   // no param continues the current level; resuming its saved run when there is one.
   useEffect(() => {
     if (!saveLoaded || ready) return
-    const start = resolveStartLevel(new URLSearchParams(window.location.search).get('level'), progress, levels.length, devUnlockAll)
+    const start = resolveStartLevel(new URLSearchParams(window.location.search).get('level'), progress, levels.length)
     if (!start) { router.replace('/levels'); return } // locked or unknown level: pick one on the map
     setLevelIndex(start.level); reset(start.level)
     window.history.replaceState(null, '', `/play?level=${start.level + 1}`)

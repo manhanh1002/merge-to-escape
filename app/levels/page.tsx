@@ -14,7 +14,7 @@ import { bossClip, bossKindFor, BOSS_NAMES } from '../../components/sprites'
 import { useSave } from '../../components/useSave'
 
 export default function LevelsPage() {
-  const { save, loaded, unlocked, devUnlockAll } = useSave()
+  const { save, loaded, unlocked } = useSave()
   const chapters = useMemo(() => chapterSummaries(levels, save, unlocked), [save, unlocked])
   const [openChapter, setOpenChapter] = useState<number | null>(null)
   const current = chapters.find((c) => c.isCurrent)?.chapter ?? 1
@@ -38,7 +38,6 @@ export default function LevelsPage() {
           </div>
           <Purse gold={save.gold} stars={save.stars} />
         </div>
-        {devUnlockAll && <p className="map-dev"><span className="dev-tag">DEV · all levels unlocked</span></p>}
 
         <div className="chapter-list">
           {chapters.map((c) => {

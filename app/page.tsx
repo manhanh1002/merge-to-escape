@@ -19,7 +19,7 @@ const MENU = [
 ] as const
 
 export default function HomePage() {
-  const { save, setSave, loaded, devUnlockAll, resetProgress } = useSave()
+  const { save, setSave, loaded, resetProgress } = useSave()
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [confirmReset, setConfirmReset] = useState(false)
 
@@ -86,7 +86,6 @@ export default function HomePage() {
         <p className="home-progress">
           <img src={ART.trophy} alt="" draggable={false} />
           {cleared} / {levels.length} chambers cleared
-          {devUnlockAll && <span className="dev-tag">DEV · all levels unlocked</span>}
         </p>
       </section>
 

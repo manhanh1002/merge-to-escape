@@ -15,7 +15,7 @@ test('level status: locked beyond unlocked, current, cleared, otherwise open', (
   assert.equal(levelStatus(1, s, 12), 'open')
   assert.equal(levelStatus(11, s, 12), 'current')
   assert.equal(levelStatus(13, s, 12), 'locked')
-  assert.equal(levelStatus(13, s, 99), 'open', 'dev unlock-all opens everything')
+  assert.equal(levelStatus(13, s, 99), 'open', 'a higher unlocked index opens it')
 })
 
 test('a cleared level that is also the current one reads as current', () => {

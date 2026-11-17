@@ -10,13 +10,11 @@ export function resolveStartLevel(
   param: string | null,
   save: Pick<SaveData, 'unlocked' | 'current' | 'run'>,
   levelCount: number,
-  devUnlockAll = false,
 ): { level: number; resume: boolean } | null {
   const resumeIf = (level: number) => ({ level, resume: !!save.run && save.run.level === level })
   if (param === null || param === '') return resumeIf(save.current)
   if (!/^\d+$/.test(param)) return null
   const level = Number(param) - 1
-  const unlocked = devUnlockAll ? levelCount - 1 : save.unlocked
-  if (level < 0 || level >= levelCount || level > unlocked) return null
+  if (level < 0 || level >= levelCount || level > save.unlocked) return null
   return level === save.current ? resumeIf(level) : { level, resume: false }
 }

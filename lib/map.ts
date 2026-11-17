@@ -23,7 +23,7 @@ export type ChapterSummary = {
   isCurrent: boolean
 }
 
-/** `unlocked` is the highest selectable level index (save.unlocked, or the last level in ?dev). */
+/** `unlocked` is the highest selectable level index (save.unlocked). */
 export function levelStatus(index: number, save: Pick<SaveData, 'current' | 'records'>, unlocked: number): LevelStatus {
   if (index > unlocked) return 'locked'
   if (index === save.current) return 'current'

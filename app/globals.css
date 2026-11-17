@@ -1052,16 +1052,11 @@ a.home-card:hover { transform: translateY(-2px); border-color: var(--gold); box-
 }
 .home-progress { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 4px 0 0; color: var(--ink-dim); font-size: 14px; }
 .home-progress img { width: 22px; height: 22px; }
-.dev-tag {
-  font-family: var(--font-display-stack); font-size: 10px; font-weight: 800; letter-spacing: .1em;
-  color: #9fe8ff; border: 1px solid #2f6f8f; border-radius: 999px; padding: 1px 8px;
-}
 
 /* ---------- Level map ---------- */
 .map-content { width: min(100% - 32px, 620px); margin: auto; padding: 18px 0 40px; }
 .map-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
 .map-heading .purse { margin: 0; }
-.map-dev { margin: -6px 0 12px; }
 .chapter-list { display: grid; gap: 10px; }
 .chapter-card {
   border: 1px solid var(--gold-line);

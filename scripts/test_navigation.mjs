@@ -30,6 +30,6 @@ test('locked or invalid levels are refused (null -> back to Home)', () => {
   assert.equal(resolveStartLevel('2.5', save(), 100), null)
 })
 
-test('dev unlock-all lets any level open', () => {
-  assert.deepEqual(resolveStartLevel('100', save(), 100, true), { level: 99, resume: false })
+test('there is no unlock-all override: a locked level stays closed', () => {
+  assert.equal(resolveStartLevel('100', save(), 100, true), null)
 })

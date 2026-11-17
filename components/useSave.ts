@@ -6,14 +6,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { LEGACY_SAVE_KEY, SAVE_KEY, freshSave, loadSave, type SaveData } from '../lib/save'
 import { levelSize, levels } from '../lib/levels'
 
-/** Set by opening any screen with ?dev; unlocks every level for this browser tab only
- *  (never written into the save). */
-const DEV_FLAG = 'merge-to-escape:dev'
-
 export function useSave() {
   const [save, setSave] = useState<SaveData>(freshSave)
   const [loaded, setLoaded] = useState(false)
-  const [devUnlockAll, setDevUnlockAll] = useState(false)
 
   // Load once on the client (localStorage does not exist during server rendering).
   useEffect(() => {
@@ -22,10 +17,8 @@ export function useSave() {
       // v2 save if present, otherwise migrate the v1 save (left in place as a backup)
       loadedSave = loadSave(localStorage.getItem(SAVE_KEY), localStorage.getItem(LEGACY_SAVE_KEY), levels.length, levelSize).save
     } catch { /* storage blocked */ }
-    try {
-      if (new URLSearchParams(location.search).has('dev')) sessionStorage.setItem(DEV_FLAG, '1')
-      setDevUnlockAll(sessionStorage.getItem(DEV_FLAG) === '1')
-    } catch { /* storage blocked */ }
+    // Clear the old ?dev unlock-all flag left in this tab by earlier builds.
+    try { sessionStorage.removeItem('merge-to-escape:dev') } catch { /* storage blocked */ }
     setSave(loadedSave)
     setLoaded(true)
   }, [])
@@ -42,6 +35,5 @@ export function useSave() {
     setSave(freshSave())
   }, [])
 
-  const unlocked = devUnlockAll ? levels.length - 1 : save.unlocked
-  return { save, setSave, loaded, devUnlockAll, unlocked, resetProgress }
+  return { save, setSave, loaded, unlocked: save.unlocked, resetProgress }
 }
