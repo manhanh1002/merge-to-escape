@@ -92,7 +92,10 @@
       "purge2": 100,
       "purge4": 150,
       "heartPotion": 120,
-      "wallRune": 120
+      "wallRune": 120,
+      "undoCharm": 80,
+      "goldMagnet": 900,
+      "itemMagnet": 3500
     },
     "bossRewards": {
       "goldRange": [
@@ -129,7 +132,16 @@
     },
     "bossTomeHits": {
       "mid": 2,
-      "final": 3
+      "final": 3,
+      "early": {
+        "untilLevel": 10,
+        "mid": 1,
+        "final": 2
+      }
+    },
+    "keyDrop": {
+      "minTile": 8,
+      "dropRate": 0.3
     }
   },
   "levels": [
@@ -298,11 +310,6 @@
           "row": 2,
           "col": 0,
           "type": "vertical"
-        },
-        {
-          "row": 2,
-          "col": 0,
-          "type": "horizontal"
         }
       ],
       "numberedStones": [],
@@ -385,13 +392,8 @@
         16
       ],
       "enemyPointsBudget": 4,
-      "initialStones": 1,
-      "stoneCoords": [
-        [
-          0,
-          2
-        ]
-      ],
+      "initialStones": 0,
+      "stoneCoords": [],
       "walls": [
         {
           "row": 2,
@@ -3340,62 +3342,62 @@
       "initialStones": 3,
       "stoneCoords": [
         [
-          1,
-          1
+          4,
+          5
         ],
         [
-          2,
-          0
+          5,
+          5
         ],
         [
-          2,
+          0,
           5
         ]
       ],
       "walls": [
         {
-          "row": 2,
-          "col": 4,
-          "type": "vertical"
-        },
-        {
-          "row": 4,
+          "row": 0,
           "col": 1,
-          "type": "horizontal"
-        },
-        {
-          "row": 4,
-          "col": 0,
           "type": "vertical"
         },
         {
           "row": 0,
-          "col": 3,
+          "col": 1,
           "type": "horizontal"
         },
         {
-          "row": 3,
-          "col": 2,
+          "row": 0,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 2,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 3,
           "type": "vertical"
         }
       ],
       "numberedStones": [
         {
           "coord": [
-            2,
-            3
+            3,
+            2
           ],
           "value": 128
         }
       ],
       "spikeTraps": [
         [
-          0,
-          3
+          3,
+          1
         ],
         [
-          3,
-          2
+          5,
+          3
         ]
       ],
       "wanderingBeasts": [],
@@ -3404,7 +3406,7 @@
       "requiredKeys": 1,
       "stepLimit": 90,
       "shiftingExit": true,
-      "layoutSeed": 5
+      "layoutSeed": 0
     },
     {
       "id": 64,
@@ -3669,27 +3671,27 @@
       "initialStones": 3,
       "stoneCoords": [
         [
-          0,
-          4
+          3,
+          2
         ],
         [
           2,
-          4
+          5
         ],
         [
-          1,
-          4
+          2,
+          2
         ]
       ],
       "walls": [
         {
-          "row": 4,
+          "row": 5,
           "col": 3,
           "type": "vertical"
         },
         {
-          "row": 2,
-          "col": 0,
+          "row": 3,
+          "col": 5,
           "type": "horizontal"
         },
         {
@@ -3699,25 +3701,25 @@
         },
         {
           "row": 2,
-          "col": 1,
+          "col": 3,
           "type": "horizontal"
         },
         {
-          "row": 1,
-          "col": 3,
-          "type": "vertical"
-        },
-        {
-          "row": 4,
+          "row": 0,
           "col": 4,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 0,
           "type": "horizontal"
         }
       ],
       "numberedStones": [
         {
           "coord": [
-            0,
-            2
+            5,
+            5
           ],
           "value": 256
         }
@@ -3725,18 +3727,18 @@
       "spikeTraps": [
         [
           3,
-          2
+          3
         ],
         [
-          3,
-          0
+          2,
+          4
         ]
       ],
       "wanderingBeasts": [
         {
           "coord": [
-            0,
-            3
+            2,
+            1
           ],
           "hp": 1638
         }
@@ -3746,7 +3748,7 @@
       "requiredKeys": 1,
       "stepLimit": 93,
       "shiftingExit": true,
-      "layoutSeed": 8
+      "layoutSeed": 1
     },
     {
       "id": 68,
@@ -4623,47 +4625,57 @@
       "initialStones": 3,
       "stoneCoords": [
         [
-          3,
-          6
+          4,
+          3
         ],
         [
           2,
           1
         ],
         [
-          1,
+          2,
           4
         ]
       ],
       "walls": [
         {
-          "row": 6,
-          "col": 4,
+          "row": 4,
+          "col": 5,
           "type": "vertical"
         },
         {
           "row": 3,
-          "col": 4,
-          "type": "horizontal"
-        },
-        {
-          "row": 2,
-          "col": 4,
-          "type": "vertical"
-        },
-        {
-          "row": 2,
-          "col": 5,
+          "col": 0,
           "type": "horizontal"
         },
         {
           "row": 1,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 2,
           "col": 1,
           "type": "vertical"
         },
         {
           "row": 5,
-          "col": 0,
+          "col": 1,
           "type": "horizontal"
         },
         {
@@ -4672,50 +4684,40 @@
           "type": "vertical"
         },
         {
-          "row": 3,
-          "col": 3,
+          "row": 5,
+          "col": 2,
           "type": "horizontal"
         },
         {
-          "row": 5,
-          "col": 3,
-          "type": "vertical"
-        },
-        {
-          "row": 4,
-          "col": 6,
-          "type": "horizontal"
-        },
-        {
-          "row": 5,
+          "row": 2,
           "col": 5,
           "type": "vertical"
         },
         {
-          "row": 1,
-          "col": 0,
+          "row": 0,
+          "col": 2,
           "type": "horizontal"
         }
       ],
       "numberedStones": [
         {
           "coord": [
-            6,
-            0
+            5,
+            5
           ],
           "value": 256
         },
         {
           "coord": [
-            5,
-            1
+            0,
+            6
           ],
           "value": 256
         },
         {
           "coord": [
             2,
-            5
+            3
           ],
           "value": 256
         }
@@ -4723,11 +4725,11 @@
       "spikeTraps": [
         [
           6,
-          1
+          5
         ],
         [
-          3,
-          1
+          2,
+          5
         ]
       ],
       "wanderingBeasts": [],
@@ -4736,7 +4738,7 @@
       "requiredKeys": 1,
       "stepLimit": 100,
       "shiftingExit": true,
-      "layoutSeed": 1
+      "layoutSeed": 0
     },
     {
       "id": 77,
@@ -5265,95 +5267,95 @@
       "initialStones": 3,
       "stoneCoords": [
         [
-          2,
-          0
+          0,
+          4
         ],
         [
           6,
-          0
+          2
         ],
         [
-          0,
-          2
+          4,
+          1
         ]
       ],
       "walls": [
         {
-          "row": 5,
-          "col": 5,
-          "type": "vertical"
-        },
-        {
-          "row": 3,
-          "col": 2,
-          "type": "horizontal"
-        },
-        {
-          "row": 4,
+          "row": 2,
           "col": 3,
           "type": "vertical"
         },
         {
-          "row": 2,
-          "col": 4,
+          "row": 5,
+          "col": 3,
           "type": "horizontal"
         },
         {
-          "row": 4,
-          "col": 1,
+          "row": 1,
+          "col": 4,
           "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 5,
+          "type": "horizontal"
+        },
+        {
+          "row": 0,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 4,
+          "type": "horizontal"
         },
         {
           "row": 0,
           "col": 1,
+          "type": "vertical"
+        },
+        {
+          "row": 3,
+          "col": 6,
           "type": "horizontal"
         },
         {
-          "row": 4,
+          "row": 3,
           "col": 4,
           "type": "vertical"
         },
         {
-          "row": 1,
-          "col": 3,
-          "type": "horizontal"
-        },
-        {
-          "row": 3,
-          "col": 3,
-          "type": "vertical"
-        },
-        {
-          "row": 3,
-          "col": 1,
+          "row": 0,
+          "col": 5,
           "type": "horizontal"
         }
       ],
       "numberedStones": [
         {
           "coord": [
-            6,
-            2
+            4,
+            3
           ],
           "value": 256
         },
         {
           "coord": [
             4,
-            0
+            2
           ],
           "value": 256
         },
         {
           "coord": [
             3,
-            5
+            3
           ],
           "value": 256
         },
         {
           "coord": [
-            0,
+            6,
             3
           ],
           "value": 256
@@ -5361,19 +5363,19 @@
       ],
       "spikeTraps": [
         [
-          1,
-          5
+          6,
+          4
         ],
         [
-          4,
+          5,
           5
         ]
       ],
       "wanderingBeasts": [
         {
           "coord": [
-            6,
-            5
+            1,
+            2
           ],
           "hp": 3277
         }
@@ -5383,7 +5385,7 @@
       "requiredKeys": 1,
       "stepLimit": 104,
       "shiftingExit": true,
-      "layoutSeed": 0
+      "layoutSeed": 6
     },
     {
       "id": 82,
@@ -7933,27 +7935,67 @@
       "initialStones": 3,
       "stoneCoords": [
         [
-          6,
+          4,
           0
         ],
         [
-          4,
-          5
+          2,
+          3
         ],
         [
-          4,
-          2
+          2,
+          6
         ]
       ],
       "walls": [
         {
-          "row": 2,
+          "row": 6,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 4,
+          "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 3,
+          "col": 3,
+          "type": "vertical"
+        },
+        {
+          "row": 5,
+          "col": 3,
+          "type": "horizontal"
+        },
+        {
+          "row": 6,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
           "col": 2,
+          "type": "horizontal"
+        },
+        {
+          "row": 4,
+          "col": 3,
           "type": "vertical"
         },
         {
           "row": 0,
           "col": 1,
+          "type": "horizontal"
+        },
+        {
+          "row": 1,
+          "col": 0,
+          "type": "vertical"
+        },
+        {
+          "row": 0,
+          "col": 3,
           "type": "horizontal"
         },
         {
@@ -7962,76 +8004,22 @@
           "type": "vertical"
         },
         {
-          "row": 3,
-          "col": 0,
-          "type": "horizontal"
-        },
-        {
-          "row": 0,
-          "col": 2,
-          "type": "vertical"
-        },
-        {
-          "row": 4,
-          "col": 3,
-          "type": "horizontal"
-        },
-        {
-          "row": 1,
-          "col": 0,
-          "type": "vertical"
-        },
-        {
-          "row": 0,
-          "col": 2,
-          "type": "horizontal"
-        },
-        {
           "row": 5,
           "col": 4,
-          "type": "vertical"
-        },
-        {
-          "row": 3,
-          "col": 6,
-          "type": "horizontal"
-        },
-        {
-          "row": 5,
-          "col": 0,
-          "type": "vertical"
-        },
-        {
-          "row": 3,
-          "col": 1,
           "type": "horizontal"
         },
         {
           "row": 3,
-          "col": 3,
+          "col": 2,
           "type": "vertical"
         },
         {
           "row": 5,
-          "col": 1,
+          "col": 5,
           "type": "horizontal"
         }
       ],
       "numberedStones": [
-        {
-          "coord": [
-            5,
-            0
-          ],
-          "value": 128
-        },
-        {
-          "coord": [
-            4,
-            3
-          ],
-          "value": 128
-        },
         {
           "coord": [
             1,
@@ -8041,38 +8029,52 @@
         },
         {
           "coord": [
-            3,
-            1
+            0,
+            3
           ],
           "value": 128
         },
         {
           "coord": [
-            3,
-            0
+            5,
+            3
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            6,
+            3
+          ],
+          "value": 128
+        },
+        {
+          "coord": [
+            0,
+            4
           ],
           "value": 128
         }
       ],
       "spikeTraps": [
         [
-          3,
-          3
+          6,
+          2
         ],
         [
-          1,
-          5
+          0,
+          2
         ],
         [
-          1,
+          5,
           4
         ]
       ],
       "wanderingBeasts": [
         {
           "coord": [
-            4,
-            6
+            3,
+            2
           ],
           "hp": 3277
         }
@@ -8082,7 +8084,7 @@
       "requiredKeys": 1,
       "stepLimit": 119,
       "shiftingExit": true,
-      "layoutSeed": 2
+      "layoutSeed": 7
     },
     {
       "id": 100,

@@ -15,7 +15,8 @@ test('missing or corrupt save starts fresh', () => {
 
 test('valid v2 save round-trips', () => {
   const save = v2({ unlocked: 12, current: 7, gold: 340, records: { 3: { bestMoves: 40, bestScore: 500 } },
-    stars: 9, talents: { goldRate: 3, basePower: 1 }, stash: { hammer: 2, purge2: 0, purge4: 1, heartPotion: 0, wallRune: 3 }, settings: { sound: false } })
+    stars: 9, talents: { goldRate: 3, basePower: 1 }, stash: { hammer: 2, purge2: 0, purge4: 1, heartPotion: 0, wallRune: 3, undoCharm: 1 },
+    purchases: { hammer: 4, goldMagnet: 1 }, perks: { goldMagnet: true, itemMagnet: false }, settings: { sound: false } })
   assert.deepEqual(parseSave(json(save), 100), save)
 })
 
@@ -28,7 +29,7 @@ test('out-of-range values are clamped, not trusted', () => {
   assert.deepEqual(s.records, {})
   assert.equal(s.stars, 0)
   assert.deepEqual(s.talents, { goldRate: 14, basePower: 0 })
-  assert.deepEqual(s.stash, { hammer: 0, purge2: 0, purge4: 0, heartPotion: 0, wallRune: 0 })
+  assert.deepEqual(s.stash, { hammer: 0, purge2: 0, purge4: 0, heartPotion: 0, wallRune: 0, undoCharm: 0 })
   assert.deepEqual(s.settings, { sound: true })
 })
 
@@ -81,7 +82,9 @@ test('migrating v1 keeps progress and back-pays stars for cleared levels', () =>
   assert.deepEqual(s.records, v1.records)
   assert.equal(s.stars, 1 + 1 + 2, 'levels 1 and 10 pay 1, level 15 pays 2')
   assert.deepEqual(s.talents, {})
-  assert.deepEqual(s.stash, { hammer: 0, purge2: 0, purge4: 0, heartPotion: 0, wallRune: 0 })
+  assert.deepEqual(s.stash, { hammer: 0, purge2: 0, purge4: 0, heartPotion: 0, wallRune: 0, undoCharm: 0 })
+  assert.deepEqual(s.purchases, {})
+  assert.deepEqual(s.perks, { goldMagnet: false, itemMagnet: false })
 })
 
 test('loadSave prefers a v2 save, migrates a v1 save, else starts fresh', () => {
@@ -148,4 +151,10 @@ test('older runs without broken walls load with none; bad lists drop the run', (
   for (const bad of [[-1], [1.5], ['0'], [1, 1], 'all']) {
     assert.equal(parseSave(withRun(run({ brokenWalls: bad })), 100, size4).run, undefined, JSON.stringify(bad))
   }
+})
+
+test('shop purchase counts and perks: unknown ids, junk counts and non-true perks are dropped', () => {
+  const s = parseSave(json({ version: 2, purchases: { hammer: 3, bogus: 9, purge2: -4, itemMagnet: 'x' }, perks: { goldMagnet: true, itemMagnet: 'yes' } }), 100)
+  assert.deepEqual(s.purchases, { hammer: 3 })
+  assert.deepEqual(s.perks, { goldMagnet: true, itemMagnet: false })
 })

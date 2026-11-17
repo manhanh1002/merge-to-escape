@@ -41,8 +41,12 @@ type CoreSave = {
 export type SaveDataV1 = { version: 1 } & CoreSave
 
 /** Consumables bought in the shop (phase 9.7). */
-export type Stash = { hammer: number; purge2: number; purge4: number; heartPotion: number; wallRune: number }
-export const STASH_ITEMS: (keyof Stash)[] = ['hammer', 'purge2', 'purge4', 'heartPotion', 'wallRune']
+export type Stash = { hammer: number; purge2: number; purge4: number; heartPotion: number; wallRune: number; undoCharm: number }
+export const STASH_ITEMS: (keyof Stash)[] = ['hammer', 'purge2', 'purge4', 'heartPotion', 'wallRune', 'undoCharm']
+
+/** Permanent shop perks (bought once). */
+export type Perks = { goldMagnet: boolean; itemMagnet: boolean }
+export const PERK_IDS: (keyof Perks)[] = ['goldMagnet', 'itemMagnet']
 export const MAX_TALENT_LEVEL = 14
 
 export type SaveData = { version: 2 } & CoreSave & {
@@ -51,13 +55,16 @@ export type SaveData = { version: 2 } & CoreSave & {
   /** Talent levels by id (0..14). Ids come from the talent config (phase 9.2). */
   talents: Record<string, number>
   stash: Stash
+  /** How many times each shop entry was bought (each purchase raises its price). */
+  purchases: Record<string, number>
+  perks: Perks
   settings: { sound: boolean }
 }
 
-const emptyStash = (): Stash => ({ hammer: 0, purge2: 0, purge4: 0, heartPotion: 0, wallRune: 0 })
+const emptyStash = (): Stash => ({ hammer: 0, purge2: 0, purge4: 0, heartPotion: 0, wallRune: 0, undoCharm: 0 })
 export const freshSave = (): SaveData => ({
   version: 2, unlocked: 0, current: 0, gold: 0, records: {},
-  stars: 0, talents: {}, stash: emptyStash(), settings: { sound: true },
+  stars: 0, talents: {}, stash: emptyStash(), purchases: {}, perks: { goldMagnet: false, itemMagnet: false }, settings: { sound: true },
 })
 
 /** Stars for clearing a level the first time: 1 for levels 1-10 ... 10 for 91-100. */
@@ -188,12 +195,22 @@ export function parseSave(raw: string | null, levelCount: number, sizeOf?: SizeO
   const stash = emptyStash()
   for (const item of STASH_ITEMS) stash[item] = clampInt(stashIn[item], 0, 999, 0)
   const settings = (d.settings && typeof d.settings === 'object' ? d.settings : {}) as Record<string, unknown>
+  const purchases: Record<string, number> = {}
+  if (d.purchases && typeof d.purchases === 'object') {
+    for (const id of [...STASH_ITEMS, ...PERK_IDS] as string[]) {
+      const n = clampInt((d.purchases as Record<string, unknown>)[id], 0, 999, 0)
+      if (n) purchases[id] = n
+    }
+  }
+  const perksIn = (d.perks && typeof d.perks === 'object' ? d.perks : {}) as Record<string, unknown>
   return {
     version: 2,
     ...parseCore(d, levelCount, sizeOf),
     stars: clampInt(d.stars, 0, 100000, 0),
     talents,
     stash,
+    purchases,
+    perks: { goldMagnet: perksIn.goldMagnet === true, itemMagnet: perksIn.itemMagnet === true },
     settings: { sound: settings.sound !== false },
   }
 }

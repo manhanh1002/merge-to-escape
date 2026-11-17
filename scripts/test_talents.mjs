@@ -98,12 +98,12 @@ test('describeTalent: names and current -> next effect text for every branch', a
 
 test('describeTalent: hearts only change at Lv 5 / 10 / 14', async () => {
   const { describeTalent } = await import('../lib/talents.ts')
-  assert.deepEqual(describeTalent('bonusHearts', 0, cfg), { name: 'Stout Heart', now: '3 hearts in boss rooms', next: '4 hearts at Lv 5' })
-  assert.equal(describeTalent('bonusHearts', 4, cfg).next, '4 hearts in boss rooms')
-  assert.equal(describeTalent('bonusHearts', 5, cfg).now, '4 hearts in boss rooms')
+  assert.deepEqual(describeTalent('bonusHearts', 0, cfg), { name: 'Stout Heart', now: '3 hearts per chamber', next: '4 hearts at Lv 5' })
+  assert.equal(describeTalent('bonusHearts', 4, cfg).next, '4 hearts per chamber')
+  assert.equal(describeTalent('bonusHearts', 5, cfg).now, '4 hearts per chamber')
   assert.equal(describeTalent('bonusHearts', 6, cfg).next, '5 hearts at Lv 10')
-  assert.equal(describeTalent('bonusHearts', 13, cfg).next, '6 hearts in boss rooms')
-  assert.equal(describeTalent('bonusHearts', 14, cfg).now, '6 hearts in boss rooms')
+  assert.equal(describeTalent('bonusHearts', 13, cfg).next, '6 hearts per chamber')
+  assert.equal(describeTalent('bonusHearts', 14, cfg).now, '6 hearts per chamber')
 })
 
 test('starsSpent counts the stars invested across branches', async () => {

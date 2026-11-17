@@ -2,7 +2,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
-import { computeMove, hasAnyMove, makeBoard, rollGift, isWallBetween, withoutWalls } from '../lib/game-logic.ts'
+import { computeMove, hasAnyMove, makeBoard, rollGift, isWallBetween, tomeDamage, withoutWalls } from '../lib/game-logic.ts'
 
 const config = JSON.parse(readFileSync(new URL('../lib/game_config.json', import.meta.url), 'utf8'))
 const economy = config.economyConfig
@@ -201,11 +201,12 @@ test('no moves left is detected (lose condition)', () => {
 })
 
 test('gifts drop at the merge cell, survive tiles sliding over them, and are collected by the player', () => {
-  const level = lvl({ target: 2048 })
-  const board = grid([null, null, null, null], [null, null, null, null], [null, null, null, null], [P, null, 64, 64])
+  const level = lvl({ target: 2048, requiredKeys: 1 })
+  // wizard far away, so the key is not pulled in at once
+  const board = grid([P, null, null, null], [null, null, null, null], [null, null, null, null], [null, null, 64, 64])
   const merge = computeMove(board, {}, level, economy, 'right', always)
   assert.equal(merge.board[15], 128)
-  assert.deepEqual(merge.floorGifts[15], { type: 'key' }, 'rarest eligible gift (key) drops under the tile')
+  assert.deepEqual(merge.floorGifts[15], { type: 'key' }, 'a needed key is the first drop under the tile')
   // Tile slides away; gift stays on the floor.
   const away = computeMove(merge.board, merge.floorGifts, level, economy, 'up', never)
   assert.deepEqual(away.floorGifts[15], { type: 'key' })
@@ -221,9 +222,11 @@ test('an existing gift is not overwritten by a new drop', () => {
 
 test('rollGift uses item tables, and gold for tiles above 2048 uses the top rule', () => {
   assert.deepEqual(rollGift(8, economy, always), { type: 'equipment', item: { type: 'sword', power: 15 } })
+  assert.deepEqual(rollGift(8, economy, always, false, true, true), { type: 'key' }, 'a wanted key comes first')
+  assert.notEqual(rollGift(128, economy, always, false, false, false)?.type, 'key', 'keys never drop unless wanted')
   assert.equal(rollGift(4, economy, always), null)
   let calls = 0
-  const goldOnly = () => (++calls <= 6 ? 1 : 0) // fail all item rolls, hit gold
+  const goldOnly = () => (++calls <= 5 ? 1 : 0) // fail the 5 item rolls (no key wanted), hit gold
   assert.deepEqual(rollGift(4096, economy, goldOnly), { type: 'gold', amount: 2000 })
 })
 
@@ -243,7 +246,8 @@ test('move result reports bumping into a wall (drives the hurt animation)', () =
 })
 
 const boss = (hp, maxHp = hp) => ({ type: 'boss', hp, maxHp })
-const bossLvl = (over = {}) => lvl({ id: 5, hasBoss: true, bossHp: 30, ...over })
+// level 45: past the easier chapter-1 bosses
+const bossLvl = (over = {}) => lvl({ id: 45, hasBoss: true, bossHp: 30, ...over })
 const tome = { type: 'equipment', item: { type: 'sword', power: 15 } }
 const S = null
 
@@ -292,7 +296,7 @@ test('walking over a tome blasts the boss: mid-boss takes maxHp/2 + Power', () =
 
 test('a final boss (level x10) takes maxHp/3 per tome', () => {
   const board = grid([P, S, S, S], [S, S, S, S], [S, S, S, S], [S, S, S, boss(50)])
-  const res = computeMove(board, { 1: tome }, bossLvl({ id: 10, bossHp: 50 }), economy, 'right', never)
+  const res = computeMove(board, { 1: tome }, bossLvl({ id: 50, bossHp: 50 }), economy, 'right', never)
   assert.equal(res.bossDamage, 17)
 })
 
@@ -490,4 +494,74 @@ test('Rune of Passage: a dissolved wall no longer blocks, the others still do', 
   assert.deepEqual(opened.walls, [walls[1]])
   assert.deepEqual(level.walls, walls, 'the level config is not changed')
   assert.equal(withoutWalls(level, []), level)
+})
+
+// ---------- keys, spikes, magnets, early bosses ----------
+const keyGift = { type: 'key' }
+const gold = (amount) => ({ type: 'gold', amount })
+
+test('a door that needs keys stays shut until the player carries them', () => {
+  const board = grid([P, 'exit', null, null], [null, null, null, null], [null, null, null, null], [null, null, null, 2])
+  const level = lvl({ requiredKeys: 1 })
+  const locked = computeMove(board, {}, level, economy, 'right', never, 0, 0, { keys: 0 })
+  assert.equal(locked.reachedDoor, false)
+  assert.equal(locked.doorLocked, true)
+  assert.equal(computeMove(board, {}, level, economy, 'right', never, 0, 0, { keys: 1 }).reachedDoor, true)
+  assert.equal(computeMove(board, {}, lvl(), economy, 'right', never).reachedDoor, true, 'no keys needed')
+})
+
+test('a key picked up on the way to the door opens it in the same move', () => {
+  const board = grid([P, null, null, 'exit'], [null, null, null, null], [null, null, null, null], [null, null, null, 2])
+  const res = computeMove(board, { 1: keyGift }, lvl({ requiredKeys: 1 }), economy, 'right', never, 0, 0, { keys: 0 })
+  assert.equal(res.reachedDoor, true)
+})
+
+test('keys drop only while the level still needs them, never on boss levels', () => {
+  const board = grid([P, null, null, null], [null, null, null, null], [null, null, null, null], [null, null, 8, 8])
+  const need = lvl({ target: 2048, requiredKeys: 1 })
+  assert.deepEqual(computeMove(board, {}, need, economy, 'right', always).floorGifts[15], keyGift)
+  assert.notDeepEqual(computeMove(board, {}, need, economy, 'right', always, 0, 0, { keys: 1 }).floorGifts[15], keyGift, 'already carried')
+  assert.notDeepEqual(computeMove(board, { 4: keyGift }, need, economy, 'right', always).floorGifts[15], keyGift, 'already on the floor')
+  assert.notDeepEqual(computeMove(board, {}, lvl({ target: 2048 }), economy, 'right', always).floorGifts[15], keyGift, 'no keys needed')
+  const bossBoard = grid([P, null, null, boss(30)], [null, null, null, null], [null, null, null, null], [null, null, 8, 8])
+  const res = computeMove(bossBoard, {}, bossLvl({ target: 2048, requiredKeys: 1 }), economy, 'right', always)
+  assert.notDeepEqual(res.floorGifts[15], keyGift, 'boss levels: the boss drops the key')
+})
+
+test('spikes no longer stop the wizard at the door: he escapes (the page charges the heart)', () => {
+  const board = grid([P, null, null, 'exit'], [null, null, null, null], [null, null, null, null], [null, null, null, 2])
+  const res = computeMove(board, {}, lvl({ spikeTraps: [[0, 1]] }), economy, 'right', never)
+  assert.equal(res.spikesCrossed, 1)
+  assert.equal(res.reachedDoor, true)
+})
+
+const scroll = { type: 'scroll', targetValue: 2 }
+
+test('keys always jump to a wizard stopping next to them; magnets pull gold, or everything', () => {
+  const board = grid([null, null, null, null], [null, P, null, null], [null, null, null, null], [null, null, null, 2])
+  const gifts = { 0: gold(10), 2: keyGift, 6: gold(30), 4: scroll, 15: gold(99) }
+  // the wizard slides up to cell 1; neighbours are 0, 2, 4, 5, 6
+  const none = computeMove(board, gifts, lvl(), economy, 'up', never)
+  assert.deepEqual(none.collected, [keyGift], 'without a magnet only the key comes')
+  const g = computeMove(board, gifts, lvl(), economy, 'up', never, 0, 0, { magnet: 'gold' })
+  assert.deepEqual(g.collected.filter((x) => x.type === 'gold'), [gold(10), gold(30)])
+  assert.ok(g.collected.includes(keyGift) && !g.collected.includes(scroll), 'gold magnet: gold (and keys), not other loot')
+  const all = computeMove(board, gifts, lvl(), economy, 'up', never, 0, 0, { magnet: 'all' })
+  assert.equal(all.collected.length, 4)
+  assert.deepEqual(Object.keys(all.floorGifts), ['15'], 'far loot stays')
+})
+
+test('magnet-pulled tomes are cast at the boss like tomes slid over', () => {
+  const board = grid([null, null, null, boss(60)], [P, null, null, null], [null, null, null, null], [null, null, null, null])
+  const res = computeMove(board, { 4: tome }, bossLvl({ bossHp: 60 }), economy, 'up', never, 0, 0, { magnet: 'all' })
+  assert.equal(res.tomesCast, 1)
+  assert.ok(res.bossDamage > 0)
+})
+
+test('chapter-1 bosses fall to fewer tomes while players learn', () => {
+  const hits = economy.bossTomeHits
+  assert.equal(tomeDamage(100, 5, hits), 100, 'level 5: one tome')
+  assert.equal(tomeDamage(100, 10, hits), 50, 'level 10: two tomes')
+  assert.equal(tomeDamage(100, 15, hits), 50, 'level 15: back to two')
+  assert.equal(tomeDamage(99, 20, hits, 7), 33 + 7, 'level 20: three, plus Power')
 })

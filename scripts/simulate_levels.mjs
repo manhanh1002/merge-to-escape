@@ -45,15 +45,20 @@ const dist = (a, b, size) => Math.abs((a % size) - (b % size)) + Math.abs(Math.f
 /** Greedy look-ahead of one swipe. Everything (the wizard too) slides all the way, so the
  *  bot judges each swipe by its outcome: escape, tome blasts and pickups first, then
  *  getting closer to the door (or to a tome while the boss lives), then free space. */
-function scoreOf(res, gifts, size) {
+function scoreOf(res, gifts, size, keysShort = 0) {
   if (res.reachedDoor) return 1e6
   const player = res.board.indexOf('player')
   const bossAlive = res.board.some((c) => c && typeof c === 'object' && c.type === 'boss')
-  let score = res.gained + res.bossDamage * 5 + res.collected.length * 25 - (res.bossHitPlayer ? 400 : 0)
+  const keysPicked = res.collected.filter((g) => g.type === 'key').length
+  let score = res.gained + res.bossDamage * 5 + res.collected.length * 25 + keysPicked * 300
+    - (res.bossHitPlayer ? 400 : 0) - res.spikesCrossed * 300
   score += res.board.filter((c) => c === null).length * 3
   if (player !== -1) {
     const exit = res.board.indexOf('exit')
-    if (!bossAlive && exit !== -1) score -= dist(player, exit, size) * 15
+    const keys = Object.entries(res.floorGifts).filter(([, g]) => g.type === 'key').map(([k]) => Number(k))
+    // still short of keys: head for the nearest key first, then the door
+    if (!bossAlive && keysShort - keysPicked > 0 && keys.length) score -= Math.min(...keys.map((k) => dist(player, k, size))) * 15
+    else if (!bossAlive && exit !== -1) score -= dist(player, exit, size) * 15
     if (bossAlive) {
       const tomes = Object.entries(res.floorGifts).filter(([, g]) => isTome(g)).map(([k]) => Number(k))
       if (tomes.length) score -= Math.min(...tomes.map((t) => dist(player, t, size))) * 10
@@ -73,25 +78,33 @@ export function play(level, talents = TALENTS === 'expected' ? expectedTalents(l
   let gauntlets = 0
   let bossKilledAt = null
   let gold = 0
+  let keys = 0
   for (let m = 0; m < MAX_MOVES; m++) {
     const options = DIRS
-      .map((d) => [d, computeMove(board, gifts, level, economy, d, noDrops, power, gauntlets)])
-      .filter(([, r]) => r.changed && r.spikesCrossed <= armor && !r.doorSealed && !(r.bumpedBoss && r.motions.length === 0))
+      .map((d) => [d, computeMove(board, gifts, level, economy, d, noDrops, power, gauntlets, { keys })])
+      // never take a swipe whose spikes would cost the last heart
+      .filter(([, r]) => r.changed && r.spikesCrossed - armor < hearts && !r.doorSealed && !(r.bumpedBoss && r.motions.length === 0))
     if (!options.length) return { win: false, moves: m, why: 'stuck' }
-    options.sort((a, b) => scoreOf(b[1], gifts, level.size) - scoreOf(a[1], gifts, level.size))
+    const short = Math.max(0, (level.requiredKeys ?? 0) - keys)
+    options.sort((a, b) => scoreOf(b[1], gifts, level.size, short) - scoreOf(a[1], gifts, level.size, short))
     const choice = options[0][0]
-    const res = computeMove(board, gifts, level, economy, choice, Math.random, power, gauntlets)
+    const res = computeMove(board, gifts, level, economy, choice, Math.random, power, gauntlets, { keys })
     // gear gives charges: armor absorbs a hit, gauntlets shatter a stone slid into
     gold += res.bossReward?.gold ?? 0
     for (const g of res.collected) {
       if (g.type === 'gold') gold += g.amount
+      if (g.type === 'key') keys++
       if (g.type !== 'equipment') continue
       if (g.item.type === 'armor') armor = Math.min(3, armor + 1)
       if (g.item.type === 'gauntlet') gauntlets = Math.min(3, gauntlets + 1)
     }
     if (res.smashedStone !== -1) gauntlets--
-    if (res.spikesCrossed > armor) return { win: false, moves: m + 1, why: 'spike' }
-    armor -= res.spikesCrossed
+    // armor takes spikes first, the rest cost hearts
+    const absorbed = Math.min(armor, res.spikesCrossed)
+    armor -= absorbed
+    hearts -= res.spikesCrossed - absorbed
+    if (hearts <= 0) return { win: false, moves: m + 1, why: 'spike' }
+    if (res.bossReward) keys += res.bossReward.keys
     if (res.bossDefeated) bossKilledAt = m + 1
     if (res.bossHitPlayer) {
       if (armor > 0) armor--
@@ -100,7 +113,7 @@ export function play(level, talents = TALENTS === 'expected' ? expectedTalents(l
     if (res.reachedDoor) return { win: true, moves: m + 1, bossKilledAt, gold }
     board = addRandomTile(res.board)
     gifts = res.floorGifts
-    if (!hasAnyMove(board, gifts, level, economy, power, gauntlets)) return { win: false, moves: m + 1, why: 'no moves' }
+    if (!hasAnyMove(board, gifts, level, economy, power, gauntlets, { keys })) return { win: false, moves: m + 1, why: 'no moves' }
   }
   return { win: false, moves: MAX_MOVES, why: 'timeout' }
 }

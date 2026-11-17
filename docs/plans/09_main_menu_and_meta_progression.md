@@ -204,3 +204,12 @@ export function usePurge(board: Tile[], value: 2 | 4): { board: Tile[]; removed:
 Bot đo được: các màn thường L1–16 gần như **0 vàng** (đích 16/32, mà vàng chỉ rơi từ ô ≥ 16), nên Shop xa tầm với.
 `economyConfig.earlyGoldBoost` (`lib/economy.ts`, áp dụng sau talent): ở L1 ô ghép 4 rơi 5 vàng (35%), ô 8 rơi 12 vàng (50%), mọi luật vàng +35%; hiệu ứng giảm tuyến tính và hết sau L20.
 Lượng vàng rơi mỗi màn đầu tăng từ ~6 lên ~50. `npm run sim` có thêm cột `gold` (vàng nhặt được trung bình mỗi lượt thắng).
+
+## Bổ sung — Đợt chỉnh thiết kế (Undo, chìa khóa, tim, nam châm, giá tăng dần)
+
+- **Undo**: 3 lần miễn phí mỗi màn (`FREE_UNDOS` trong `app/play/page.tsx`); hết thì mỗi lần Undo tiêu 1 **Amulet of Rewind** (`stash.undoCharm`, Shop 80). Undo không trả lại amulet. Tải lại trang thì mất lịch sử Undo (như trước).
+- **Chìa khóa**: `requiredKeys` (1 ở mọi màn từ L31 và mọi màn boss) giờ khóa cửa (`doorLocked`, cửa hiện ổ khóa). Màn thường: chìa chỉ rơi khi còn thiếu (đang cầm + đang nằm trên sàn < cần), luật `economyConfig.keyDrop` (ô ≥ 8, 30%). Màn boss: không rơi chìa — boss chết cho 1 chìa (`bossRewards.bonusKeys`). Chìa nằm ở 8 ô quanh chỗ pháp sư dừng sẽ tự bay vào (khó dừng đúng ô khi trượt hết cỡ). Thanh túi đồ hiện `chìa/cần`.
+- **Gai chỉ trừ tim**: mỗi gai trượt qua −1 ❤️ (giáp đỡ trước); hết tim mới thua. Tim dùng ở **mọi màn** (talent Stout Heart: "hearts per chamber"); Heart Potion dùng được ở mọi màn.
+- **Shop**: mỗi lần mua một món, giá món đó **+15%** (cộng dồn, lưu ở `save.purchases`). Thêm 2 **relic vĩnh viễn** (`save.perks`, mua một lần): **Gilded Lodestone** 900 — hút vàng ở 8 ô quanh pháp sư sau mỗi nước; **Arcane Lodestone** 3500 — hút mọi vật phẩm (vàng, chìa, trang bị, sách — sách hút được vẫn bắn boss).
+- **Đầu game dễ để làm quen**: L1–10 mỗi màn tối đa 1 chướng ngại; boss chương 1 chết sau 1 sách (L5) / 2 sách (L10) (`bossTomeHits.early`).
+- Bot (không talent, 30 lượt/màn) sau thay đổi: L1–9 97–100%; 6×6 92% → 79% → 71%; 7×7 78% → 72% → 63% — khớp đường mục tiêu (6×6 85→70, 7×7 75→60).

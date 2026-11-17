@@ -13,7 +13,7 @@ export type TalentConfig = {
   /** Effect per level: goldRate / weaponRate add to drop rates, basePower adds Power. */
   statsBonusPerLevel: { goldRate: number; weaponRate: number; basePower: number }
   maxLevel: number
-  /** bonusHearts: +1 heart in boss rooms at each of these levels. */
+  /** bonusHearts: +1 starting heart (every chamber) at each of these levels. */
   heartLevels: number[]
   /** weaponBonusPower ("Gear Mastery"): +1 starting armor at each of these levels. */
   armorLevels: number[]
@@ -72,7 +72,7 @@ export function effectiveEconomy(base: EconomyConfig, talents: TalentLevels, cfg
   }
 }
 
-/** What a run starts with: Power from basePower, boss-room hearts from bonusHearts, and
+/** What a run starts with: Power from basePower, hearts from bonusHearts, and
  *  armor charges from Gear Mastery (stored under its original id, weaponBonusPower). */
 export function startingRun(talents: TalentLevels, cfg: TalentConfig): { power: number; hearts: number; armor: number } {
   const reached = (levels: number[], lv: number | undefined) => levels.filter((at) => (lv ?? 0) >= at).length
@@ -106,7 +106,7 @@ export function describeTalent(id: TalentId, level: number, cfg: TalentConfig): 
         const armor = startingRun({ weaponBonusPower: lv }, cfg).armor
         return armor ? `Start each chamber with ${armor} armor` : 'No starting armor yet'
       }
-      case 'bonusHearts': return `${startingRun({ bonusHearts: lv }, cfg).hearts} hearts in boss rooms`
+      case 'bonusHearts': return `${startingRun({ bonusHearts: lv }, cfg).hearts} hearts per chamber`
     }
   }
   const now = level === 0 && id !== 'bonusHearts' && id !== 'weaponBonusPower' ? 'No bonus yet' : effect(level)

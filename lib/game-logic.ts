@@ -29,6 +29,18 @@ export type LevelConfig = {
   spikeTraps: [number, number][]
   hasBoss: boolean
   bossHp: number
+  /** Keys the player must carry to walk through the door (boss levels: the boss drops them). */
+  requiredKeys?: number
+}
+
+/** Shop perks: pull floor loot from the 8 cells around the wizard after every move. */
+export type Magnet = 'none' | 'gold' | 'all'
+
+/** Per-run state the rules need besides the board. */
+export type MoveOptions = {
+  /** Keys the player already carries this level. */
+  keys?: number
+  magnet?: Magnet
 }
 
 type ItemRule = { minTile: number; dropRate: number; basePower?: number }
@@ -39,7 +51,9 @@ export type EconomyConfig = {
   /** On boss levels attack tomes drop more often (rolled before any other gift). */
   bossTomeDrop?: { minTile: number; dropRate: number }
   /** Tomes needed to kill a boss without gear: each tome deals ceil(maxHp / hits) + Power. */
-  bossTomeHits?: { mid: number; final: number }
+  bossTomeHits?: TomeHits
+  /** Keys drop only while the level still needs them (not yet carried or on the floor). */
+  keyDrop?: { minTile: number; dropRate: number }
   /** Extra gold in the first levels, fading out by `untilLevel` (applied by lib/economy.ts). */
   earlyGoldBoost?: EarlyGoldBoost
 }
@@ -51,6 +65,15 @@ export type EarlyGoldBoost = {
   extraDropRate: number
   /** Gold rules for small merges that normally drop nothing (rates scaled by the fade). */
   smallMerges: { minTile: number; gold: number; dropRate: number }[]
+}
+
+export type TomeHits = { mid: number; final: number; /** Easier bosses while learning (levels <= untilLevel). */ early?: { untilLevel: number; mid: number; final: number } }
+
+/** Damage of one attack tome: a boss falls to `hits` tomes (mid-chapter or chapter-final
+ *  boss; fewer in the first levels), plus the wizard's Power. */
+export function tomeDamage(maxHp: number, levelId: number, hits: TomeHits, power = 0): number {
+  const set = hits.early && levelId <= hits.early.untilLevel ? hits.early : hits
+  return Math.ceil(maxHp / (levelId % 10 === 0 ? set.final : set.mid)) + power
 }
 
 export type Rng = () => number
@@ -134,14 +157,15 @@ export function addRandomTile(board: Tile[], rng: Rng = Math.random): Tile[] {
 /** Decide which gift (if any) drops when a merge produces `value`. At most one per merge. */
 /** `bossLevel`: a boss is alive (tomes are the priority drop). `allowTomes`: false once the
  *  boss of this level is dead — attack tomes have nothing left to hit, so none drop. */
-export function rollGift(value: number, economy: EconomyConfig, rng: Rng, bossLevel = false, allowTomes = true): FloorGift | null {
+/** `keyWanted`: the level still needs a key (keys never drop otherwise). */
+export function rollGift(value: number, economy: EconomyConfig, rng: Rng, bossLevel = false, allowTomes = true, keyWanted = false): FloorGift | null {
   const items = economy.itemDropRates
   const hit = (rule: ItemRule | undefined) => !!rule && value >= rule.minTile && rng() < rule.dropRate
   // While a boss is alive, attack tomes (the "sword" slot) are the priority drop.
   if (bossLevel && hit(economy.bossTomeDrop ?? { minTile: 4, dropRate: 0.5 })) {
     return { type: 'equipment', item: { type: 'sword', power: items.sword?.basePower ?? 0 } }
   }
-  if (hit(items.key)) return { type: 'key' }
+  if (keyWanted && hit(economy.keyDrop ?? items.key)) return { type: 'key' }
   for (const type of ['gauntlet', 'armor', 'sword'] as const) {
     if (type === 'sword' && !allowTomes) continue
     if (hit(items[type])) return { type: 'equipment', item: { type, power: items[type].basePower ?? 0 } }
@@ -166,6 +190,8 @@ type SlideContext = {
   bossLevel: boolean
   /** False on a boss level whose boss is already dead: no tomes drop. */
   allowTomes: boolean
+  /** Keys the level still needs to drop this move (decremented as keys drop). */
+  keysWanted: number
   /** Where the player ended its slide (set by slideSegment). */
   playerLanding?: number
 }
@@ -189,8 +215,9 @@ function slideSegment(segment: { val: Tile; idx: number }[], ctx: SlideContext) 
       out.push(merged)
       gained += merged
       if (!ctx.gifts[landing]) {
-        const gift = rollGift(merged, ctx.economy, ctx.rng, ctx.bossLevel, ctx.allowTomes)
+        const gift = rollGift(merged, ctx.economy, ctx.rng, ctx.bossLevel, ctx.allowTomes, ctx.keysWanted > 0)
         if (gift) ctx.gifts[landing] = gift
+        if (gift?.type === 'key') ctx.keysWanted--
       }
       i++
     } else if (
@@ -252,6 +279,8 @@ export type MoveResult = {
   bossAt: number
   /** Player tried to enter the door while the boss still guards it. */
   doorSealed: boolean
+  /** Player tried to enter the door without enough keys. */
+  doorLocked: boolean
   /** How pieces moved (tiles, crashes, the player), for animating the board. */
   motions: Motion[]
 }
@@ -273,12 +302,16 @@ export function computeMove(
   power = 0,
   /** Gauntlet charges: sliding into a stone or numbered stone shatters it (one charge). */
   gauntlets = 0,
+  opts: MoveOptions = {},
 ): MoveResult {
   const size = level.size
   const walls = level.walls ?? []
   const base = [...board]
   const next = [...board]
   const gifts: FloorGifts = { ...floorGifts }
+  const keysHeld = opts.keys ?? 0
+  const requiredKeys = level.requiredKeys ?? 0
+  const keysOnFloor = Object.values(gifts).filter((g) => g.type === 'key').length
   const ctx: SlideContext = {
     targetFormula: level.targetFormula,
     fusionAvailable: isFusionLevel(level) && !base.includes('exit'),
@@ -288,6 +321,8 @@ export function computeMove(
     bossLevel: base.some(isBoss),
     // attack tomes only exist while a boss is there to hit
     allowTomes: base.some(isBoss),
+    // boss levels get their keys from the boss; elsewhere keys drop until there are enough
+    keysWanted: level.hasBoss ? 0 : Math.max(0, requiredKeys - keysHeld - keysOnFloor),
   }
   let changed = false
   let gained = 0
@@ -363,6 +398,7 @@ export function computeMove(
   let smashedStone = -1
   let bossDiedAt = -1
   let doorSealed = false
+  let doorLocked = false
   let tomesCast = 0
   const collected: FloorGift[] = []
   if (player !== -1) {
@@ -378,6 +414,19 @@ export function computeMove(
     for (const k of path) {
       if (gifts[k]) { collected.push(gifts[k]); delete gifts[k] }
     }
+    // From the 8 cells around where the wizard stopped: keys always jump to him (they are
+    // hard to land on exactly); the magnet perks pull gold, or every item, too.
+    const magnet = opts.magnet ?? 'none'
+    const lr = Math.floor(landing / size), lc = landing % size
+    for (let r = lr - 1; r <= lr + 1; r++) {
+      for (let c = lc - 1; c <= lc + 1; c++) {
+        const k = r * size + c
+        if (r < 0 || r >= size || c < 0 || c >= size || k === landing || !gifts[k]) continue
+        const type = gifts[k].type
+        if (type !== 'key' && magnet !== 'all' && !(magnet === 'gold' && type === 'gold')) continue
+        collected.push(gifts[k]); delete gifts[k]
+      }
+    }
     if (playerMoved) changed = true
 
     // What is straight ahead of where the player stopped?
@@ -385,8 +434,10 @@ export function computeMove(
     const front = fr >= 0 && fr < size && fc >= 0 && fc < size ? fr * size + fc : -1
     const openAhead = front !== -1 && !isWallBetween(landing, front, size, walls)
     if (front !== -1 && !openAhead && !playerMoved) bumpedWall = true
-    if (openAhead && next[front] === 'exit' && !steppedOnSpike) {
+    const keysNow = keysHeld + collected.filter((g) => g.type === 'key').length
+    if (openAhead && next[front] === 'exit') {
       if (next.some(isBoss)) doorSealed = true
+      else if (keysNow < requiredKeys) doorLocked = true
       else {
         // Walk on through the door: the door stays drawn where the player escaped.
         reachedDoor = true
@@ -416,7 +467,7 @@ export function computeMove(
       if (gift.type === 'equipment' && gift.item.type === 'sword' && isBoss(next[bossIdx])) tomesCast++
       const boss = next[bossIdx]
       if (!isBoss(boss) || gift.type !== 'equipment' || gift.item.type !== 'sword') continue
-      const damage = Math.ceil(boss.maxHp / (level.id % 10 === 0 ? hits.final : hits.mid)) + power
+      const damage = tomeDamage(boss.maxHp, level.id, hits, power)
       const dealt = Math.min(damage, boss.hp)
       bossDamage += dealt
       gained += dealt
@@ -457,18 +508,18 @@ export function computeMove(
 
   return {
     board: next, floorGifts: gifts, changed, gained, playerMoved, reachedDoor, steppedOnSpike, bumpedWall, shattered,
-    collected, doorOpen: next.includes('exit'), bossDamage, bossDefeated, bossReward, bossHitPlayer, bumpedBoss, bossAt, doorSealed, tomesCast, tomesFaded,
+    collected, doorOpen: next.includes('exit'), bossDamage, bossDefeated, bossReward, bossHitPlayer, bumpedBoss, bossAt, doorSealed, doorLocked, tomesCast, tomesFaded,
     spikesCrossed, smashedStone,
     motions,
   }
 }
 
 /** True if at least one swipe direction would change the board. */
-export function hasAnyMove(board: Tile[], floorGifts: FloorGifts, level: LevelConfig, economy: EconomyConfig, power = 0, gauntlets = 0): boolean {
+export function hasAnyMove(board: Tile[], floorGifts: FloorGifts, level: LevelConfig, economy: EconomyConfig, power = 0, gauntlets = 0, opts: MoveOptions = {}): boolean {
   const noDrops: Rng = () => 1 // never roll gifts during the probe
   // Just walking into the boss (nothing else moves) is not a way out.
   return (['left', 'right', 'up', 'down'] as const).some((d) => {
-    const res = computeMove(board, floorGifts, level, economy, d, noDrops, power, gauntlets)
+    const res = computeMove(board, floorGifts, level, economy, d, noDrops, power, gauntlets, opts)
     return res.changed && !(res.bumpedBoss && res.motions.length === 0 && res.shattered === 0)
   })
 }

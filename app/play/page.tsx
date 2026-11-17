@@ -11,7 +11,7 @@ import { resolveStartLevel } from '../../lib/navigation'
 import { tomeFor } from '../../lib/tomes'
 import { levelEconomy } from '../../lib/economy'
 import {
-  addRandomTile, applyHammer, applyHeartPotion, applyPurge, computeMove, hasAnyMove, isBoss, isFusionLevel, withoutWalls,
+  addRandomTile, applyHammer, applyHeartPotion, applyPurge, computeMove, hasAnyMove, isBoss, isFusionLevel, tomeDamage as tomeDamageFor, withoutWalls,
   makeBoard as buildBoard, spikeCells,
   type Direction, type FloorGift, type FloorGifts, type LevelConfig, type Motion, type Tile,
 } from '../../lib/game-logic'
@@ -21,14 +21,15 @@ import {
   type BossAction, type HeroAction,
 } from '../../components/sprites'
 import { Purse } from '../../components/Purse'
-import { BOOSTERS } from '../../components/boosters'
-import { SHOP_ITEMS, type ShopItem } from '../../lib/shop'
+import { BOOSTERS, BOOSTER_BAR } from '../../components/boosters'
+import { magnetOf, type ShopItem } from '../../lib/shop'
 import { TopBar } from '../../components/TopBar'
 import { useSave } from '../../components/useSave'
 
 // Gold is the persistent wallet; keys, power and scrolls belong to the current run of a level.
-// Hearts only matter on boss levels: each touch of the boss costs one. Talents (bought with
-// stars) decide the Power and hearts a level starts with.
+// Hearts: a boss touch or a spike slid over costs one; none left loses the level. Talents
+// (bought with stars) decide the Power and hearts a level starts with. Keys unlock the door
+// of levels that need them (dropped by merges, or by the boss in boss rooms).
 // Gear gives charges, not Power: armor absorbs one hit (boss touch or a spike), gauntlets
 // shatter a stone the wizard slides into. Power comes only from the Arcane Might talent.
 type Inventory = {
@@ -40,6 +41,8 @@ const freshRun = (gold: number, talents: TalentLevels = {}): Inventory => {
   const start = startingRun(talents, talentCfg)
   return { gold, keys: 0, power: start.power, hearts: start.hearts, scrolls: { 2: 0, 4: 0 }, armor: start.armor, gauntlets: 0 }
 }
+/** Free Undos per level; after that each Undo spends an Amulet of Rewind from the stash. */
+const FREE_UNDOS = 3
 /** Undo restores the board, the run and the stash (so undoing a booster gives it back). */
 type Snapshot = { board: Tile[]; moves: number; score: number; floorGifts: FloorGifts; inventory: Inventory; stash: Stash; brokenWalls: number[] }
 
@@ -116,10 +119,18 @@ function renderTileIcon(value: number) {
 
 const START_MESSAGE = 'Merge the stones to reach the exit.'
 
-function statusMessage(level: LevelConfig, doorOpen: boolean, bossAlive = false) {
+/** Keys still missing for this level's door (boss levels: the boss drops them). */
+const keysMissingFor = (level: LevelConfig, keys: number) => Math.max(0, (level.requiredKeys ?? 0) - keys)
+const keyWord = (n: number) => `${n} key${n === 1 ? '' : 's'}`
+
+/** `keysMissing`: keys the player still needs for the door (0 when none are required). */
+function statusMessage(level: LevelConfig, doorOpen: boolean, bossAlive = false, keysMissing = 0) {
   if (bossAlive) return doorOpen
     ? 'The door is sealed while the boss lives. Walk over attack tomes to blast it.'
     : 'A boss roams this room. Merge to drop attack tomes, walk over them to blast it — and don\'t let it touch you.'
+  if (keysMissing > 0) return doorOpen
+    ? `The door is locked — find ${keyWord(keysMissing)}. Merges drop them; stop next to one to grab it.`
+    : `This door needs ${keyWord(keysMissing)}. Merges drop them — stop next to one to grab it.`
   if (doorOpen) return 'The door is open. Move onto it to escape.'
   if (isFusionLevel(level)) return `Slide ${level.targetFormula[0]} into ${level.targetFormula[1]} to fuse the door.`
   return 'Merge matching tiles to reveal the door.'
@@ -146,6 +157,8 @@ export default function PlayPage() {
   const [hammerMode, setHammerMode] = useState(false)
   /** Rune of Passage: picking a wall to dissolve. */
   const [wallMode, setWallMode] = useState(false)
+  /** Undos taken this level (the first FREE_UNDOS are free). */
+  const [undosUsed, setUndosUsed] = useState(0)
   /** Walls dissolved this run (indices into level.walls). */
   const [brokenWalls, setBrokenWalls] = useState<number[]>([])
   // Boss animation + transient effects. `corpseAt` keeps the dying animation on screen after
@@ -168,6 +181,8 @@ export default function PlayPage() {
     [progress.talents, levelIndex],
   )
   const maxHearts = startingRun(progress.talents, talentCfg).hearts
+  /** Loot magnet perk from the shop (permanent). */
+  const magnet = magnetOf(progress.perks)
 
   const spikes = spikeCells(level)
   /** The level as the rules see it: without the walls a rune has dissolved. */
@@ -176,10 +191,11 @@ export default function PlayPage() {
   const reset = useCallback((index = levelIndex) => {
     setBoard(makeBoard(index)); setFloorGifts({}); setHistory([]); setMoves(0); setScore(0); setWon(false); setLost(false)
     setInventory((inv) => freshRun(inv.gold, progress.talents))
-    setMessage(levels[index].hasBoss ? statusMessage(levels[index], false, true) : START_MESSAGE)
+    setMessage(levels[index].hasBoss ? statusMessage(levels[index], false, true)
+      : levels[index].requiredKeys ? statusMessage(levels[index], false, false, levels[index].requiredKeys) : START_MESSAGE)
     setHero((h) => ({ action: 'idle', nonce: h.nonce + 1 })); setFacing(1)
     setBossAnim((b) => ({ action: 'idle', nonce: b.nonce + 1, corpseAt: null })); setPopup(null); setBoardAnim(null)
-    setWinStars(null); setStuck(false); setHammerMode(false); setWallMode(false); setBrokenWalls([])
+    setWinStars(null); setStuck(false); setHammerMode(false); setWallMode(false); setBrokenWalls([]); setUndosUsed(0)
   }, [levelIndex, progress.talents])
 
   const chooseLevel = useCallback((index: number) => {
@@ -203,7 +219,7 @@ export default function PlayPage() {
       setBoard(run.board); setFloorGifts(run.floorGifts); setMoves(run.moves); setScore(run.score)
       setInventory({ gold: progress.gold, keys: run.keys, power: run.power, hearts: run.hearts, scrolls: run.scrolls, armor: run.armor, gauntlets: run.gauntlets })
       setBrokenWalls(run.brokenWalls.filter((i) => i < (levels[run.level].walls?.length ?? 0)))
-      setMessage(`Welcome back — your run is restored. ${statusMessage(levels[run.level], run.board.includes('exit'), run.board.some(isBoss))}`)
+      setMessage(`Welcome back — your run is restored. ${statusMessage(levels[run.level], run.board.includes('exit'), run.board.some(isBoss), keysMissingFor(levels[run.level], run.keys))}`)
     } else {
       setInventory(freshRun(progress.gold, progress.talents))
       if (start.level !== progress.current) setProgress((p) => ({ ...p, current: start.level, run: undefined }))
@@ -236,7 +252,7 @@ export default function PlayPage() {
 
   const move = useCallback((direction: Direction) => {
     if (won || lost) return
-    const res = computeMove(board, floorGifts, playLevel, runEconomy, direction, Math.random, inventory.power, inventory.gauntlets)
+    const res = computeMove(board, floorGifts, playLevel, runEconomy, direction, Math.random, inventory.power, inventory.gauntlets, { keys: inventory.keys, magnet })
     if (!res.changed) return
 
     // Attack tomes picked up while a boss lives are cast at it, not kept as Power; every other
@@ -251,10 +267,13 @@ export default function PlayPage() {
       nextInventory = applyGift(nextInventory, gift)
     }
     if (res.smashedStone !== -1) nextInventory = { ...nextInventory, gauntlets: nextInventory.gauntlets - 1 }
-    // Armor absorbs one spike each; without enough, the spikes are deadly.
-    const spikeDeath = res.spikesCrossed > nextInventory.armor
-    const armorOnSpikes = !spikeDeath ? res.spikesCrossed : 0
-    if (armorOnSpikes) nextInventory = { ...nextInventory, armor: nextInventory.armor - armorOnSpikes }
+    // Armor absorbs one spike each; every other spike slid over costs a heart.
+    const armorOnSpikes = Math.min(res.spikesCrossed, nextInventory.armor)
+    const spikeHits = res.spikesCrossed - armorOnSpikes
+    if (res.spikesCrossed) {
+      nextInventory = { ...nextInventory, armor: nextInventory.armor - armorOnSpikes, hearts: nextInventory.hearts - spikeHits }
+    }
+    const spikeDeath = spikeHits > 0 && nextInventory.hearts <= 0
     if (res.bossReward) {
       nextInventory = { ...nextInventory, gold: nextInventory.gold + res.bossReward.gold, keys: nextInventory.keys + res.bossReward.keys }
     }
@@ -265,8 +284,9 @@ export default function PlayPage() {
         ? { ...nextInventory, armor: nextInventory.armor - 1 }
         : { ...nextInventory, hearts: nextInventory.hearts - 1 }
     }
-    const slain = res.bossHitPlayer && !armorBlocked && nextInventory.hearts <= 0
-    const finished = res.reachedDoor || spikeDeath || slain
+    const slain = res.bossHitPlayer && !armorBlocked && nextInventory.hearts <= 0 && !spikeDeath
+    const escaped = res.reachedDoor && !spikeDeath && !slain
+    const finished = escaped || spikeDeath || slain
     const nextBoard = finished ? res.board : addRandomTile(res.board)
     const spawned = nextBoard.findIndex((c, i) => c !== null && res.board[i] === null)
     setBoardAnim((a) => ({ nonce: (a?.nonce ?? 0) + 1, motions: res.motions, prev: board, spawned }))
@@ -283,7 +303,7 @@ export default function PlayPage() {
     if (direction === 'left') setFacing(-1)
     if (direction === 'right') setFacing(1)
 
-    if (res.reachedDoor) {
+    if (escaped) {
       playHero('jump'); setWon(true); setMessage('You made it out!')
       setWinStars(progress.records[levelIndex] ? 0 : starsForLevel(levelIndex))
       setProgress((p) => recordWin(p, levelIndex, moves + 1, score + res.gained, levels.length).save)
@@ -295,8 +315,8 @@ export default function PlayPage() {
       setMessage(`${bossName} struck you down. Keep your distance and blast it with your tomes.`)
       return
     }
-    if (spikeDeath) { playHero('die'); setLost(true); setMessage('You stepped into a deadly Spike Trap!'); return }
-    if (!hasAnyMove(nextBoard, res.floorGifts, playLevel, runEconomy, nextInventory.power, nextInventory.gauntlets)) {
+    if (spikeDeath) { playHero('die'); setLost(true); setMessage('The spikes took your last heart!'); return }
+    if (!hasAnyMove(nextBoard, res.floorGifts, playLevel, runEconomy, nextInventory.power, nextInventory.gauntlets, { keys: nextInventory.keys, magnet })) {
       playHero('die'); setLost(true); setStuck(true)
       setMessage('No moves left — the room has sealed shut.')
       return
@@ -307,7 +327,7 @@ export default function PlayPage() {
     else if (res.bossDefeated) playBoss('dying', res.bossAt)
     else if (tomeCast) playBoss('hurt')
     // The wizard reacts: casts on a tome/stone, ouch on a hit or wall, steps otherwise.
-    if (res.bossHitPlayer || res.bumpedWall || res.doorSealed || armorOnSpikes) playHero('hurt')
+    if (res.bossHitPlayer || res.bumpedWall || res.doorSealed || res.doorLocked || res.spikesCrossed) playHero('hurt')
     else if (tomeCast || res.shattered > 0) playHero('attack')
     else if (res.playerMoved) {
       // a long slide is a run, a short one a walk
@@ -317,7 +337,8 @@ export default function PlayPage() {
     }
 
     const gearNote = (res.smashedStone !== -1 ? 'Your gauntlets shatter the stone! ' : '')
-      + (armorOnSpikes ? `Your armor takes the spikes${armorOnSpikes > 1 ? ` (×${armorOnSpikes})` : ''} — you're unhurt! ` : '')
+      + (armorOnSpikes ? `Your armor takes the spikes${armorOnSpikes > 1 ? ` (×${armorOnSpikes})` : ''}${spikeHits ? '' : ' — you\'re unhurt'}! ` : '')
+      + (spikeHits ? `The spikes cut you${spikeHits > 1 ? ` (×${spikeHits})` : ''} — ${nextInventory.hearts} ❤️ left. ` : '')
     const note = gearNote + (res.bossReward
       ? `${bossName} is defeated! +${res.bossReward.gold} gold, +${res.bossReward.keys} key.${res.tomesFaded ? ' The unused tomes fade away.' : ''} `
       : tomeCast
@@ -330,20 +351,25 @@ export default function PlayPage() {
           : `${bossName} hits you! ${nextInventory.hearts} ❤️ left — don't let it touch you.`
         : res.doorSealed
           ? 'The door is sealed — defeat the boss first. Walk over attack tomes to blast it!'
-          : note + statusMessage(level, res.doorOpen, res.board.some(isBoss)),
+          : note + statusMessage(level, res.doorOpen, res.board.some(isBoss), keysMissingFor(level, nextInventory.keys)),
     )
-  }, [board, brokenWalls, floorGifts, inventory, level, levelIndex, lost, moves, playBoss, playHero, playLevel, progress.records, progress.stash, progress.talents, runEconomy, score, setProgress, won])
+  }, [board, brokenWalls, floorGifts, inventory, level, levelIndex, lost, magnet, moves, playBoss, playHero, playLevel, progress.records, progress.stash, progress.talents, runEconomy, score, setProgress, won])
 
+  const freeUndosLeft = Math.max(0, FREE_UNDOS - undosUsed)
+  const canUndo = history.length > 0 && (freeUndosLeft > 0 || progress.stash.undoCharm > 0)
   const undo = () => {
     const previous = history[history.length - 1]
-    if (!previous) return
+    if (!previous || !canUndo) return
+    // the 3 free Undos go first, then an Amulet of Rewind (which Undo never gives back)
+    const charmsLeft = progress.stash.undoCharm - (freeUndosLeft > 0 ? 0 : 1)
+    setUndosUsed((n) => n + 1)
     setHistory(history.slice(0, -1))
     setBoard(previous.board); setMoves(previous.moves); setScore(previous.score)
     setFloorGifts(previous.floorGifts); setInventory(previous.inventory); setBrokenWalls(previous.brokenWalls)
-    setProgress((p) => ({ ...p, stash: previous.stash }))
+    setProgress((p) => ({ ...p, stash: { ...previous.stash, undoCharm: charmsLeft } }))
     setWon(false); setLost(false); setStuck(false); setHammerMode(false); setWallMode(false)
     playHero('idle'); playBoss('idle'); setPopup(null); setBoardAnim(null)
-    setMessage(statusMessage(level, previous.board.includes('exit'), previous.board.some(isBoss)))
+    setMessage(statusMessage(level, previous.board.includes('exit'), previous.board.some(isBoss), keysMissingFor(level, previous.inventory.keys)))
   }
 
   // ---------- Boosters (stash items, used between moves; undoable; no tile spawns) ----------
@@ -354,8 +380,9 @@ export default function PlayPage() {
     hammer: progress.stash.hammer > 0 && smashable.length > 0,
     purge2: progress.stash.purge2 > 0 && board.includes(2),
     purge4: progress.stash.purge4 > 0 && board.includes(4),
-    heartPotion: progress.stash.heartPotion > 0 && bossAliveNow && applyHeartPotion(inventory.hearts, maxHearts) !== null,
+    heartPotion: progress.stash.heartPotion > 0 && applyHeartPotion(inventory.hearts, maxHearts) !== null,
     wallRune: progress.stash.wallRune > 0 && (playLevel.walls?.length ?? 0) > 0,
+    undoCharm: false, // spent by the Undo button
   }
 
   /** Applies a booster's new board/inventory, spends one item, and lifts a "stuck" loss
@@ -446,7 +473,13 @@ export default function PlayPage() {
   const bossDir = bossFacing(bossIdx === -1 ? (bossAnim.corpseAt ?? -1) : bossIdx, board.indexOf('player'), level.size)
   const bossAlive = bossIdx !== -1
   const tomeHits = economy.bossTomeHits ?? { mid: 2, final: 3 }
-  const tomeDamage = bossCellTile ? Math.ceil(bossCellTile.maxHp / (level.id % 10 === 0 ? tomeHits.final : tomeHits.mid)) + inventory.power : 0
+  const undoTitle = freeUndosLeft > 0
+    ? `${freeUndosLeft} free Undo${freeUndosLeft === 1 ? '' : 's'} left this chamber`
+    : `Free Undos used — each Undo spends an Amulet of Rewind (${progress.stash.undoCharm} left)`
+  const undoBadge = <em className="undo-count">{freeUndosLeft > 0 ? freeUndosLeft : <><img src={BOOSTERS.undoCharm.icon} alt="" draggable={false} />{progress.stash.undoCharm}</>}</em>
+  const tomeDamage = bossCellTile ? tomeDamageFor(bossCellTile.maxHp, level.id, tomeHits, inventory.power) : 0
+  /** Door can't be entered yet: boss alive, or keys missing. */
+  const doorLocked = bossAlive || keysMissingFor(level, inventory.keys) > 0
   const tomesLeft = bossCellTile ? Math.ceil(bossCellTile.hp / tomeDamage) : 0
   const iconSize = level.size >= 7 ? 22 : level.size === 6 ? 26 : level.size === 5 ? 32 : 38
   const specialSize = level.size >= 7 ? 26 : level.size === 6 ? 30 : level.size === 5 ? 36 : 44
@@ -456,7 +489,7 @@ export default function PlayPage() {
       <TopBar back="/" />
 
       <section className="game-content play-content">
-        <Purse gold={inventory.gold} stars={progress.stars} keys={inventory.keys} power={inventory.power} armor={inventory.armor} gauntlets={inventory.gauntlets} />
+        <Purse gold={inventory.gold} stars={progress.stars} hearts={inventory.hearts} maxHearts={maxHearts} keys={inventory.keys} keysNeeded={level.hasBoss ? 0 : level.requiredKeys ?? 0} power={inventory.power} armor={inventory.armor} gauntlets={inventory.gauntlets} />
 
         <div className="level-heading">
           <div>
@@ -534,7 +567,7 @@ export default function PlayPage() {
                   {cell !== null && (
                     <div
                       key={animKey}
-                      className={`piece ${pieceKind(cell)}${stateClass}${cell === 'exit' && bossAlive ? ' sealed' : ''}`}
+                      className={`piece ${pieceKind(cell)}${stateClass}${cell === 'exit' && doorLocked ? ' sealed' : ''}`}
                       style={primary ? offset(primary.from) : undefined}
                     >
                       {cell === 'stone' ? (
@@ -545,7 +578,7 @@ export default function PlayPage() {
                         </div>
                       ) : cell === 'exit' ? (
                         <div className="special-tile-content">
-                          <span className="portal">{bossAlive ? <img className="padlock" src={ART.padlock} alt="Sealed" draggable={false} /> : <DoorOpen size={specialSize} strokeWidth={2.4} />}</span>
+                          <span className="portal">{doorLocked ? <img className="padlock" src={ART.padlock} alt={bossAlive ? 'Sealed' : 'Locked'} draggable={false} /> : <DoorOpen size={specialSize} strokeWidth={2.4} />}</span>
                         </div>
                       ) : typeof cell === 'object' && cell.type === 'numbered_stone' ? (
                         <div className="special-tile-content">
@@ -621,7 +654,7 @@ export default function PlayPage() {
                   {winStars ? <><i aria-hidden>★</i> +{winStars} {winStars === 1 ? 'star' : 'stars'} — first clear!</> : 'Replay — no stars this time'}
                 </p>
               )}
-              {lost && stuck && SHOP_ITEMS.some((i) => boosterUsable[i]) && (
+              {lost && stuck && BOOSTER_BAR.some((i) => boosterUsable[i]) && (
                 <p className="star-line earned">Use a booster below to clear some space and keep going.</p>
               )}
               <div className="result-actions">
@@ -630,8 +663,8 @@ export default function PlayPage() {
                 ) : (
                   <button className="primary-button" onClick={() => reset()}>{won ? 'Play From Start' : 'Play again'}</button>
                 )}
-                {lost && history.length > 0 ? (
-                  <button className="secondary-button" onClick={undo}>Undo last move</button>
+                {lost && canUndo ? (
+                  <button className="secondary-button" onClick={undo}>Undo last move{undoBadge}</button>
                 ) : (
                   <button className="secondary-button" onClick={() => reset()}>Replay Level</button>
                 )}
@@ -648,7 +681,7 @@ export default function PlayPage() {
         {hammerMode && <p className="booster-hint">Pick a glowing stone to smash · Esc to cancel</p>}
         {wallMode && <p className="booster-hint">Tap a glowing wall to dissolve it · Esc to cancel</p>}
         <div className="booster-bar" aria-label="Boosters">
-          {SHOP_ITEMS.map((item) => {
+          {BOOSTER_BAR.map((item) => {
             const b = BOOSTERS[item]
             return (
               <button
@@ -668,7 +701,7 @@ export default function PlayPage() {
           })}
         </div>
         <div className="controls">
-          <button className="secondary-button" onClick={undo} disabled={history.length === 0}><Undo2 size={17} /> Undo</button>
+          <button className="secondary-button" onClick={undo} disabled={!canUndo} title={undoTitle}><Undo2 size={17} /> Undo{undoBadge}</button>
           <button className="secondary-button" onClick={() => reset()}><RotateCcw size={17} /> Restart</button>
         </div>
         <div className="how-to">
@@ -677,7 +710,7 @@ export default function PlayPage() {
             Swipe or use arrow keys — everything slides as far as it can, the wizard too, picking up whatever he slides over. {isFusionLevel(level)
               ? `Slide ${level.targetFormula[0]} directly into ${level.targetFormula[1]} to fuse the exit door.`
               : `Merge matching tiles until you reach ${level.target} — that tile becomes the door.`} Then
-            move onto the door to escape. Numbered stones shatter when a tile of the same value crashes into them; never slide over a spike trap. Armor absorbs one hit (a boss touch or a spike); gauntlets shatter a stone you slide into; a Rune of Passage from the shop dissolves one wall line. In boss rooms the boss slides with every swipe: merge to drop attack tomes and walk over them to blast it, but every time it touches you costs a heart. Tomes grow grander as your Power rises (Arcane Might).
+            move onto the door to escape. Numbered stones shatter when a tile of the same value crashes into them. Spikes and boss touches cost a heart each (armor absorbs one first); lose every heart and the level is lost. Later doors need keys: merges drop them and they jump to you when you stop next to one; boss rooms get theirs from the boss. Gauntlets shatter a stone you slide into; a Rune of Passage from the shop dissolves one wall line. You get 3 free Undos per level — an Amulet of Rewind buys one more. In boss rooms the boss slides with every swipe: merge to drop attack tomes and walk over them to blast it. Tomes grow grander as your Power rises (Arcane Might).
           </p>
           <div className="legend">
             <span><img src={ART.stone} alt="" draggable={false} /> Obstacle</span>
