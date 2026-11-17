@@ -128,11 +128,12 @@
     },
     "bossTomeDrop": {
       "minTile": 4,
-      "dropRate": 0.5
+      "dropRate": 0.3
     },
     "bossTomeHits": {
       "mid": 2,
       "final": 3,
+      "growth": { "mid": 0.5, "final": 1 },
       "early": {
         "untilLevel": 10,
         "mid": 1,

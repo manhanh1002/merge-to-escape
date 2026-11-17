@@ -67,13 +67,29 @@ export type EarlyGoldBoost = {
   smallMerges: { minTile: number; gold: number; dropRate: number }[]
 }
 
-export type TomeHits = { mid: number; final: number; /** Easier bosses while learning (levels <= untilLevel). */ early?: { untilLevel: number; mid: number; final: number } }
+export type TomeHits = {
+  /** Tomes a chapter-2 boss needs (mid-chapter / chapter-final). */
+  mid: number
+  final: number
+  /** Extra tomes per chapter after chapter 2, so later bosses really are tougher. */
+  growth?: { mid: number; final: number }
+  /** Easier bosses while learning (levels <= untilLevel). */
+  early?: { untilLevel: number; mid: number; final: number }
+}
 
-/** Damage of one attack tome: a boss falls to `hits` tomes (mid-chapter or chapter-final
- *  boss; fewer in the first levels), plus the wizard's Power. */
+/** Tomes that kill this level's boss with no Power. */
+export function tomesToKill(levelId: number, hits: TomeHits): number {
+  const final = levelId % 10 === 0
+  if (hits.early && levelId <= hits.early.untilLevel) return final ? hits.early.final : hits.early.mid
+  const later = Math.max(0, Math.ceil(levelId / 10) - 2)
+  const growth = hits.growth ? (final ? hits.growth.final : hits.growth.mid) : 0
+  return (final ? hits.final : hits.mid) + Math.floor(later * growth)
+}
+
+/** Damage of one attack tome: its share of the boss's HP (see tomesToKill) plus the
+ *  wizard's Power. */
 export function tomeDamage(maxHp: number, levelId: number, hits: TomeHits, power = 0): number {
-  const set = hits.early && levelId <= hits.early.untilLevel ? hits.early : hits
-  return Math.ceil(maxHp / (levelId % 10 === 0 ? set.final : set.mid)) + power
+  return Math.ceil(maxHp / tomesToKill(levelId, hits)) + power
 }
 
 export type Rng = () => number

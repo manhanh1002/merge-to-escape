@@ -2,7 +2,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
-import { computeMove, hasAnyMove, makeBoard, rollGift, isWallBetween, tomeDamage, withoutWalls } from '../lib/game-logic.ts'
+import { computeMove, hasAnyMove, makeBoard, rollGift, isWallBetween, tomeDamage, tomesToKill, withoutWalls } from '../lib/game-logic.ts'
 
 const config = JSON.parse(readFileSync(new URL('../lib/game_config.json', import.meta.url), 'utf8'))
 const economy = config.economyConfig
@@ -247,7 +247,7 @@ test('move result reports bumping into a wall (drives the hurt animation)', () =
 
 const boss = (hp, maxHp = hp) => ({ type: 'boss', hp, maxHp })
 // level 45: past the easier chapter-1 bosses
-const bossLvl = (over = {}) => lvl({ id: 45, hasBoss: true, bossHp: 30, ...over })
+const bossLvl = (over = {}) => lvl({ id: 15, hasBoss: true, bossHp: 30, ...over })
 const tome = { type: 'equipment', item: { type: 'sword', power: 15 } }
 const S = null
 
@@ -296,7 +296,7 @@ test('walking over a tome blasts the boss: mid-boss takes maxHp/2 + Power', () =
 
 test('a final boss (level x10) takes maxHp/3 per tome', () => {
   const board = grid([P, S, S, S], [S, S, S, S], [S, S, S, S], [S, S, S, boss(50)])
-  const res = computeMove(board, { 1: tome }, bossLvl({ id: 50, bossHp: 50 }), economy, 'right', never)
+  const res = computeMove(board, { 1: tome }, bossLvl({ id: 20, bossHp: 50 }), economy, 'right', never)
   assert.equal(res.bossDamage, 17)
 })
 
@@ -564,4 +564,16 @@ test('chapter-1 bosses fall to fewer tomes while players learn', () => {
   assert.equal(tomeDamage(100, 10, hits), 50, 'level 10: two tomes')
   assert.equal(tomeDamage(100, 15, hits), 50, 'level 15: back to two')
   assert.equal(tomeDamage(99, 20, hits, 7), 33 + 7, 'level 20: three, plus Power')
+})
+
+test('later bosses need more tomes, so their HP really matters', () => {
+  const hits = economy.bossTomeHits
+  const need = (id) => tomesToKill(id, hits)
+  assert.equal(need(20), 3)
+  assert.equal(need(100), 11, 'final boss: 11 tomes without Power')
+  assert.equal(need(95), 6)
+  for (const id of [30, 50, 70, 90]) assert.ok(need(id + 10) > need(id), `final bosses keep growing at L${id + 10}`)
+  for (const id of [15, 35, 55, 75]) assert.ok(need(id + 20) > need(id), `mid bosses keep growing at L${id + 20}`)
+  assert.equal(tomeDamage(1000, 100, hits), 91)
+  assert.equal(tomesToKill(100, { mid: 2, final: 3 }), 3, 'no growth configured: fixed counts')
 })
