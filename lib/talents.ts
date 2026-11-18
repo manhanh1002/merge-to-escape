@@ -17,6 +17,10 @@ export type TalentConfig = {
   heartLevels: number[]
   /** weaponBonusPower ("Gear Mastery"): +1 starting armor at each of these levels. */
   armorLevels: number[]
+  /** Upgrade price multiplier: going to level L costs round(L × costMultiplier) stars. */
+  costMultiplier?: number
+  /** Gold charged per star a reset gives back. */
+  resetGoldPerStar?: number
 }
 
 /** Hearts every boss room starts with before talents. */
@@ -26,31 +30,47 @@ export type TalentLevels = Partial<Record<string, number>>
 
 export const talentLevel = (save: Pick<SaveData, 'talents'>, id: TalentId) => save.talents[id] ?? 0
 
-/** Going from `level` to `level + 1` costs `level + 1` stars. */
-export const upgradeCost = (level: number) => level + 1
+/** Going from `level` to `level + 1` costs round((level + 1) × costMultiplier) stars. */
+export const upgradeCost = (level: number, cfg: Pick<TalentConfig, 'costMultiplier'>) =>
+  Math.max(1, Math.round((level + 1) * (cfg.costMultiplier ?? 1)))
 
-/** Total stars spent to reach `level` (1 + 2 + ... + level). */
-const spentFor = (level: number) => (level * (level + 1)) / 2
+/** Total stars spent to reach `level`. */
+const spentFor = (level: number, cfg: Pick<TalentConfig, 'costMultiplier'>) => {
+  let sum = 0
+  for (let l = 0; l < level; l++) sum += upgradeCost(l, cfg)
+  return sum
+}
 
 export function canUpgrade(save: SaveData, id: TalentId, cfg: TalentConfig): boolean {
   const level = talentLevel(save, id)
-  return level < cfg.maxLevel && save.stars >= upgradeCost(level)
+  return level < cfg.maxLevel && save.stars >= upgradeCost(level, cfg)
 }
 
 /** Buys the next level of `id`; returns the same save object if it is not affordable/maxed. */
 export function upgrade(save: SaveData, id: TalentId, cfg: TalentConfig): SaveData {
   if (!canUpgrade(save, id, cfg)) return save
   const level = talentLevel(save, id)
-  return { ...save, stars: save.stars - upgradeCost(level), talents: { ...save.talents, [id]: level + 1 } }
+  return { ...save, stars: save.stars - upgradeCost(level, cfg), talents: { ...save.talents, [id]: level + 1 } }
 }
 
 /** Stars currently invested across all branches. */
-export const starsSpent = (talents: TalentLevels) =>
-  Object.values(talents).reduce((sum: number, lv) => sum + spentFor(lv ?? 0), 0)
+export const starsSpent = (talents: TalentLevels, cfg: Pick<TalentConfig, 'costMultiplier'>) =>
+  Object.values(talents).reduce((sum: number, lv) => sum + spentFor(lv ?? 0, cfg), 0)
 
-/** Resets every branch to 0 and gives back all the stars spent on them. */
-export function refundAll(save: SaveData): SaveData {
-  return { ...save, stars: save.stars + starsSpent(save.talents), talents: {} }
+/** Gold a reset costs: proportional to the stars it gives back. */
+export const resetCost = (stars: number, cfg: Pick<TalentConfig, 'resetGoldPerStar'>) =>
+  stars * (cfg.resetGoldPerStar ?? 0)
+
+/** Resets one branch (`id`) or every branch (no id) to Lv 0, giving back the stars spent
+ *  for gold (resetCost). Returns the same save if there is nothing to refund or the
+ *  player cannot pay. */
+export function refund(save: SaveData, cfg: TalentConfig, id?: TalentId): SaveData {
+  const picked: TalentLevels = id ? { [id]: talentLevel(save, id) } : save.talents
+  const stars = starsSpent(picked, cfg)
+  const gold = resetCost(stars, cfg)
+  if (stars === 0 || save.gold < gold) return save
+  const talents = id ? Object.fromEntries(Object.entries(save.talents).filter(([k]) => k !== id)) : {}
+  return { ...save, gold: save.gold - gold, stars: save.stars + stars, talents }
 }
 
 const capRate = (rate: number) => Math.min(1, rate)

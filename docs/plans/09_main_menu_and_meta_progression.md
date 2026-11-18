@@ -28,7 +28,7 @@
 | 🪙 Vàng | Rơi khi merge, thưởng Boss (đã có) | Mua đồ tiêu hao trong Shop | Đã lưu vĩnh viễn |
 
 ### 3.2. Talent Tree — 5 nhánh (dùng đúng `talentTreeConfig`)
-Chi phí lên Lv **L** = **L⭐**; max Lv 14 ➔ 105⭐/nhánh, 525⭐ cả cây (≤ 550⭐ kiếm được).
+Chi phí lên Lv **L** = **round(L × 1.2)⭐** (`costMultiplier`); max Lv 14 ➔ 126⭐/nhánh, 630⭐ cả cây (> 550⭐ kiếm được cả game ➔ không max được mọi nhánh, người chơi phải chọn đường). Reset từng nhánh hoặc toàn bộ: hoàn lại ⭐, tốn **5 vàng / ⭐ hoàn lại** (`resetGoldPerStar`). (Trước đây: L⭐, 525⭐ cả cây, reset miễn phí.)
 
 | Nhánh (key config) | Hiệu ứng mỗi Lv (config) | Áp vào luật hiện tại |
 |---|---|---|

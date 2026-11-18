@@ -107,7 +107,9 @@
     },
     "talentTreeConfig": {
       "starRewardFormula": "Math.ceil(levelId / 10) sao khi First-Clear (Tổng 550 ⭐ qua 100 màn)",
-      "costFormula": "Chi phí nâng lên Level L tốn đúng L điểm Sao ⭐ (Tổng chi phí max 1 nhánh Lv 14 là 105 ⭐, 5 nhánh = 525 ⭐)",
+      "costFormula": "Nâng lên Level L tốn round(L × costMultiplier) ⭐ (×1.2: max 1 nhánh = 126 ⭐, 5 nhánh = 630 ⭐ > 550 ⭐ cả game → phải chọn nhánh). Reset hoàn sao, tốn resetGoldPerStar vàng mỗi sao hoàn lại.",
+      "costMultiplier": 1.2,
+      "resetGoldPerStar": 5,
       "statsBonusPerLevel": {
         "goldRate": 0.02,
         "weaponRate": 0.015,

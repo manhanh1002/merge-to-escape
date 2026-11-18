@@ -1163,6 +1163,13 @@ a.level-tile:hover { transform: translateY(-2px); border-color: var(--gold); }
 .talent-title { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
 .talent-title strong { font-family: var(--font-display-stack); font-size: 17px; color: var(--gold-hi); }
 .talent-level { font-family: var(--font-display-stack); font-size: 12px; font-weight: 700; color: var(--ink-dim); }
+.talent-title .talent-level { margin-left: auto; }
+.talent-reset {
+  background: none; border: 1px solid #6b4a3a; border-radius: 999px; padding: 0 8px; cursor: pointer;
+  font-family: var(--font-display-stack); font-size: 11px; font-weight: 700; color: #e9a58a; line-height: 18px;
+}
+.talent-reset:hover { border-color: #e9a58a; }
+.confirm-reset .price-coin, .upgrades-footer .price-coin { width: 16px; height: 16px; margin: 0 2px; vertical-align: -3px; }
 .talent-effect { margin: 2px 0 6px; font-size: 14px; color: var(--parchment); }
 .talent-next { color: var(--hero); }
 .talent-pips { display: flex; gap: 3px; }

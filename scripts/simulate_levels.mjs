@@ -32,7 +32,7 @@ export function expectedTalents(levelIndex) {
   let save = { ...freshSave(), stars: Array.from({ length: levelIndex }, (_, i) => starsForLevel(i)).reduce((a, b) => a + b, 0) }
   for (;;) {
     const id = [...TALENT_IDS].sort((a, b) => talentLevel(save, a) - talentLevel(save, b))[0]
-    if (talentLevel(save, id) >= talentCfg.maxLevel || save.stars < upgradeCost(talentLevel(save, id))) return save.talents
+    if (talentLevel(save, id) >= talentCfg.maxLevel || save.stars < upgradeCost(talentLevel(save, id), talentCfg)) return save.talents
     save = upgrade(save, id, talentCfg)
   }
 }
